@@ -1,14 +1,15 @@
 ﻿using SFML.Graphics;
 using SFML.System;
-using SFML.Window;
 
 namespace Source.Engine
 {
 	public class GameLoop
 	{
-		private static List<IUpdatable> _updatables;
+		private static List<IUpdatable> _updatables = new();
 
-		private static List<Drawable> _drawables;
+		private static List<Drawable> _drawables = new();
+
+		private static List<IInpputHandler> _inputhandlers = new();
 
 		private readonly RenderWindow _window;
 
@@ -20,9 +21,13 @@ namespace Source.Engine
 		{
 			_window = window;
 
+			FloatRect windowBounds = new FloatRect(0, 0, _window.Size.X, _window.Size.Y);
+
 			_clock = new();
 
-			_game = new();
+			_game = new(windowBounds);
+
+			_updatables.Add(_game);
 		}
 
 		public void Run()
@@ -37,16 +42,21 @@ namespace Source.Engine
 
 		private void UpdateInput()
 		{
+			_window.DispatchEvents();
 
+			for (int i = 0; i < _inputhandlers.Count; i++)
+			{
+				_inputhandlers[i].UpdateInput();
+			}
 		}
 
 		private void Update()
 		{
 			var deltaTime = _clock.Restart().AsSeconds();
 
-			foreach (var updatable in _updatables)
+			for (int i = 0; i < _updatables.Count; i++)
 			{
-				updatable.Update(deltaTime);
+				_updatables[i].Update(deltaTime);
 			}
 		}
 
@@ -54,9 +64,9 @@ namespace Source.Engine
 		{
 			_window.Clear(Color.White);
 
-			foreach (var drawable in _drawables)
+			for (int i = 0; i < _drawables.Count; i++)
 			{
-				_window.Draw(drawable);
+				_window.Draw(_drawables[i]);
 			}
 
 			_window.Display();
@@ -82,6 +92,11 @@ namespace Source.Engine
 			{
 				_updatables.Add(gameObject);
 			}
+
+			if (gameObject is IInpputHandler)
+			{
+				_updatables.Add(gameObject);
+			}
 		}
 
 		public static void UnRegister(GameObject gameObject)
@@ -92,6 +107,11 @@ namespace Source.Engine
 			}
 
 			if (gameObject is IUpdatable)
+			{
+				_updatables.Remove(gameObject);
+			}
+
+			if (gameObject is IInpputHandler)
 			{
 				_updatables.Remove(gameObject);
 			}

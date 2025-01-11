@@ -6,15 +6,13 @@ namespace Source.Engine
 {
 	public class Application
 	{
-		private static readonly Vector2f WindowSize = new(1000, 500);
+		private static readonly Vector2f WindowSize = new(1600, 900);
 
 		private const string WindowAppName = "Air Hockey";
 
 		public void Run()
 		{
 			RenderWindow window = CreateWindow();
-
-			//EntityHandler entityHandler = new(window);
 
 			GameLoop gameLoop = new(window);
 
