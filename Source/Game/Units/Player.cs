@@ -1,6 +1,7 @@
 ﻿using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
+using Source.Engine;
 using Source.Tools;
 
 namespace Source.Game.Units
@@ -29,7 +30,7 @@ namespace Source.Game.Units
 		public bool TryEat(IFood food);
 	}
 
-	public class Player : CircleObject, IEater, IFood
+	public class Player : CircleObject, IEater, IFood, IInpputHandler
 	{
 		private const float BaseSpeed = 200f;
 		private const float MinSpeed = 100f;

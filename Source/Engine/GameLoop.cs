@@ -93,9 +93,9 @@ namespace Source.Engine
 				_updatables.Add(gameObject);
 			}
 
-			if (gameObject is IInpputHandler)
+			if (gameObject is IInpputHandler inputGameObject)
 			{
-				_updatables.Add(gameObject);
+				_inputhandlers.Add(inputGameObject);
 			}
 		}
 
@@ -111,9 +111,9 @@ namespace Source.Engine
 				_updatables.Remove(gameObject);
 			}
 
-			if (gameObject is IInpputHandler)
+			if (gameObject is IInpputHandler inputGameObject)
 			{
-				_updatables.Remove(gameObject);
+				_inputhandlers.Remove(inputGameObject);
 			}
 		}
 	}
