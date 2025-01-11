@@ -1,8 +1,7 @@
 ﻿using SFML.Graphics;
 using SFML.System;
-using Source.Engine;
 
-namespace Source.Game.Units
+namespace Source.Engine.Gameobjects
 {
 	public class TextObject : GameObject
 	{

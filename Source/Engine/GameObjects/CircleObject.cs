@@ -1,9 +1,8 @@
 ﻿using SFML.Graphics;
 using SFML.System;
-using Source.Engine;
-using Source.Tools;
+using Source.Engine.Tools;
 
-namespace Source.Game.Units
+namespace Source.Engine.Gameobjects
 {
 	public class CircleObject : GameObject
 	{

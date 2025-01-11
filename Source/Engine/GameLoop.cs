@@ -83,15 +83,8 @@ namespace Source.Engine
 
 		public static void Register(GameObject gameObject)
 		{
-			if (gameObject is Drawable)
-			{
-				_drawables.Add(gameObject);
-			}
-
-			if (gameObject is IUpdatable)
-			{
-				_updatables.Add(gameObject);
-			}
+			_drawables.Add(gameObject);
+			_updatables.Add(gameObject);
 
 			if (gameObject is IInpputHandler inputGameObject)
 			{
@@ -101,16 +94,9 @@ namespace Source.Engine
 
 		public static void UnRegister(GameObject gameObject)
 		{
-			if (gameObject is Drawable)
-			{
-				_drawables.Remove(gameObject);
-			}
-
-			if (gameObject is IUpdatable)
-			{
-				_updatables.Remove(gameObject);
-			}
-
+			_drawables.Remove(gameObject);
+			_updatables.Remove(gameObject);
+			
 			if (gameObject is IInpputHandler inputGameObject)
 			{
 				_inputhandlers.Remove(inputGameObject);
