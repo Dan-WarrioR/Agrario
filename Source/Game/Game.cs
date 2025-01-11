@@ -7,7 +7,7 @@ namespace Source.Game
 {
 	public class Game : IUpdatable
 	{
-		private const int PlayersCount = 5;
+		private const int PlayersCount = 50;
 		private const int FoodCount = 500;
 
 		private FloatRect _bounds;
