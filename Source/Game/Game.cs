@@ -62,7 +62,7 @@ namespace Source.Game
 
 		private void SpawnUserUI()
 		{
-			_mainPlayerScore = new(_mainPlayer.Mass.ToString(), new(_bounds.Width - 200, _bounds.Top + 20));
+			_mainPlayerScore = UnitFactory.CreateText(_mainPlayer.Mass.ToString(), _bounds);
 
 			_mainPlayer.OnAteFood += _mainPlayerScore.OnScoreChanged;
 		}

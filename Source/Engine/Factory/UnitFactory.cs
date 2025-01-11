@@ -30,6 +30,15 @@ namespace Source.Engine.Factory
 			return food;
 		}
 
+		public static TextObject CreateText(string text, FloatRect bounds)
+		{
+			var textObject = new TextObject(text, new(bounds.Width - 200, bounds.Top + 20));
+
+			RegisterObject(textObject);
+
+			return textObject;
+		}
+
 		private static Vector2f GetRandomPosition(FloatRect bounds)
 		{
 			float x = _random.Next((int)bounds.Left, (int)(bounds.Left + bounds.Width));
