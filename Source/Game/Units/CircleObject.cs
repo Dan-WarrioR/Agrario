@@ -9,22 +9,20 @@ namespace Source.Game.Units
 	{
 		protected virtual Color FillColor => Color.White;
 
-		public FloatRect ObjectRect => Shape.GetGlobalBounds();
+		public FloatRect ObjectRect => Circle.GetGlobalBounds();
 
-		public override Vector2f Position => Shape.Position;
+		public override Vector2f Position => Circle.Position;
 
-		public float Radius { get; }
+		public float Radius => Circle.Radius;
 
-		protected Shape Shape { get; }
+		protected CircleShape Circle { get; }
 
 		public CircleObject(float radius, Vector2f initialPosition) : base(initialPosition)
 		{
-			Radius = radius;
-
-			Shape = new CircleShape(radius)
+			Circle = new CircleShape(radius)
 			{
 				Position = initialPosition,
-				Origin = new(Radius, Radius),
+				Origin = new(radius, radius),
 				FillColor = FillColor,
 			};
 		}
@@ -43,7 +41,7 @@ namespace Source.Game.Units
 
 		public override void Draw(RenderTarget target, RenderStates states)
 		{
-			Shape.Draw(target, states);
+			Circle.Draw(target, states);
 		}
 	}
 }

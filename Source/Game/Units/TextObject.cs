@@ -6,7 +6,7 @@ namespace Source.Game.Units
 {
 	public class TextObject : GameObject
 	{
-		private static readonly Color TextColor = Color.White;
+		private static readonly Color DefaultTextColor = Color.Black;
 
 		private const string FontPath = @"C:\Windows\Fonts\Arial.ttf";
 		private const uint CharacterSize = 24;
@@ -15,20 +15,25 @@ namespace Source.Game.Units
 
 		private Text _text;
 
-		public TextObject(Vector2f initialPosition) : base(initialPosition)
+		public TextObject(string text, Vector2f initialPosition) : base(initialPosition)
 		{
 			var font = new Font(FontPath);
 
-			_text = new("0", font, CharacterSize)
+			_text = new(text, font, CharacterSize)
 			{
-				FillColor = TextColor,
+				FillColor = DefaultTextColor,
 				Position = initialPosition,
 			};
 		}
 
-		public void OnScoreChanged(int playerScore)
+		public TextObject(string text, Vector2f initialPosition, Color textColor) : this(text, initialPosition)
 		{
-			_text.DisplayedString = playerScore.ToString();
+			_text.FillColor = textColor;
+		}
+
+		public void OnScoreChanged(float playerMass)
+		{
+			_text.DisplayedString = playerMass.ToString();
 		}
 
 		public override void Draw(RenderTarget target, RenderStates states)
