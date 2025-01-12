@@ -1,9 +1,9 @@
 ﻿using SFML.Graphics;
 using SFML.System;
 
-namespace Source.Engine.Gameobjects
+namespace Source.Engine.GameObjects
 {
-	public class TextObject : GameObject
+    public class TextObject : GameObject
 	{
 		private static readonly Color DefaultTextColor = Color.Black;
 

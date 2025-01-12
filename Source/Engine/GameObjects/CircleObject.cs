@@ -2,9 +2,9 @@
 using SFML.System;
 using Source.Engine.Tools;
 
-namespace Source.Engine.Gameobjects
+namespace Source.Engine.GameObjects
 {
-	public class CircleObject : GameObject
+    public class CircleObject : GameObject
 	{
 		protected virtual Color FillColor => Color.White;
 

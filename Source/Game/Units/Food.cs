@@ -1,6 +1,6 @@
 ﻿using SFML.Graphics;
 using SFML.System;
-using Source.Engine.Gameobjects;
+using Source.Engine.GameObjects;
 
 namespace Source.Game.Units
 {

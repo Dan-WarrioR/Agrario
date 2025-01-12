@@ -1,7 +1,7 @@
 ﻿using SFML.Graphics;
 using SFML.System;
 
-namespace Source.Engine
+namespace Source.Engine.GameObjects
 {
 	public interface IInpputHandler
 	{

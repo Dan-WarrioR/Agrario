@@ -1,4 +1,6 @@
-﻿namespace Source.Engine
+﻿using Source.Engine;
+
+namespace Source
 {
 	public class Boot
 	{

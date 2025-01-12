@@ -1,8 +1,7 @@
 ﻿using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
-using Source.Engine;
-using Source.Engine.Gameobjects;
+using Source.Engine.GameObjects;
 using Source.Engine.Tools;
 
 namespace Source.Game.Units
