@@ -1,28 +1,38 @@
 ﻿using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
+using Source.Engine.Factory;
+using Source.Game;
+using Source.Game.Configs;
 
 namespace Source.Engine
 {
 	public class Application
 	{
-		private static readonly Vector2f WindowSize = new(1600, 900);
-
-		private const string WindowAppName = "Air Hockey";
-
 		public void Run()
 		{
 			RenderWindow window = CreateWindow();
 
-			GameLoop gameLoop = new(window);
+			FloatRect windowBounds = new(0, 0, window.Size.X, window.Size.Y);
+
+			var game = new AgarioGame();
+			var renderer = new SFMLRenderer(window);
+
+			var gameLoop = new GameLoop(renderer, game);
+
+			var unitFactory = new UnitFactory(gameLoop, windowBounds);
+
+			game.Initialize(window, unitFactory);
 
 			gameLoop.Run();
 		}
 
 		private RenderWindow CreateWindow()
 		{
-			var videoMode = new VideoMode((uint)WindowSize.X, (uint)WindowSize.Y);
-			var window = new RenderWindow(videoMode, WindowAppName);
+			Vector2f windowSize = WindowConfig.WindowSize;
+
+			var videoMode = new VideoMode((uint)windowSize.X, (uint)windowSize.Y);
+			var window = new RenderWindow(videoMode, WindowConfig.AppName);
 
 			window.SetFramerateLimit(60);
 			window.SetVerticalSyncEnabled(true);
