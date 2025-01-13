@@ -1,50 +1,49 @@
 ﻿using Source.Engine.GameObjects;
-using SFML.Graphics;
-using SFML.System;
 
 namespace Source.Engine
 {
 	public class GameLoop
 	{
-		private static List<IUpdatable> _updatables = new();
+		private const int TargetFramerate = 120;
+		private const float TimeUntilUpdate = 1f / TargetFramerate;
 
-		private static List<Drawable> _drawables = new();
+		public static GameLoop Instance { get; private set; }
 
-		private static List<IInpputHandler> _inputhandlers = new();
+		private List<GameObject> _gameObjects = new();
 
-		private readonly RenderWindow _window;
+		private List<IInpputHandler> _inputhandlers = new();
 
-		private readonly Clock _clock;
+		private readonly BaseRenderer _renderer;
+		private readonly BaseGame _game;
+		private readonly Time _time;
 
-		private Game.Game _game;
+		private bool _isActive = true;
 
-		public GameLoop(RenderWindow window)
+		public GameLoop(BaseRenderer renderer, BaseGame game)
 		{
-			_window = window;
+			Instance = this;
 
-			FloatRect windowBounds = new FloatRect(0, 0, _window.Size.X, _window.Size.Y);
+			_renderer = renderer;
+			_game = game;
 
-			_clock = new();
+			_time = new();
 
-			_game = new(windowBounds);
-
-			_updatables.Add(_game);
+			_gameObjects.Add(game);
 		}
 
 		public void Run()
 		{
-			while (!IsEndGameLoop())
+			while (_isActive)
 			{
-				Draw();
+				_renderer.Render();
 				UpdateInput();
+				Start(); //StartForNewObjects()
 				Update();
 			}
 		}
 
 		private void UpdateInput()
 		{
-			_window.DispatchEvents();
-
 			for (int i = 0; i < _inputhandlers.Count; i++)
 			{
 				_inputhandlers[i].UpdateInput();
@@ -53,50 +52,49 @@ namespace Source.Engine
 
 		private void Update()
 		{
-			var deltaTime = _clock.Restart().AsSeconds();
+			_time.Update();
 
-			for (int i = 0; i < _updatables.Count; i++)
+			if (_time.BeforeUpdateTime < TimeUntilUpdate)
 			{
-				_updatables[i].Update(deltaTime);
+				return;
+			}
+
+			_time.Reset();
+
+			for (int i = 0; i < _gameObjects.Count; i++)
+			{
+				_gameObjects[i].Update(_time.DeltaTime);
 			}
 		}
 
-		private void Draw()
+		private void Start()
 		{
-			_window.Clear(Color.White);
+			
+		}
 
-			for (int i = 0; i < _drawables.Count; i++)
+
+
+		public void StopGameLoop()
+		{
+			_isActive = false;
+		}
+
+		public void Register<T>(T gameObject) where T : GameObject
+		{
+			if (!_gameObjects.Contains(gameObject))
 			{
-				_window.Draw(_drawables[i]);
-			}
+				_gameObjects.Add(gameObject);
+			}		
 
-			_window.Display();
-		}
-
-
-
-		private bool IsEndGameLoop()
-		{
-			return !_game.IsEndGame() && !_window.IsOpen;
-		}
-
-
-
-		public static void Register(GameObject gameObject)
-		{
-			_drawables.Add(gameObject);
-			_updatables.Add(gameObject);
-
-			if (gameObject is IInpputHandler inputGameObject)
+			if (gameObject is IInpputHandler inputGameObject && !_inputhandlers.Contains(inputGameObject))
 			{
 				_inputhandlers.Add(inputGameObject);
 			}
 		}
 
-		public static void UnRegister(GameObject gameObject)
+		public void UnRegister<T>(T gameObject) where T : GameObject
 		{
-			_drawables.Remove(gameObject);
-			_updatables.Remove(gameObject);
+			_gameObjects.Remove(gameObject);
 			
 			if (gameObject is IInpputHandler inputGameObject)
 			{

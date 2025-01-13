@@ -1,28 +1,38 @@
 ﻿using SFML.Graphics;
+using Source.Engine;
 using Source.Engine.Factory;
-using Source.Engine.GameObjects;
 using Source.Game.Units;
 
 namespace Source.Game
 {
-	public class Game : IUpdatable
+    public class AgarioGame : BaseGame
 	{
 		private const int PlayersCount = 50;
 		private const int FoodCount = 500;
 
-		private FloatRect _bounds;
+		//private FloatRect _bounds;
+		private GameLoop GameLoop => GameLoop.Instance;
+
+		private UnitFactory _unitFactory;
 
 		private List<Player> _players = new();
 
 		private List<Food> _foods = new();
 
-		private TextObject _mainPlayerScore;
+		private TextObject _text;
 
 		private Player _mainPlayer;
 
-		public Game(FloatRect bounds)
+		//private GameCamera _camera;
+
+		public AgarioGame()
 		{
-			_bounds = bounds;
+
+		}
+
+		public void Initialize(RenderWindow window, UnitFactory unitFactory)
+		{
+			_unitFactory = unitFactory;
 
 			SpawnFood();
 
@@ -37,7 +47,7 @@ namespace Source.Game
 		{
 			for (int i = _players.Count; i < PlayersCount - 1; i++)
 			{
-				var bot = UnitFactory.CreatePlayer(true, _bounds);
+				var bot = _unitFactory.CreatePlayer(true);
 
 				_players.Add(bot);
 			}		
@@ -47,7 +57,7 @@ namespace Source.Game
 		{
 			for (int i = _foods.Count; i < FoodCount; i++)
 			{
-				var food = UnitFactory.CreateFood(_bounds);
+				var food = _unitFactory.CreateFood();
 
 				_foods.Add(food);
 			}
@@ -55,27 +65,41 @@ namespace Source.Game
 
 		private void SpawnMainPlayer()
 		{
-			_mainPlayer = UnitFactory.CreatePlayer(false, _bounds);
+			_mainPlayer = _unitFactory.CreatePlayer(false);
+
+			//_camera = new(_window, _mainPlayer.Position, _bounds.Size);
 
 			_players.Add(_mainPlayer);
 		}
 
 		private void SpawnUserUI()
 		{
-			_mainPlayerScore = UnitFactory.CreateText(_mainPlayer.Mass.ToString(), _bounds);
+			_text = _unitFactory.CreateText(_mainPlayer.Mass.ToString());
 
-			_mainPlayer.OnAteFood += _mainPlayerScore.OnScoreChanged;
+			_mainPlayer.OnAteFood += _text.OnScoreChanged;
 		}
 
 	
 
-		public void Update(float deltaTime)
+		public override void Update(float deltaTime)
 		{
+			//_camera.Update(_mainPlayer.Position);
+
 			CheckFoodColissions();
 
 			CheckPlayerColissions();
 
 			CheckForGameRestart();
+		}
+
+		public override void Draw(RenderTarget target, RenderStates states)
+		{
+			//_camera.BeginGameView();
+
+			//_camera.BeginUIView();
+			_text.Draw(target, states);
+
+			//_camera.BeginGameView();
 		}
 
 
@@ -93,7 +117,7 @@ namespace Source.Game
 			{
 				return;
 			}
-
+			return;
 			RestartGame();
 		}
 
@@ -153,7 +177,7 @@ namespace Source.Game
 				player.Dispose();
 			}
 
-			_mainPlayer.OnAteFood -= _mainPlayerScore.OnScoreChanged;
+			_mainPlayer.OnAteFood -= _text.OnScoreChanged;
 
 			foreach (var food in _foods)
 			{
@@ -167,7 +191,7 @@ namespace Source.Game
 			SpawnBots();
 			SpawnMainPlayer();
 
-			_mainPlayer.OnAteFood += _mainPlayerScore.OnScoreChanged;
+			_mainPlayer.OnAteFood += _text.OnScoreChanged;
 		}
 	}
 }
