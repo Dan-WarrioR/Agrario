@@ -1,5 +1,4 @@
-﻿using Agrario.Source.Game.Units;
-using SFML.Graphics;
+﻿using SFML.Graphics;
 using SFML.System;
 
 namespace Source.Game.Units

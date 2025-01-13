@@ -2,30 +2,38 @@
 using SFML.Graphics;
 using SFML.System;
 using Source.Engine.GameObjects;
+using Source.Game.Units.Components.Input;
+using Source.Game.Configs;
 
 namespace Source.Engine.Factory
 {
     public class UnitFactory
 	{
 		private const float MinPlayerRadius = 20f;
-
 		private const float FoodRadius = 5f;
 
-		private GameLoop _gameLoop;
+		private static readonly Color BotFillColor = new(150, 150, 150);
+		private static readonly Color PlayerFillColor = Color.Yellow;
+		private static readonly IInputComponent KeyBoardInput = new KeyBoardInput();
+		private static readonly IInputComponent RandomDirectionInput = new RandomDirectionInput();
 
-		private FloatRect _bounds;
+		private GameLoop _gameLoop;
+		private BaseRenderer _renderer;
 
 		private Random _random = new();
 
-		public UnitFactory(GameLoop gameLoop, FloatRect bounds)
+		public UnitFactory(GameLoop gameLoop, BaseRenderer renderer)
 		{
 			_gameLoop = gameLoop;
-			_bounds = bounds;
+			_renderer = renderer;
 		}
 
 		public Player CreatePlayer(bool isAi)
 		{
-			var player = new Player(isAi, _bounds, MinPlayerRadius, GetRandomPosition());
+			IInputComponent inputComponent = isAi ? KeyBoardInput : RandomDirectionInput;
+			var color = isAi ? new(150, 150, 150) : Color.Yellow;
+
+			var player = new Player(inputComponent, color, MinPlayerRadius, GetRandomPosition());
 
 			RegisterObject(player);
 
@@ -43,17 +51,21 @@ namespace Source.Engine.Factory
 
 		public TextObject CreateText(string text)
 		{
-			var textObject = new TextObject(text, new(_bounds.Width - 200, _bounds.Top + 20));
+			var textObject = new TextObject(text, new(WindowConfig.Bounds.Width - 200, WindowConfig.Bounds.Top + 20));
 
-			//RegisterObject(textObject);
+			_renderer.Add(textObject);
+
+			textObject.OnDisposed += _renderer.Remove;
 
 			return textObject;
 		}
 
 		private Vector2f GetRandomPosition()
 		{
-			float x = _random.Next((int)_bounds.Left, (int)(_bounds.Left + _bounds.Width));
-			float y = _random.Next((int)_bounds.Top, (int)(_bounds.Top + _bounds.Height));
+			var bounds = WindowConfig.Bounds;
+
+			float x = _random.Next((int)bounds.Left, (int)(bounds.Left + bounds.Width));
+			float y = _random.Next((int)bounds.Top, (int)(bounds.Top + bounds.Height));
 			
 			return new(x, y);
 		}
@@ -61,6 +73,7 @@ namespace Source.Engine.Factory
 		private void RegisterObject(GameObject gameObject)
 		{
 			_gameLoop.Register(gameObject);
+			_renderer.Add(gameObject);
 
 			gameObject.OnDisposed += UnregisterObject;
 		}
@@ -69,6 +82,7 @@ namespace Source.Engine.Factory
 		{
 			gameObject.OnDisposed -= UnregisterObject;
 
+			_renderer.Remove(gameObject);
 			_gameLoop.UnRegister(gameObject);
 		}
 	}
