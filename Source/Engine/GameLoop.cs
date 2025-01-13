@@ -45,9 +45,9 @@ namespace Source.Engine
 
 		private void UpdateInput()
 		{
-			for (int i = 0; i < _inputhandlers.Count; i++)
+			foreach (var inputHandler in _inputhandlers)
 			{
-				_inputhandlers[i].UpdateInput();
+				inputHandler.UpdateInput();
 			}
 		}
 

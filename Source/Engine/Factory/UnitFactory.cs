@@ -14,8 +14,6 @@ namespace Source.Engine.Factory
 
 		private static readonly Color BotFillColor = new(150, 150, 150);
 		private static readonly Color PlayerFillColor = Color.Yellow;
-		private static readonly IInputComponent KeyBoardInput = new KeyBoardInput();
-		private static readonly IInputComponent RandomDirectionInput = new RandomDirectionInput();
 
 		private GameLoop _gameLoop;
 		private BaseRenderer _renderer;
@@ -30,7 +28,7 @@ namespace Source.Engine.Factory
 
 		public Player CreatePlayer(bool isAi)
 		{
-			IInputComponent inputComponent = isAi ? KeyBoardInput : RandomDirectionInput;
+			IInputComponent inputComponent = isAi ? new RandomDirectionInput() : new KeyBoardInput();
 			var color = isAi ? new(150, 150, 150) : Color.Yellow;
 
 			var player = new Player(inputComponent, color, MinPlayerRadius, GetRandomPosition());
