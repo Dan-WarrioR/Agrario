@@ -54,6 +54,8 @@ namespace Source.Game.Units
 
 		public override void Update(float deltaTime)
 		{
+			_inputComponent.Update(deltaTime);
+
 			Circle.Position += CurrentSpeed * deltaTime * _inputComponent.Delta;
 
 			ClampPosition();

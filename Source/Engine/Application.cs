@@ -18,6 +18,8 @@ namespace Source.Engine
 
 			var gameLoop = new GameLoop(renderer, game);
 
+			window.Closed += (_, _) => gameLoop.Stop();
+
 			var unitFactory = new UnitFactory(gameLoop, renderer);
 
 			game.Initialize(window, unitFactory);

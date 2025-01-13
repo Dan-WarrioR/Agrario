@@ -75,7 +75,7 @@ namespace Source.Engine
 
 
 
-		public void StopGameLoop()
+		public void Stop()
 		{
 			_isActive = false;
 		}

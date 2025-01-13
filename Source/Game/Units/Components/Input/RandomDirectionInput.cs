@@ -4,21 +4,25 @@ namespace Source.Game.Units.Components.Input
 {
 	public class RandomDirectionInput : IInputComponent
 	{
-		private const float AiMovementDelay = 2f;
+		private const int MinMovementDelay = 2;
+		private const int MaxMovementDelay = 10;
 
 		public Vector2f Delta { get; private set; }
 
-		private float _aiMovementTime = AiMovementDelay;
+		private float _movementDelay = 0f;
+		private float _aiMovementTime = 0f;
 
 		public void UpdateInput()
 		{
-			if (_aiMovementTime >= AiMovementDelay)
+			if (_aiMovementTime < _movementDelay)
 			{
-				SetDelta();
-				_aiMovementTime = 0f;
-
 				return;
 			}
+
+			SetDelta();
+			_aiMovementTime = 0f;
+
+			_movementDelay = Random.Shared.Next(MinMovementDelay, MaxMovementDelay);
 		}
 
 		public void Update(float deltaTime)
