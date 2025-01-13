@@ -1,10 +1,10 @@
-﻿using SFML.Graphics;
+﻿using Agrario.Source.Game.Units;
+using SFML.Graphics;
 using SFML.System;
-using Source.Engine.GameObjects;
 
 namespace Source.Game.Units
 {
-	public interface IFood
+    public interface IFood
 	{
 		public float Mass { get; }
 

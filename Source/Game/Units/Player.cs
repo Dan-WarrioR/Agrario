@@ -6,7 +6,7 @@ using Source.Engine.Tools;
 
 namespace Source.Game.Units
 {
-	public struct MovementKey
+    public struct MovementKey
 	{
 		public Keyboard.Key Key { get; }
 		public float DeltaX { get; }
@@ -41,7 +41,7 @@ namespace Source.Game.Units
 
 		private const float MassMultiplier = 1f;
 
-		protected override Color FillColor => _isAi ? Color.Red : Color.Blue;
+		protected override Color FillColor => _isAi ? new(150, 150, 150) : Color.Yellow;
 
 		public event Action<float> OnAteFood;
 

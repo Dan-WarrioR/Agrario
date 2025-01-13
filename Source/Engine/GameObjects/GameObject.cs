@@ -30,7 +30,9 @@ namespace Source.Engine.GameObjects
 
 		public virtual Vector2f Position { get; }
 
-		protected Vector2f InitialPosition { get; }
+		public Vector2f InitialPosition { get; }
+
+		public GameObject() { }
 
 		public GameObject(Vector2f initialPosition)
 		{
@@ -48,6 +50,11 @@ namespace Source.Engine.GameObjects
 			IsDisposed = true;
 
 			OnDisposed?.Invoke(this);
+		}
+
+		public virtual void Start()
+		{
+
 		}
 
 		public virtual void Update(float deltaTime)
