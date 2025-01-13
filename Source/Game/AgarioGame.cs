@@ -10,8 +10,8 @@ namespace Source.Game
 		private const int PlayersCount = 50;
 		private const int FoodCount = 500;
 
-		//private FloatRect _bounds;
 		private GameLoop GameLoop => GameLoop.Instance;
+		private RenderWindow _window;
 
 		private UnitFactory _unitFactory;
 
@@ -23,8 +23,6 @@ namespace Source.Game
 
 		private Player _mainPlayer;
 
-		//private GameCamera _camera;
-
 		public AgarioGame()
 		{
 
@@ -32,6 +30,7 @@ namespace Source.Game
 
 		public void Initialize(RenderWindow window, UnitFactory unitFactory)
 		{
+			_window = window;
 			_unitFactory = unitFactory;
 
 			SpawnFood();
@@ -79,7 +78,12 @@ namespace Source.Game
 			_mainPlayer.OnAteFood += _text.OnScoreChanged;
 		}
 
-	
+
+		public override void UpdateInput()
+		{
+			_window.DispatchEvents();
+		}
+
 
 		public override void Update(float deltaTime)
 		{

@@ -13,14 +13,12 @@ namespace Source.Engine
 		{
 			RenderWindow window = CreateWindow();
 
-			FloatRect windowBounds = new(0, 0, window.Size.X, window.Size.Y);
-
 			var game = new AgarioGame();
 			var renderer = new SFMLRenderer(window);
 
 			var gameLoop = new GameLoop(renderer, game);
 
-			var unitFactory = new UnitFactory(gameLoop, windowBounds);
+			var unitFactory = new UnitFactory(gameLoop, renderer);
 
 			game.Initialize(window, unitFactory);
 

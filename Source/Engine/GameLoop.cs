@@ -29,6 +29,7 @@ namespace Source.Engine
 			_time = new();
 
 			_gameObjects.Add(game);
+			_inputhandlers.Add(game);
 		}
 
 		public void Run()

@@ -6,7 +6,7 @@ namespace Source.Game.Units
 {
     public class TextObject : GameObject
     {
-        private static readonly Color DefaultTextColor = Color.Black;
+        private static readonly Color DefaultTextColor = Color.White;
         private static readonly Font DefaultFont = new(FontPath);
 
         private const string FontPath = @"C:\Windows\Fonts\Arial.ttf";
