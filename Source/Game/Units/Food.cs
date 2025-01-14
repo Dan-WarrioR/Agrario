@@ -24,11 +24,16 @@ namespace Source.Game.Units
 
 		}
 
+		public void Eat()
+		{
+			SetActive(false);
+		}
+
 		public bool CanBeEatenBy(Player player)
 		{
 			float distance = Position.DistanceTo(player.Position);
 
-			return player.Radius > Radius && distance < player.Radius;
+			return player.Radius > Radius && distance < player.Radius && IsActive;
 		}
 	}
 }

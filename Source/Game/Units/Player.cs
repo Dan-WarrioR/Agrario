@@ -49,11 +49,21 @@ namespace Source.Game.Units
 
 		public void UpdateInput()
 		{
+			if (!IsActive)
+			{
+				return;
+			}
+
 			_inputComponent.UpdateInput();
 		}
 
 		public override void Update(float deltaTime)
 		{
+			if (!IsActive)
+			{
+				return;
+			}
+
 			_inputComponent.Update(deltaTime);
 
 			Circle.Position += CurrentSpeed * deltaTime * _inputComponent.Delta;
