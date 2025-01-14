@@ -1,5 +1,6 @@
 ﻿using SFML.Graphics;
 using SFML.System;
+using Source.Engine.Tools;
 
 namespace Source.Game.Units
 {
@@ -7,9 +8,7 @@ namespace Source.Game.Units
 	{
 		public float Mass { get; }
 
-		public float Radius { get; }
-
-		public Vector2f Position { get; }
+		public bool CanBeEatenBy(Player player);
 	}
 
 	public class Food : CircleObject, IFood
@@ -23,6 +22,13 @@ namespace Source.Game.Units
 		public Food(float radius, Vector2f initialPosition) : base(radius, initialPosition)
 		{
 
+		}
+
+		public bool CanBeEatenBy(Player player)
+		{
+			float distance = Position.DistanceTo(player.Position);
+
+			return player.Radius > Radius && distance < player.Radius;
 		}
 	}
 }

@@ -8,7 +8,7 @@ namespace Source.Game
     public class AgarioGame : BaseGame
 	{
 		private const int PlayersCount = 50;
-		private const int FoodCount = 2;
+		private const int FoodCount = 500;
 
 		private GameLoop GameLoop => GameLoop.Instance;
 		private RenderWindow _window;
@@ -131,6 +131,8 @@ namespace Source.Game
 					}
 				}
 			}
+
+
 		}
 
 		private void CheckPlayerColissions()

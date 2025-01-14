@@ -65,7 +65,7 @@ namespace Source.Game.Units
 
 		public bool TryEat(IFood food)
 		{
-			if (!CanEat(food))
+			if (!food.CanBeEatenBy(this))
 			{
 				return false;
 			}
@@ -82,9 +82,9 @@ namespace Source.Game.Units
 			return true;
 		}
 
-		private bool CanEat(IFood food)
+		public bool CanBeEatenBy(Player player)
 		{
-			return Radius > food.Radius && Position.DistanceTo(food.Position) < Radius;
+			return Radius > player.Radius && Position.DistanceTo(player.Position) < Radius;
 		}
 
 		//Position
