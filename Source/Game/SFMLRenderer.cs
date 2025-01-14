@@ -1,4 +1,5 @@
 ﻿using SFML.Graphics;
+using SFML.System;
 using Source.Engine;
 using Source.Game.Configs;
 
@@ -14,7 +15,12 @@ namespace Source.Game
 		{
 			_window = window;
 
-			_camera = new(window, new(0,0), WindowConfig.WindowSize);
+			_camera = new(_window, WindowConfig.WindowSize, WindowConfig.WindowSize);
+		}
+
+		public void UpdateView(Vector2f playerPosition) //Clean with Dependency
+		{
+			_camera.Update(playerPosition);
 		}
 
 		public override void Render()
@@ -30,7 +36,15 @@ namespace Source.Game
 				}	
 			}
 
+			DrawUIElements();
+
+			_window.Display();
+		}
+
+		private void DrawUIElements()
+		{
 			_camera.BeginUIView();
+
 			foreach (var drawable in UIElements)
 			{
 				if (drawable.IsActive)
@@ -38,8 +52,6 @@ namespace Source.Game
 					_window.Draw(drawable);
 				}
 			}
-
-			_window.Display();
 		}
 	}
 }

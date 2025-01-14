@@ -1,5 +1,6 @@
 ﻿using SFML.Graphics;
 using SFML.System;
+using SFML.Window;
 
 public class GameCamera
 {
@@ -11,13 +12,15 @@ public class GameCamera
 	{
 		_window = window;
 
-		// Initialize game view (follows player)
-		_gameView = new View(initialCenter, size);
+		_window.Resized += OnWindowResize;
 
-		// Initialize UI view (stays fixed)
-		_uiView = new View(_window.DefaultView);
+		_gameView = new(initialCenter, size);
+
+		_uiView = new(_window.DefaultView);
 		_uiView.Size = _window.DefaultView.Size;
-		_uiView.Center = new Vector2f(_uiView.Size.X / 2, _uiView.Size.Y / 2);
+		_uiView.Center = new(_uiView.Size.X / 2, _uiView.Size.Y / 2);
+
+		BeginGameView();
 	}
 
 	public void BeginGameView()
@@ -45,15 +48,15 @@ public class GameCamera
 		_gameView.Size = size;
 	}
 
-	public Vector2f GetCameraPosition()
+	private void OnWindowResize(object? sender, SizeEventArgs e)
 	{
-		return _gameView.Center;
-	}
+		uint width = _window.Size.X;
+		uint height = _window.Size.Y;
 
-	// Handle window resize if needed
-	public void OnWindowResize(uint width, uint height)
-	{
-		_uiView.Size = new Vector2f(width, height);
-		_uiView.Center = new Vector2f(width / 2, height / 2);
+		_uiView.Size = new(width, height);
+		_uiView.Center = new(width / 2, height / 2);
+
+		float aspectRatio = width / (float)height;
+		_gameView.Size = new(_gameView.Size.Y * aspectRatio, _gameView.Size.Y);
 	}
 }
