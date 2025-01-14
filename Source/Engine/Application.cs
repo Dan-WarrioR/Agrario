@@ -1,7 +1,6 @@
 ﻿using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
-using Source.Engine.Factory;
 using Source.Game;
 using Source.Game.Configs;
 
@@ -20,9 +19,7 @@ namespace Source.Engine
 
 			window.Closed += (_, _) => gameLoop.Stop();
 
-			var unitFactory = new UnitFactory(gameLoop, renderer);
-
-			game.Initialize(window, unitFactory);
+			game.Initialize(window, renderer);
 
 			gameLoop.Run();
 		}
