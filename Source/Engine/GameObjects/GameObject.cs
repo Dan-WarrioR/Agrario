@@ -28,6 +28,8 @@ namespace Source.Engine.GameObjects
 
 		public event Action<GameObject> OnDisposed;
 
+		public bool IsActive { get; private set; }
+
 		public virtual Vector2f Position { get; }
 
 		public Vector2f InitialPosition { get; }
@@ -50,6 +52,11 @@ namespace Source.Engine.GameObjects
 			IsDisposed = true;
 
 			OnDisposed?.Invoke(this);
+		}
+
+		public void SetActive(bool isActive)
+		{
+			IsActive = isActive;
 		}
 
 		public virtual void Start()

@@ -4,21 +4,38 @@ namespace Source.Engine
 {
 	public abstract class BaseRenderer
 	{
-		protected List<GameObject> Drawables = new();
+		protected List<GameObject> GameElements = new();
 
-		public void Add(GameObject gameobject)
+		protected List<GameObject> UIElements = new();
+
+		public void AddGameElement(GameObject gameobject)
 		{
-			if (Drawables.Contains(gameobject))
+			if (GameElements.Contains(gameobject))
 			{
 				return;
 			}
 
-			Drawables.Add(gameobject);
+			GameElements.Add(gameobject);
 		}
 
-		public void Remove(GameObject gameobject)
+		public void RemoveGameElement(GameObject gameobject)
 		{
-			Drawables.Remove(gameobject);
+			GameElements.Remove(gameobject);
+		}
+
+		public void AddUIElement(GameObject uiElement)
+		{
+			if (UIElements.Contains(uiElement))
+			{
+				return;
+			}
+
+			UIElements.Add(uiElement);
+		}
+
+		public void RemoveUIElement(GameObject uiElement)
+		{
+			UIElements.Remove(uiElement);
 		}
 
 		public abstract void Render();
