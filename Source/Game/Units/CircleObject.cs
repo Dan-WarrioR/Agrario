@@ -11,13 +11,13 @@ namespace Source.Game.Units
 
         public FloatRect ObjectRect => Circle.GetGlobalBounds();
 
-        public override Vector2f Position => Circle.Position;
+        public Vector2f Position => Circle.Position;
 
         public float Radius => Circle.Radius;
 
         protected CircleShape Circle { get; }
 
-        public CircleObject(float radius, Vector2f initialPosition) : base(initialPosition)
+        public CircleObject(float radius, Vector2f initialPosition)
         {
             Circle = new CircleShape(radius)
             {
@@ -27,7 +27,12 @@ namespace Source.Game.Units
             };
         }
 
-        public bool IsIntersects(CircleObject sphere)
+		public void SetPosition(Vector2f position)
+		{
+			Circle.Position = position;
+		}
+
+		public bool IsIntersects(CircleObject sphere)
         {
             float distanceToObject = Position.DistanceTo(sphere.Position);
 

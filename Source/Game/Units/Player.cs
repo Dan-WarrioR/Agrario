@@ -18,8 +18,6 @@ namespace Source.Game.Units
 		private const float MinSpeed = 100f;
 		private const float SpeedReductionCoefficient = 20f;
 
-		private const float StopDistance = 1f;
-
 		private const float MassMultiplier = 1f;
 
 		public event Action<float> OnAteFood;
@@ -38,13 +36,20 @@ namespace Source.Game.Units
 
 		private IInputComponent _inputComponent;
 
-		private Random _random = new();		
+		private float _initialRadius;
 
 		public Player(IInputComponent inputComponent, Color color, float radius, Vector2f initialPosition) : base(radius, initialPosition)
 		{
 			_inputComponent = inputComponent;
+			_initialRadius = radius;
 
 			Circle.FillColor = color;
+		}
+
+		public void Reset()
+		{
+			SetActive(true);
+			Circle.Radius = _initialRadius;
 		}
 
 		public void UpdateInput()
@@ -71,7 +76,7 @@ namespace Source.Game.Units
 			ClampPosition();
 		}
 
-		//Eat	
+		#region Eat
 
 		public bool TryEat(IFood food)
 		{
@@ -94,10 +99,12 @@ namespace Source.Game.Units
 
 		public bool CanBeEatenBy(Player player)
 		{
-			return Radius > player.Radius && Position.DistanceTo(player.Position) < Radius;
+			var distance = Position.DistanceTo(player.Position);
+
+			return Radius < player.Radius && distance < Radius * 2 && IsActive;
 		}
 
-		//Position
+		#endregion
 
 		private void ClampPosition()
 		{

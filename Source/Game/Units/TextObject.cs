@@ -12,11 +12,11 @@ namespace Source.Game.Units
         private const string FontPath = @"C:\Windows\Fonts\Arial.ttf";
         private const uint CharacterSize = 24;
 
-        public override Vector2f Position => _text.Position;
+        public Vector2f Position => _text.Position;
 
         private Text _text;
 
-        public TextObject(string text, Vector2f initialPosition) : base(initialPosition)
+        public TextObject(string text, Vector2f initialPosition)
         {
             _text = new(text, DefaultFont, CharacterSize)
             {
@@ -29,6 +29,11 @@ namespace Source.Game.Units
         {
             _text.FillColor = textColor;
         }
+
+        public void ChangeText(string text)
+        {
+			_text.DisplayedString = text;
+		}
 
         public void OnScoreChanged(float playerMass)
         {
