@@ -20,7 +20,14 @@ namespace Source.Game
 		private UIFactory _uiFactory;
 
 		private TextObject _text;
+		private TextObject _countText;
+
 		private Player _mainPlayer;
+
+		private List<Food> _foods = new(FoodCount);
+		private List<Player> _players = new(PlayersCount);
+
+		private int _alivedPlayersCount = 0;
 
 		public AgarioGame()
 		{
@@ -42,32 +49,41 @@ namespace Source.Game
 			SpawnMainPlayer();
 
 			SpawnUserUI();
+
+			_alivedPlayersCount = _players.Count;
 		}
 
 		private void SpawnBots()
 		{
 			for (int i = 0; i < PlayersCount - 1; i++)
 			{
-				_unitFactory.BotsPool.SpawnObject();
-			}		
+				var bot = _unitFactory.SpawnBot();
+
+				_players.Add(bot);
+			}
 		}
 
 		private void SpawnFood()
 		{
 			for (int i = 0; i < FoodCount; i++)
 			{
-				_unitFactory.FoodPool.SpawnObject();
+				var food = _unitFactory.SpawnFood();
+				_foods.Add(food);
 			}
 		}
 
 		private void SpawnMainPlayer()
 		{
 			_mainPlayer = _unitFactory.SpawnPlayer();
+
+			_players.Add(_mainPlayer);
 		}
 
 		private void SpawnUserUI()
 		{
-			_text = _uiFactory.CreateText(_mainPlayer.Mass.ToString());
+			_text = _uiFactory.CreateScoreText(_mainPlayer.Mass.ToString());
+
+			_countText = _uiFactory.CreateCountText(PlayersCount.ToString());
 
 			_mainPlayer.OnAteFood += _text.OnScoreChanged;
 		}
@@ -87,6 +103,8 @@ namespace Source.Game
 
 			CheckPlayerColissions();
 
+			_countText.ChangeText(_alivedPlayersCount.ToString());
+
 			CheckForGameRestart();
 		}
 
@@ -101,7 +119,7 @@ namespace Source.Game
 
 		private void CheckForGameRestart()
 		{
-			if (!_mainPlayer.IsActive || _unitFactory.BotsPool.Items.Count >= 1)
+			if (!_mainPlayer.IsActive || _alivedPlayersCount > 1)
 			{
 				return;
 			}
@@ -111,9 +129,9 @@ namespace Source.Game
 
 		private void CheckFoodColissions()
 		{
-			foreach (var player in _unitFactory.BotsPool.Items)
+			foreach (var player in _players)
 			{
-				foreach (var food in _unitFactory.FoodPool.Items)
+				foreach (var food in _foods)
 				{
 					if (player.TryEat(food))
 					{
@@ -121,59 +139,45 @@ namespace Source.Game
 					}
 				}		
 			}
-
-			//Fix it later
-
-			foreach (var food in _unitFactory.FoodPool.Items)
-			{
-				if (_mainPlayer.TryEat(food))
-				{
-					food.Eat();
-				}
-			}
 		}
 
 		private void CheckPlayerColissions()
 		{
-			//Fix it later
-
-			for (int i = 1; i < _unitFactory.BotsPool.Items.Count - 1; i++)
+			for (int i = 1; i < _players.Count; i++)
 			{
-				var bot1 = _unitFactory.BotsPool.Items[i - 1];
-				var bot2 = _unitFactory.BotsPool.Items[i];
+				var bot1 = _players[i - 1];
+				var bot2 = _players[i];
 
-				if (bot2.IsActive && bot1.TryEat(bot2))
+				if (bot1.IsActive && bot1.TryEat(bot2))
 				{
-					bot2.SetActive(false);
+					EatPlayer(bot2);
 				}
-				else if (bot1.IsActive && bot2.TryEat(bot1))
+				else if (bot2.IsActive && bot2.TryEat(bot1))
 				{
-					bot1.SetActive(false);
-				}
-			}
-
-			//Fix it later
-
-			foreach (var bot in _unitFactory.BotsPool.Items)
-			{
-				if (bot.IsActive && _mainPlayer.TryEat(bot))
-				{
-					bot.SetActive(false);
-				}
-				else if (_mainPlayer.IsActive && bot.TryEat(_mainPlayer))
-				{
-					_mainPlayer.SetActive(false);
+					EatPlayer(bot1);
 				}
 			}
 		}
 
 		private void RestartGame()
 		{
-			_unitFactory.FoodPool.RespawanAll();
-			_unitFactory.BotsPool.RespawanAll();
+			foreach (var food in _foods)
+			{
+				_unitFactory.RespawnFood(food);
+			}
 
-			_mainPlayer.SetActive(true);
-			_mainPlayer.SetPosition(GetRandomPosition());
+			foreach (var player in _players)
+			{
+				_unitFactory.RespawnPlayer(player);
+			}	
+
+			_alivedPlayersCount = _players.Count;
+		}
+
+		private void EatPlayer(Player player)
+		{
+			player.SetActive(false);
+			_alivedPlayersCount--;
 		}
 
 		private Vector2f GetRandomPosition()

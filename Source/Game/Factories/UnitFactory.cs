@@ -5,7 +5,6 @@ using Source.Engine.GameObjects;
 using Source.Game.Units.Components.Input;
 using Source.Game.Configs;
 using Source.Engine;
-using Source.Engine.Tools;
 
 namespace Source.Game.Factories
 {
@@ -17,11 +16,6 @@ namespace Source.Game.Factories
 		private static readonly Color BotFillColor = new(150, 150, 150);
 		private static readonly Color PlayerFillColor = Color.Yellow;
 
-        public ObjectPool<Food> FoodPool;
-        public ObjectPool<Player> BotsPool;
-
-        private Player _mainPlayer;
-
 		private GameLoop _gameLoop;
 		private BaseRenderer _renderer;
 
@@ -29,14 +23,11 @@ namespace Source.Game.Factories
         {
             _gameLoop = gameLoop;
             _renderer = renderer;
-
-            FoodPool = new(0, 500, SpawnFood, RespawnFood);
-            BotsPool = new(0, 50, SpawnBot, RespawnBot);
 		}
 
 		#region Food
 
-		private Food SpawnFood()
+		public Food SpawnFood()
 		{
 			var food = new Food(FoodRadius, GetRandomPosition());
 
@@ -45,7 +36,7 @@ namespace Source.Game.Factories
 			return food;
 		}
 
-		private void RespawnFood(Food food)
+		public void RespawnFood(Food food)
 		{
 			food.SetActive(true);
 			food.SetPosition(GetRandomPosition());
@@ -59,25 +50,25 @@ namespace Source.Game.Factories
 
 		public Player SpawnPlayer()
         {
-			_mainPlayer = new Player(new KeyBoardInput(), PlayerFillColor, MinPlayerRadius, GetRandomPosition());
+			var player = new Player(new KeyBoardInput(), PlayerFillColor, 50, GetRandomPosition());
             
-			RegisterObject(_mainPlayer);
-
-            return _mainPlayer;
-		}
-
-		private Player SpawnBot()
-        {
-			var player = new Player(new RandomDirectionInput(), BotFillColor, MinPlayerRadius, GetRandomPosition());
-
 			RegisterObject(player);
 
-			return player;
+            return player;
 		}
 
-        private void RespawnBot(Player player)
+		public Player SpawnBot()
         {
-			player.SetActive(false);
+			var bot = new Player(new RandomDirectionInput(), BotFillColor, MinPlayerRadius, GetRandomPosition());
+
+			RegisterObject(bot);
+
+			return bot;
+		}
+
+        public void RespawnPlayer(Player player)
+        {
+			player.Reset();
 			player.SetPosition(GetRandomPosition());
         }
 

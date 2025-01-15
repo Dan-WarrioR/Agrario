@@ -8,6 +8,7 @@ namespace Source.Game.Factories
 	public class UIFactory
 	{
 		private static readonly Vector2f ScoreTextPosition = new(WindowConfig.Bounds.Width - 200, WindowConfig.Bounds.Top + 20);
+		private static readonly Vector2f PlayerCountTextPosition = new(WindowConfig.Bounds.Left + 200, WindowConfig.Bounds.Top + 20);
 
 		private GameLoop _gameLoop;
 		private BaseRenderer _renderer;
@@ -18,9 +19,20 @@ namespace Source.Game.Factories
 			_renderer = renderer;		
 		}
 
-		public TextObject CreateText(string text)
+		public TextObject CreateScoreText(string text)
 		{
 			var textObject = new TextObject(text, ScoreTextPosition);
+
+			_renderer.AddUIElement(textObject);
+
+			textObject.OnDisposed += _renderer.RemoveGameElement;
+
+			return textObject;
+		}
+
+		public TextObject CreateCountText(string text)
+		{
+			var textObject = new TextObject(text, PlayerCountTextPosition);
 
 			_renderer.AddUIElement(textObject);
 
