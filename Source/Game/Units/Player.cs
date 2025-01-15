@@ -99,9 +99,9 @@ namespace Source.Game.Units
 
 		public bool CanBeEatenBy(Player player)
 		{
-			var distance = Position.DistanceTo(player.Position);
+			float distance = Position.DistanceTo(player.Position);
 
-			return Radius < player.Radius && distance < Radius * 2 && IsActive;
+			return player.Radius > Radius && distance < player.Radius && IsActive;
 		}
 
 		#endregion
