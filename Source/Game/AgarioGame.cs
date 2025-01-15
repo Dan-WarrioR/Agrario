@@ -2,16 +2,12 @@
 using SFML.Graphics;
 using Source.Engine;
 using Source.Game.Units;
-using SFML.System;
 using Source.Game.Configs;
 
 namespace Source.Game
 {
     public class AgarioGame : BaseGame
 	{
-		private const int PlayersCount = 2;
-		private const int FoodCount = 500;
-
 		private GameLoop GameLoop => GameLoop.Instance;
 		private RenderWindow _window;
 		private SFMLRenderer _renderer;
@@ -19,13 +15,13 @@ namespace Source.Game
 		private UnitFactory _unitFactory;
 		private UIFactory _uiFactory;
 
-		private TextObject _text;
+		private TextObject _scoreText;
 		private TextObject _countText;
 
 		private Player _mainPlayer;
 
-		private List<Food> _foods = new(FoodCount);
-		private List<Player> _players = new(PlayersCount);
+		private List<Food> _foods = new(GameConfig.FoodCount);
+		private List<Player> _players = new(GameConfig.PlayersCount);
 
 		private int _alivedPlayersCount = 0;
 
@@ -48,14 +44,14 @@ namespace Source.Game
 
 			SpawnMainPlayer();
 
-			SpawnUserUI();
-
 			_alivedPlayersCount = _players.Count;
+
+			SpawnUserUI();
 		}
 
 		private void SpawnBots()
 		{
-			for (int i = 0; i < PlayersCount - 1; i++)
+			for (int i = 0; i < GameConfig.PlayersCount - 1; i++)
 			{
 				var bot = _unitFactory.SpawnBot();
 
@@ -65,7 +61,7 @@ namespace Source.Game
 
 		private void SpawnFood()
 		{
-			for (int i = 0; i < FoodCount; i++)
+			for (int i = 0; i < GameConfig.FoodCount; i++)
 			{
 				var food = _unitFactory.SpawnFood();
 				_foods.Add(food);
@@ -81,11 +77,11 @@ namespace Source.Game
 
 		private void SpawnUserUI()
 		{
-			_text = _uiFactory.CreateScoreText(_mainPlayer.Mass.ToString());
+			_scoreText = _uiFactory.CreateScoreText(_mainPlayer.Mass.ToString());
 
-			_countText = _uiFactory.CreateCountText(PlayersCount.ToString());
+			_countText = _uiFactory.CreateCountText(_alivedPlayersCount.ToString());
 
-			_mainPlayer.OnAteFood += _text.OnScoreChanged;
+			_mainPlayer.OnAteFood += UpdateScore;
 		}
 
 
@@ -157,7 +153,40 @@ namespace Source.Game
 					EatPlayer(bot1);
 				}
 			}
+
+
+
+			for (int i = 0; i < _players.Count; i++)
+			{
+				var player1 = _players[i];
+
+				if (!player1.IsActive)
+				{
+					continue;
+				}
+
+				for (int j = i + 1; j < _players.Count; j++)
+				{
+					var player2 = _players[j];
+
+					if (!player2.IsActive)
+					{
+						continue;
+					}
+
+					if (player1.TryEat(player2))
+					{
+						EatPlayer(player2);
+					}
+					else if (player2.TryEat(player1))
+					{
+						EatPlayer(player1);
+					}
+				}
+			}
 		}
+
+
 
 		private void RestartGame()
 		{
@@ -180,14 +209,9 @@ namespace Source.Game
 			_alivedPlayersCount--;
 		}
 
-		private Vector2f GetRandomPosition()
+		private void UpdateScore(float mass)
 		{
-			var bounds = WindowConfig.Bounds;
-
-			float x = Random.Shared.Next((int)bounds.Left, (int)(bounds.Left + bounds.Width));
-			float y = Random.Shared.Next((int)bounds.Top, (int)(bounds.Top + bounds.Height));
-
-			return new(x, y);
+			_scoreText.ChangeText(mass.ToString());
 		}
 	}
 }

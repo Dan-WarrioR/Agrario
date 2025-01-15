@@ -35,11 +35,6 @@ namespace Source.Game.Units
 			_text.DisplayedString = text;
 		}
 
-        public void OnScoreChanged(float playerMass)
-        {
-            _text.DisplayedString = playerMass.ToString();
-        }
-
         public override void Draw(RenderTarget target, RenderStates states)
         {
             _text.Draw(target, states);

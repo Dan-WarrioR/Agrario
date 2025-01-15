@@ -13,9 +13,11 @@ namespace Source.Game.Units
 
 	public class Food : CircleObject, IFood
 	{
+		private static readonly Color FoodColor = new(241, 196, 15);
+
 		private const float MassMultiplier = 1f;
 
-		protected override Color FillColor => Color.Green;
+		protected override Color FillColor => FoodColor;
 
 		public float Mass => Radius * Radius * MathF.PI * MassMultiplier;
 

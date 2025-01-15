@@ -13,8 +13,8 @@ namespace Source.Game.Factories
 		private const float MinPlayerRadius = 20f;
 		private const float FoodRadius = 5f;
 
-		private static readonly Color BotFillColor = new(150, 150, 150);
-		private static readonly Color PlayerFillColor = Color.Yellow;
+		private static readonly Color BotFillColor = new(46, 204, 113);
+		private static readonly Color PlayerFillColor = new(52, 152, 219);
 
 		private GameLoop _gameLoop;
 		private BaseRenderer _renderer;

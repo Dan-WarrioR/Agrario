@@ -8,7 +8,7 @@ namespace Source.Game.Factories
 	public class UIFactory
 	{
 		private static readonly Vector2f ScoreTextPosition = new(WindowConfig.Bounds.Width - 200, WindowConfig.Bounds.Top + 20);
-		private static readonly Vector2f PlayerCountTextPosition = new(WindowConfig.Bounds.Left + 200, WindowConfig.Bounds.Top + 20);
+		private static readonly Vector2f PlayerCountTextPosition = new(WindowConfig.Bounds.Left + 50, WindowConfig.Bounds.Top + 20);
 
 		private GameLoop _gameLoop;
 		private BaseRenderer _renderer;

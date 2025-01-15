@@ -28,8 +28,8 @@ namespace Source.Engine
 		{
 			Vector2f windowSize = WindowConfig.WindowSize;
 
-			var videoMode = new VideoMode((uint)windowSize.X, (uint)windowSize.Y);
-			var window = new RenderWindow(videoMode, WindowConfig.AppName);
+			var videoMode = VideoMode.DesktopMode;
+			var window = new RenderWindow(videoMode, WindowConfig.AppName, Styles.Default);
 
 			window.SetFramerateLimit(60);
 			window.SetVerticalSyncEnabled(true);
