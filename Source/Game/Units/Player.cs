@@ -101,7 +101,7 @@ namespace Source.Game.Units
 		{
 			float distance = Position.DistanceTo(player.Position);
 
-			return player.Radius > Radius && distance < player.Radius && IsActive;
+			return player.Radius > Radius && distance + Radius < player.Radius && IsActive;
 		}
 
 		#endregion
