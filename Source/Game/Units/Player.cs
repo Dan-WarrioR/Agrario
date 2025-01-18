@@ -118,9 +118,10 @@ namespace Source.Game.Units
 
 		public bool CanBeEatenBy(Player player)
 		{
-			float distance = Position.DistanceTo(player.Position);
-
-			return player.Radius > Radius && distance + Radius < player.Radius && IsActive;
+			float distanceSquared = Position.DistanceToSquared(player.Position);
+			float radiusDifference = player.Radius - Radius;
+			
+			return player.Radius > Radius && distanceSquared < radiusDifference * radiusDifference && IsActive;
 		}
 
 		#endregion
