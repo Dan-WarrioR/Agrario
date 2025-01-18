@@ -14,6 +14,13 @@ namespace Source.Game.Units
 
 	public class Player : CircleObject, IEater, IFood, IInpputHandler
 	{
+		private const float BaseZoom = 0.1f;
+		private const float ZoomFactorCoefficient = 0.01f;
+
+		private const float GrowthBase = 2f;
+		private const float GrowthDecayRate = 0.5f;
+		private const float MinGrowthFactor = 1f;
+
 		private const float BaseSpeed = 200f;
 		private const float MinSpeed = 100f;
 		private const float SpeedReductionCoefficient = 20f;
@@ -22,7 +29,15 @@ namespace Source.Game.Units
 
 		public event Action<float> OnAteFood;
 
-		public float Mass => Radius * Radius * MathF.PI * MassMultiplier;
+		public float ZoomFactor
+		{
+			get
+			{
+				return BaseZoom + (Radius * ZoomFactorCoefficient);
+			}
+		}
+
+		public float Mass => Radius * Radius * MathF.PI;
 
 		public float CurrentSpeed
 		{
@@ -85,8 +100,12 @@ namespace Source.Game.Units
 				return false;
 			}
 
-			float newArea = Mass + food.Mass;
-			float newRadius = MathF.Sqrt(newArea / MathF.PI);
+			float growthFactor = GrowthBase / (1f + GrowthDecayRate * MathF.Log(Mass + 1));
+			growthFactor = MathF.Max(growthFactor, MinGrowthFactor);
+
+			float newMass = Mass + food.Mass * growthFactor;
+
+			float newRadius = MathF.Sqrt(newMass / MathF.PI);
 
 			Circle.Radius = newRadius;
 

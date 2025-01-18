@@ -41,6 +41,11 @@ namespace Source.Game
 			_window.Display();
 		}
 
+		public void Zoom(float factor)
+		{
+			_camera.Zoom(factor);
+		}
+
 		private void DrawUIElements()
 		{
 			_camera.BeginUIView();

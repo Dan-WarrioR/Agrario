@@ -14,7 +14,6 @@ namespace Source.Engine
 
 			var game = new AgarioGame();
 			var renderer = new SFMLRenderer(window);
-
 			var gameLoop = new GameLoop(renderer, game);
 
 			window.Closed += (_, _) => gameLoop.Stop();

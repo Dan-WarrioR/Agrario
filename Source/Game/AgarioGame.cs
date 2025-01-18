@@ -76,7 +76,7 @@ namespace Source.Game
 		{
 			_scoreText = _uiFactory.CreateScoreText(_mainPlayer.Mass.ToString());
 
-			_countText = _uiFactory.CreateCountText(_alivedPlayersCount.ToString());
+			_countText = _uiFactory.CreateCountText($"Players: {_alivedPlayersCount}");
 
 			_mainPlayer.OnAteFood += UpdateScore;
 
@@ -92,20 +92,13 @@ namespace Source.Game
 
 		public override void Update(float deltaTime)
 		{
-			_renderer.UpdateView(_mainPlayer.Position);
+			UpdatePlayerCamera();		
 
 			CheckFoodColissions();
 
 			CheckPlayerColissions();
 			
 			CheckForGameRestart();
-		}
-
-
-
-		public bool IsEndGame()
-		{
-			return false;
 		}
 
 
@@ -154,16 +147,44 @@ namespace Source.Game
 						continue;
 					}
 
-					if (player1.TryEat(player2))
+					if (TryEatPlayer(player1, player2))
 					{
-						EatPlayer(player2);
-					}
-					else if (player2.TryEat(player1))
-					{
-						EatPlayer(player1);
+						continue;
 					}
 				}
 			}
+		}
+
+
+		private void UpdatePlayerCamera()
+		{
+			_renderer.UpdateView(_mainPlayer.Position);
+
+			_renderer.Zoom(_mainPlayer.ZoomFactor);
+		}
+
+		private bool TryEatPlayer(Player player1, Player player2)
+		{
+			if (player1.TryEat(player2))
+			{
+				EatPlayer(player2);
+				return true;
+			}
+			else if (player2.TryEat(player1))
+			{
+				EatPlayer(player1);
+				return true;
+			}
+
+			return false;
+		}
+		
+		private void EatPlayer(Player player)
+		{
+			player.SetActive(false);
+			_alivedPlayersCount--;
+			OnPlayerDied?.Invoke(_alivedPlayersCount);
+			
 		}
 
 
@@ -178,27 +199,23 @@ namespace Source.Game
 			foreach (var player in _players)
 			{
 				_unitFactory.RespawnPlayer(player);
-			}	
+			}
 
 			_alivedPlayersCount = _players.Count;
 		}
 
-		private void EatPlayer(Player player)
-		{
-			player.SetActive(false);
-			_alivedPlayersCount--;
-			OnPlayerDied?.Invoke(_alivedPlayersCount);
-			
-		}
-
 		private void OnPlayerDead(int playersCount)
 		{
-			_countText.ChangeText(playersCount.ToString());
+			string text = $"Players: {playersCount}";
+
+			_countText.ChangeText(text);
 		}
 
 		private void UpdateScore(float mass)
 		{
-			_scoreText.ChangeText(mass.ToString());
+			string text = $"Mass: {MathF.Round(mass, 0)}";
+
+			_scoreText.ChangeText(text);
 		}
 	}
 }

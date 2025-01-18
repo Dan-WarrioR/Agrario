@@ -42,7 +42,9 @@ namespace Source.Game
 
 		public void Zoom(float factor)
 		{
-			_gameView.Zoom(factor);
+			//_gameView.Zoom(factor); //zoom change view on factor every method invoke. Need to set a value once
+
+			_gameView.Size = new(_uiView.Size.X * factor, _uiView.Size.Y * factor);
 		}
 
 		public void SetViewSize(Vector2f size)
