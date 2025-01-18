@@ -23,12 +23,9 @@ namespace Source.Game
 		private List<Food> _foods = new(GameConfig.FoodCount);
 		private List<Player> _players = new(GameConfig.PlayersCount);
 
-		private int _alivedPlayersCount = 0;
+		private event Action<int> OnPlayerDied; 
 
-		public AgarioGame()
-		{
-			
-		}
+		private int _alivedPlayersCount = 0;
 
 		public void Initialize(RenderWindow window, SFMLRenderer renderer)
 		{
@@ -82,6 +79,8 @@ namespace Source.Game
 			_countText = _uiFactory.CreateCountText(_alivedPlayersCount.ToString());
 
 			_mainPlayer.OnAteFood += UpdateScore;
+
+			OnPlayerDied += OnPlayerDead;
 		}
 
 
@@ -98,9 +97,7 @@ namespace Source.Game
 			CheckFoodColissions();
 
 			CheckPlayerColissions();
-
-			_countText.ChangeText(_alivedPlayersCount.ToString());
-
+			
 			CheckForGameRestart();
 		}
 
@@ -139,23 +136,6 @@ namespace Source.Game
 
 		private void CheckPlayerColissions()
 		{
-			for (int i = 1; i < _players.Count; i++)
-			{
-				var bot1 = _players[i - 1];
-				var bot2 = _players[i];
-
-				if (bot1.IsActive && bot1.TryEat(bot2))
-				{
-					EatPlayer(bot2);
-				}
-				else if (bot2.IsActive && bot2.TryEat(bot1))
-				{
-					EatPlayer(bot1);
-				}
-			}
-
-
-
 			for (int i = 0; i < _players.Count; i++)
 			{
 				var player1 = _players[i];
@@ -207,6 +187,13 @@ namespace Source.Game
 		{
 			player.SetActive(false);
 			_alivedPlayersCount--;
+			OnPlayerDied?.Invoke(_alivedPlayersCount);
+			
+		}
+
+		private void OnPlayerDead(int playersCount)
+		{
+			_countText.ChangeText(playersCount.ToString());
 		}
 
 		private void UpdateScore(float mass)
