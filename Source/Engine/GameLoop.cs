@@ -10,6 +10,7 @@ namespace Source.Engine
 		public static GameLoop Instance { get; private set; }
 
 		private List<GameObject> _gameObjects = new();
+		private List<GameObject> _newGameObjects = new();
 
 		private List<IInpputHandler> _inputhandlers = new();
 
@@ -17,7 +18,7 @@ namespace Source.Engine
 		private readonly BaseGame _game;
 		private readonly Time _time;
 
-		private bool _isActive = true;
+		private bool _isStopped = false;
 
 		public GameLoop(BaseRenderer renderer, BaseGame game)
 		{
@@ -34,13 +35,18 @@ namespace Source.Engine
 
 		public void Run()
 		{
-			while (_isActive)
+			while (!IsEndGameLoop())
 			{
 				_renderer.Render();
 				UpdateInput();
-				Start(); //StartForNewObjects()
+				Start();
 				Update();
 			}
+		}
+
+		public void Stop()
+		{
+			_isStopped = true;
 		}
 
 		private void UpdateInput()
@@ -62,30 +68,37 @@ namespace Source.Engine
 
 			_time.Reset();
 
-			for (int i = 0; i < _gameObjects.Count; i++)
+			foreach (var updatable in _gameObjects)
 			{
-				_gameObjects[i].Update(_time.DeltaTime);
+				updatable.Update(_time.DeltaTime);
 			}
 		}
 
 		private void Start()
 		{
-			
-		}
-
-
-
-		public void Stop()
-		{
-			_isActive = false;
-		}
-
-		public void Register<T>(T gameObject) where T : GameObject
-		{
-			if (!_gameObjects.Contains(gameObject))
+			if (_newGameObjects.Count <= 0)
 			{
-				_gameObjects.Add(gameObject);
-			}		
+				return;
+			}
+
+			foreach (var item in _newGameObjects)
+			{
+				StartNewGameObject(item);
+			}
+
+			_newGameObjects.Clear();
+		}
+
+		private bool IsEndGameLoop()
+		{
+			return !_isStopped && _game.IsEndGame();
+		}
+
+		private void StartNewGameObject(GameObject gameObject)
+		{
+			gameObject.Start();
+
+			_gameObjects.Add(gameObject);
 
 			if (gameObject is IInpputHandler inputGameObject && !_inputhandlers.Contains(inputGameObject))
 			{
@@ -93,10 +106,23 @@ namespace Source.Engine
 			}
 		}
 
+
+
+		public void Register<T>(T gameObject) where T : GameObject
+		{
+			if (_gameObjects.Contains(gameObject) || _newGameObjects.Contains(gameObject))
+			{
+				return;
+			}
+
+			_newGameObjects.Add(gameObject);
+		}
+
 		public void UnRegister<T>(T gameObject) where T : GameObject
 		{
 			_gameObjects.Remove(gameObject);
-			
+			_newGameObjects.Remove(gameObject);
+
 			if (gameObject is IInpputHandler inputGameObject)
 			{
 				_inputhandlers.Remove(inputGameObject);

@@ -8,11 +8,6 @@ namespace Source.Engine.GameObjects
 		public void UpdateInput();
 	}
 
-	public interface IUpdatable
-	{
-		public void Update(float deltaTime);
-	}
-
 	public interface IDisposable
 	{
 		public bool IsDisposed { get; }
@@ -22,7 +17,7 @@ namespace Source.Engine.GameObjects
 		public void Dispose();
 	}
 
-	public abstract class GameObject : IDisposable, IUpdatable, Drawable
+	public abstract class GameObject : IDisposable, Drawable
 	{
 		public bool IsDisposed { get; private set; } = false;
 
