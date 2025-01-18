@@ -89,14 +89,10 @@ namespace Source.Game.Factories
         {
             _gameLoop.Register(gameObject);
             _renderer.AddGameElement(gameObject);
-
-            gameObject.OnDisposed += UnregisterObject;
         }
 
         private void UnregisterObject(GameObject gameObject)
         {
-            gameObject.OnDisposed -= UnregisterObject;
-
             _renderer.RemoveGameElement(gameObject);
             _gameLoop.UnRegister(gameObject);
         }

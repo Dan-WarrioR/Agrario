@@ -8,36 +8,11 @@ namespace Source.Engine.GameObjects
 		public void UpdateInput();
 	}
 
-	public interface IDisposable
+	public abstract class GameObject : Drawable
 	{
-		public bool IsDisposed { get; }
-
-		public event Action<GameObject> OnDisposed;
-
-		public void Dispose();
-	}
-
-	public abstract class GameObject : IDisposable, Drawable
-	{
-		public bool IsDisposed { get; private set; } = false;
-
-		public event Action<GameObject> OnDisposed;
-
 		public bool IsActive { get; private set; } = true;
 
 		public Vector2f InitialPosition { get; }
-
-		public void Dispose()
-		{
-			if (IsDisposed)
-			{
-				return;
-			}
-
-			IsDisposed = true;
-
-			OnDisposed?.Invoke(this);
-		}
 
 		public void SetActive(bool isActive)
 		{

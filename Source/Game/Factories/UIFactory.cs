@@ -26,8 +26,6 @@ namespace Source.Game.Factories
 
 			RegisterText(textObject);
 
-			textObject.OnDisposed += _renderer.RemoveGameElement;
-
 			return textObject;
 		}
 
@@ -36,8 +34,6 @@ namespace Source.Game.Factories
 			var textObject = new TextObject(text, PlayerCountTextPosition);
 
 			RegisterText(textObject);
-
-			textObject.OnDisposed += _renderer.RemoveGameElement;
 
 			return textObject;
 		}
