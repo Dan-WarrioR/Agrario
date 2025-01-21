@@ -49,16 +49,21 @@ namespace Source.Game.Units
 			}
 		}
 
-		private IInputComponent _inputComponent;
+		public IInputComponent InputComponent;
 
 		private float _initialRadius;
 
 		public Player(IInputComponent inputComponent, Color color, float radius, Vector2f initialPosition) : base(radius, initialPosition)
 		{
-			_inputComponent = inputComponent;
+			InputComponent = inputComponent;
 			_initialRadius = radius;
 
 			Circle.FillColor = color;
+		}
+
+		public void ChangeInputComponent(IInputComponent inputComponent)
+		{
+			InputComponent = inputComponent;
 		}
 
 		public void Reset()
@@ -74,7 +79,7 @@ namespace Source.Game.Units
 				return;
 			}
 
-			_inputComponent.UpdateInput();
+			InputComponent.UpdateInput();
 		}
 
 		public override void Update(float deltaTime)
@@ -84,9 +89,9 @@ namespace Source.Game.Units
 				return;
 			}
 
-			_inputComponent.Update(deltaTime);
+			InputComponent.Update(deltaTime);
 
-			Circle.Position += CurrentSpeed * deltaTime * _inputComponent.Delta;
+			Circle.Position += CurrentSpeed * deltaTime * InputComponent.Delta;
 
 			ClampPosition();
 		}
