@@ -44,6 +44,8 @@ namespace Source.Game
 			_alivedPlayersCount = _players.Count;
 
 			SpawnUserUI();
+
+			_window.KeyPressed += OnKeypressed;
 		}
 
 		private void SpawnBots()
@@ -86,9 +88,8 @@ namespace Source.Game
 
 		public override void UpdateInput()
 		{
-			_window.DispatchEvents();
+			_window.DispatchEvents();		
 		}
-
 
 		public override void Update(float deltaTime)
 		{
@@ -187,6 +188,8 @@ namespace Source.Game
 		}
 
 
+		
+
 
 		private void RestartGame()
 		{
@@ -215,6 +218,45 @@ namespace Source.Game
 			string text = $"Mass: {MathF.Round(mass, 0)}";
 
 			_scoreText.ChangeText(text);
+		}
+
+
+
+
+		//Trash
+
+		private void OnKeypressed(object? sender, SFML.Window.KeyEventArgs e)
+		{
+			if (e.Code == SFML.Window.Keyboard.Key.F)
+			{
+				SwapPlayerWithBot();
+			}
+		}
+
+		private void SwapPlayerWithBot()
+		{
+			Player bot = null;
+
+			foreach (var player in _players)
+			{
+				if (player != _mainPlayer && player.IsActive)
+				{
+					bot = player;
+					break;
+				}
+			}
+
+			if (bot == null)
+			{
+				return;
+			}
+
+			var botInputComponent = bot.InputComponent;
+
+			bot.ChangeInputComponent(_mainPlayer.InputComponent);
+			_mainPlayer.ChangeInputComponent(botInputComponent);
+
+			_mainPlayer = bot;
 		}
 	}
 }
