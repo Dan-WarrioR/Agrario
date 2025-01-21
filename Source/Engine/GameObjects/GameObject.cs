@@ -14,6 +14,13 @@ namespace Source.Engine.GameObjects
 
 		public Vector2f InitialPosition { get; }
 
+		public GameObject() { }
+
+		public GameObject(Vector2f initialPosition)
+		{
+			InitialPosition = initialPosition;
+		}
+
 		public void SetActive(bool isActive)
 		{
 			IsActive = isActive;

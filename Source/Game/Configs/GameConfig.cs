@@ -2,7 +2,7 @@
 {
 	public class GameConfig
 	{
-		public const int PlayersCount = 50;
-		public const int FoodCount = 500;
+		public const int PlayersCount = 100;
+		public const int FoodCount = 1000;
 	}
 }

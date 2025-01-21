@@ -1,6 +1,4 @@
 ﻿using SFML.Graphics;
-using SFML.System;
-using SFML.Window;
 using Source.Game;
 using Source.Game.Configs;
 
@@ -25,10 +23,7 @@ namespace Source.Engine
 
 		private RenderWindow CreateWindow()
 		{
-			Vector2f windowSize = WindowConfig.WindowSize;
-
-			var videoMode = VideoMode.DesktopMode;
-			var window = new RenderWindow(videoMode, WindowConfig.AppName, Styles.Default);
+			var window = new RenderWindow(WindowConfig.VideoMode, WindowConfig.AppName, WindowConfig.Style);
 
 			window.SetFramerateLimit(60);
 			window.SetVerticalSyncEnabled(true);

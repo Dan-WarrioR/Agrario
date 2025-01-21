@@ -184,7 +184,6 @@ namespace Source.Game
 			player.SetActive(false);
 			_alivedPlayersCount--;
 			OnPlayerDied?.Invoke(_alivedPlayersCount);
-			
 		}
 
 
