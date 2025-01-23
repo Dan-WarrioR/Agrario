@@ -1,12 +1,11 @@
 ﻿using SFML.System;
 using Source.Engine;
-using Source.Engine.GameObjects;
 using Source.Game.Configs;
 using Source.Game.Units;
 
 namespace Source.Game.Factories
 {
-	public class UIFactory
+	public class UIFactory : ObjectFactory
 	{
 		private static readonly Vector2f ScoreTextPosition = new(WindowConfig.Bounds.Width - 200, WindowConfig.Bounds.Top + 20);
 		private static readonly Vector2f PlayerCountTextPosition = new(WindowConfig.Bounds.Left + 50, WindowConfig.Bounds.Top + 20);
@@ -14,7 +13,7 @@ namespace Source.Game.Factories
 		private readonly GameLoop _gameLoop;
 		private readonly BaseRenderer _renderer;
 
-		public UIFactory(GameLoop gameLoop, BaseRenderer renderer)
+		public UIFactory(GameLoop gameLoop, BaseRenderer renderer) : base(gameLoop, renderer)
 		{
 			_gameLoop = gameLoop;
 			_renderer = renderer;		
@@ -22,26 +21,20 @@ namespace Source.Game.Factories
 
 		public TextObject CreateScoreText(string text)
 		{
-			var textObject = new TextObject(text, ScoreTextPosition);
+			var textObject = Instantiate<TextObject>();
 
-			RegisterText(textObject);
+			textObject.Initialize(text, ScoreTextPosition);
 
 			return textObject;
 		}
 
 		public TextObject CreateCountText(string text)
 		{
-			var textObject = new TextObject(text, PlayerCountTextPosition);
+			var textObject = Instantiate<TextObject>();
 
-			RegisterText(textObject);
+			textObject.Initialize(text, PlayerCountTextPosition);
 
 			return textObject;
-		}
-
-		private void RegisterText(GameObject textObject)
-		{
-			_gameLoop.Register(textObject);
-			_renderer.AddUIElement(textObject);
 		}
 	}
 }

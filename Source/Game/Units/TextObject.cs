@@ -1,11 +1,12 @@
 ﻿using SFML.Graphics;
 using SFML.System;
+using Source.Engine;
 using Source.Engine.GameObjects;
 
 namespace Source.Game.Units
 {
-    public class TextObject : GameObject
-    {
+    public class TextObject : GameObject, IUIElement
+	{
         private static readonly Color DefaultTextColor = Color.White;
         private static readonly Font DefaultFont = new(FontPath);
 
@@ -16,19 +17,16 @@ namespace Source.Game.Units
 
         private Text _text;
 
-        public TextObject(string text, Vector2f initialPosition)
+        public void Initialize(string text, Vector2f initialPosition)
         {
-            _text = new(text, DefaultFont, CharacterSize)
-            {
-                FillColor = DefaultTextColor,
-                Position = initialPosition,
-            };
-        }
+            Initialize(initialPosition);
 
-        public TextObject(string text, Vector2f initialPosition, Color textColor) : this(text, initialPosition)
-        {
-            _text.FillColor = textColor;
-        }
+			_text = new(text, DefaultFont, CharacterSize)
+			{
+				FillColor = DefaultTextColor,
+				Position = initialPosition,
+			};
+		}
 
         public void ChangeText(string text)
         {

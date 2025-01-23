@@ -1,5 +1,4 @@
 ﻿using SFML.Graphics;
-using SFML.System;
 using Source.Engine.Tools;
 
 namespace Source.Game.Units
@@ -20,11 +19,6 @@ namespace Source.Game.Units
 		protected override Color FillColor => FoodColor;
 
 		public float Mass => Radius * Radius * MathF.PI * MassMultiplier;
-
-		public Food(float radius, Vector2f initialPosition) : base(radius, initialPosition)
-		{
-
-		}
 
 		public void Eat()
 		{

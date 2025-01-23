@@ -1,14 +1,13 @@
 ﻿using Source.Game.Units;
 using SFML.Graphics;
 using SFML.System;
-using Source.Engine.GameObjects;
 using Source.Game.Units.Components.Input;
 using Source.Game.Configs;
 using Source.Engine;
 
 namespace Source.Game.Factories
 {
-    public class UnitFactory
+    public class UnitFactory : ObjectFactory
     {
 		private const float MinPlayerRadius = 20f;
 		private const float FoodRadius = 5f;
@@ -16,22 +15,18 @@ namespace Source.Game.Factories
 		private static readonly Color BotFillColor = new(46, 204, 113);
 		private static readonly Color PlayerFillColor = new(52, 152, 219);
 
-		private GameLoop _gameLoop;
-		private BaseRenderer _renderer;
-
-		public UnitFactory(GameLoop gameLoop, BaseRenderer renderer)
+		public UnitFactory(GameLoop gameLoop, BaseRenderer renderer) : base(gameLoop, renderer)
         {
-            _gameLoop = gameLoop;
-            _renderer = renderer;
+
 		}
 
 		#region Food
 
 		public Food SpawnFood()
 		{
-			var food = new Food(FoodRadius, GetRandomPosition());
+			var food = Instantiate<Food>();
 
-			RegisterObject(food);
+			food.Initialize(FoodRadius, GetRandomPosition());
 
 			return food;
 		}
@@ -50,18 +45,18 @@ namespace Source.Game.Factories
 
 		public Player SpawnPlayer()
         {
-			var player = new Player(new KeyBoardInput(), PlayerFillColor, 50, GetRandomPosition());
-            
-			RegisterObject(player);
+			var player = Instantiate<Player>();
+
+			player.Initialize(new KeyBoardInput(), PlayerFillColor, 50, GetRandomPosition());
 
             return player;
 		}
 
 		public Player SpawnBot()
         {
-			var bot = new Player(new RandomDirectionInput(), BotFillColor, MinPlayerRadius, GetRandomPosition());
+			var bot = Instantiate<Player>();
 
-			RegisterObject(bot);
+			bot.Initialize(new RandomDirectionInput(), BotFillColor, MinPlayerRadius, GetRandomPosition());
 
 			return bot;
 		}
@@ -83,18 +78,6 @@ namespace Source.Game.Factories
             float y = Random.Shared.Next((int)bounds.Top, (int)(bounds.Top + bounds.Height));
 
             return new(x, y);
-        }
-
-        private void RegisterObject(GameObject gameObject)
-        {
-            _gameLoop.Register(gameObject);
-            _renderer.AddGameElement(gameObject);
-        }
-
-        private void UnregisterObject(GameObject gameObject)
-        {
-            _renderer.RemoveGameElement(gameObject);
-            _gameLoop.UnRegister(gameObject);
         }
     }
 }

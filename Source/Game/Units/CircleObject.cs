@@ -8,13 +8,15 @@ namespace Source.Game.Units
     {
         public float Radius => Circle.Radius;
 
-        protected CircleShape Circle { get; }
+        protected CircleShape Circle { get; private set; }
 
-        public CircleObject(float radius, Vector2f initialPosition) : base(new CircleShape(radius), initialPosition)
+        public void Initialize(float radius, Vector2f initialPosition)
         {
-            Circle = (CircleShape)Shape;
+            Initialize(new CircleShape(radius), initialPosition);
 
-            Shape.Origin = new(radius, radius);
+			Circle = (CircleShape)Shape;
+
+			Shape.Origin = new(radius, radius);
 		}
 
 		public bool IsIntersects(CircleObject sphere)

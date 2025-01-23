@@ -12,10 +12,12 @@ namespace Source.Game.Units
 
 		public Vector2f Position => Shape.Position;
 
-		protected Shape Shape { get; }
+		protected Shape Shape { get; private set; }
 
-		public ShapeObject(Shape shape, Vector2f initialPosition) : base(initialPosition)
+		public void Initialize(Shape shape, Vector2f initialPosition)
 		{
+			Initialize(initialPosition);
+
 			Shape = shape;
 
 			shape.Position = initialPosition;
