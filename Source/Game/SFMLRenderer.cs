@@ -1,6 +1,7 @@
 ﻿using SFML.Graphics;
 using SFML.System;
 using Source.Engine;
+using Source.Engine.GameObjects;
 using Source.Game.Configs;
 
 namespace Source.Game
@@ -28,15 +29,10 @@ namespace Source.Game
 			_window.Clear(WindowConfig.BackgroundColor);
 
 			_camera.BeginGameView();
-			foreach (var drawable in GameElements)
-			{
-				if (drawable.IsActive)
-				{
-					_window.Draw(drawable);
-				}	
-			}
+			DrawActiveElements(GameElements);
 
-			DrawUIElements();
+			_camera.BeginUIView();
+			DrawActiveElements(UIElements);
 
 			_window.Display();
 		}
@@ -46,15 +42,13 @@ namespace Source.Game
 			_camera.Zoom(factor);
 		}
 
-		private void DrawUIElements()
+		private void DrawActiveElements<T>(IEnumerable<T> objects) where T : Drawable, IActivable
 		{
-			_camera.BeginUIView();
-
-			foreach (var drawable in UIElements)
+			foreach (var obj in objects)
 			{
-				if (drawable.IsActive)
+				if (obj.IsActive)
 				{
-					_window.Draw(drawable);
+					_window.Draw(obj);
 				}
 			}
 		}

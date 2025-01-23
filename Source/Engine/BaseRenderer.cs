@@ -2,40 +2,44 @@
 
 namespace Source.Engine
 {
+	public interface IUIElement
+	{
+
+	}
+
 	public abstract class BaseRenderer
 	{
 		protected List<GameObject> GameElements = new();
 
 		protected List<GameObject> UIElements = new();
 
-		public void AddGameElement(GameObject gameobject)
+		public void AddRenderElement(GameObject gameObject)
 		{
-			if (GameElements.Contains(gameobject))
+			if (gameObject is IUIElement)
 			{
+				if (!UIElements.Contains(gameObject))
+				{
+					UIElements.Add(gameObject);
+				}
+
 				return;
 			}
 
-			GameElements.Add(gameobject);
-		}
-
-		public void RemoveGameElement(GameObject gameobject)
-		{
-			GameElements.Remove(gameobject);
-		}
-
-		public void AddUIElement(GameObject uiElement)
-		{
-			if (UIElements.Contains(uiElement))
+			if (!GameElements.Contains(gameObject))
 			{
+				GameElements.Add(gameObject);
+			}
+		}
+
+		public void RemoveGameElement(GameObject gameObject)
+		{
+			if (gameObject is IUIElement)
+			{
+				UIElements.Remove(gameObject);
 				return;
 			}
 
-			UIElements.Add(uiElement);
-		}
-
-		public void RemoveUIElement(GameObject uiElement)
-		{
-			UIElements.Remove(uiElement);
+			GameElements.Remove(gameObject);
 		}
 
 		public abstract void Render();
