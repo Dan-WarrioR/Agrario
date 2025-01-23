@@ -8,15 +8,22 @@ namespace Source.Engine.GameObjects
 		public void UpdateInput();
 	}
 
-	public abstract class GameObject : Drawable
+	public interface IActivable
+	{
+		public bool IsActive { get; }
+
+		public void SetActive(bool isActive);
+	}
+
+	public abstract class GameObject : Drawable, IActivable
 	{
 		public bool IsActive { get; private set; } = true;
 
-		public Vector2f InitialPosition { get; }
+		public Vector2f InitialPosition { get; private set; }
 
-		public GameObject() { }
+		private List<BaseComponent> _components = new();
 
-		public GameObject(Vector2f initialPosition)
+		public void Initialize(Vector2f initialPosition)
 		{
 			InitialPosition = initialPosition;
 		}
@@ -26,6 +33,34 @@ namespace Source.Engine.GameObjects
 			IsActive = isActive;
 		}
 
+		public T AddComponent<T>() where T : BaseComponent, new()
+		{
+			T component = new();
+
+			component.SetOwner(this);
+			_components.Add(component);
+
+			return component;
+		}
+
+		public T? GetComponent<T>() where T : BaseComponent
+		{
+			foreach (var component in _components)
+			{
+				if (component is T)
+				{
+					return component as T;
+				}
+			}
+
+			return null;
+		}
+
+		public void RemoveComponent<T>() where T : BaseComponent
+		{
+			_components.RemoveAll(c => c is T);
+		}
+
 		public virtual void Start()
 		{
 
@@ -33,7 +68,10 @@ namespace Source.Engine.GameObjects
 
 		public virtual void Update(float deltaTime)
 		{
-			
+			foreach (var component in _components)
+			{
+				component.Update(deltaTime);
+			}
 		}
 
 		public abstract void Draw(RenderTarget target, RenderStates states);
