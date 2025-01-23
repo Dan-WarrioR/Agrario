@@ -9,14 +9,15 @@ namespace Source.Engine
 		public void Run()
 		{
 			RenderWindow window = CreateWindow();
-
+			
 			var game = new AgarioGame();
 			var renderer = new SFMLRenderer(window);
-			var gameLoop = new GameLoop(renderer, game);
+			var input = new Input(window);
+			var gameLoop = new GameLoop(input, renderer, game);
 
 			window.Closed += (_, _) => gameLoop.Stop();
-
-			game.Initialize(window, renderer);
+			
+			game.Initialize(window, renderer, input);
 
 			gameLoop.Run();
 		}

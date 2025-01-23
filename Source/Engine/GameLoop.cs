@@ -14,18 +14,20 @@ namespace Source.Engine
 
 		private List<IInpputHandler> _inputhandlers = new();
 
+		private readonly Input _input;
 		private readonly BaseRenderer _renderer;
 		private readonly BaseGame _game;
 		private readonly Time _time;
 
 		private bool _isStopped = false;
 
-		public GameLoop(BaseRenderer renderer, BaseGame game)
+		public GameLoop(Input input, BaseRenderer renderer, BaseGame game)
 		{
 			Instance = this;
 
 			_renderer = renderer;
 			_game = game;
+			_input = input;
 
 			_time = new();
 
@@ -51,6 +53,8 @@ namespace Source.Engine
 
 		private void UpdateInput()
 		{
+			_input.UpdateInput();
+
 			foreach (var inputHandler in _inputhandlers)
 			{
 				inputHandler.UpdateInput();
@@ -70,7 +74,10 @@ namespace Source.Engine
 
 			foreach (var updatable in _gameObjects)
 			{
-				updatable.Update(_time.DeltaTime);
+				if (updatable.IsActive)
+				{
+					updatable.Update(_time.DeltaTime);
+				}		
 			}
 		}
 

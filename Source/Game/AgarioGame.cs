@@ -11,6 +11,7 @@ namespace Source.Game
 		private GameLoop GameLoop => GameLoop.Instance;
 		private RenderWindow _window;
 		private SFMLRenderer _renderer;
+		private Input _input;
 
 		private UnitFactory _unitFactory;
 		private UIFactory _uiFactory;
@@ -27,10 +28,11 @@ namespace Source.Game
 
 		private int _alivedPlayersCount = 0;
 
-		public void Initialize(RenderWindow window, SFMLRenderer renderer)
+		public void Initialize(RenderWindow window, SFMLRenderer renderer, Input input)
 		{
 			_window = window;
 			_renderer = renderer;
+			_input = input;
 
 			_unitFactory = new(GameLoop, renderer);
 			_uiFactory = new(GameLoop, renderer);
@@ -44,8 +46,6 @@ namespace Source.Game
 			_alivedPlayersCount = _players.Count;
 
 			SpawnUserUI();
-
-			_window.KeyPressed += OnKeypressed;
 		}
 
 		private void SpawnBots()
@@ -72,6 +72,8 @@ namespace Source.Game
 			_mainPlayer = _unitFactory.SpawnPlayer();
 
 			_players.Add(_mainPlayer);
+
+			_input.BindKey(SFML.Window.Keyboard.Key.F, SwapPlayerWithBot);
 		}
 
 		private void SpawnUserUI()
@@ -88,7 +90,7 @@ namespace Source.Game
 
 		public override void UpdateInput()
 		{
-			_window.DispatchEvents();		
+					
 		}
 
 		public override void Update(float deltaTime)
@@ -225,25 +227,17 @@ namespace Source.Game
 
 		//Trash
 
-		private void OnKeypressed(object? sender, SFML.Window.KeyEventArgs e)
-		{
-			if (e.Code == SFML.Window.Keyboard.Key.F)
-			{
-				SwapPlayerWithBot();
-			}
-		}
-
 		private void SwapPlayerWithBot()
 		{
 			Player bot = null;
 
 			foreach (var player in _players)
 			{
-				if (player != _mainPlayer && player.IsActive)
+				if (player != _mainPlayer || player.IsActive)
 				{
 					bot = player;
 					break;
-				}
+				}		
 			}
 
 			if (bot == null)
@@ -251,10 +245,7 @@ namespace Source.Game
 				return;
 			}
 
-			var botInputComponent = bot.InputComponent;
-
-			bot.ChangeInputComponent(_mainPlayer.InputComponent);
-			_mainPlayer.ChangeInputComponent(botInputComponent);
+			_mainPlayer.SwapInputComponents(bot);
 
 			_mainPlayer = bot;
 		}
