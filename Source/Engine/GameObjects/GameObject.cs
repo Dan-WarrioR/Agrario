@@ -63,7 +63,10 @@ namespace Source.Engine.GameObjects
 
 		public virtual void Start()
 		{
-
+			foreach (var component in _components)
+			{
+				component.Start();
+			}
 		}
 
 		public virtual void Update(float deltaTime)

@@ -1,9 +1,9 @@
 ﻿using Source.Game.Units;
 using SFML.Graphics;
 using SFML.System;
-using Source.Game.Units.Components.Input;
 using Source.Game.Configs;
 using Source.Engine;
+using Source.Game.Units.Components;
 
 namespace Source.Game.Factories
 {
@@ -47,7 +47,8 @@ namespace Source.Game.Factories
         {
 			var player = Instantiate<Player>();
 
-			player.Initialize(new KeyBoardInput(), PlayerFillColor, 50, GetRandomPosition());
+			player.Initialize(PlayerFillColor, 50, GetRandomPosition());
+			player.AddComponent<PlayerControllerComponent>();
 
             return player;
 		}
@@ -56,7 +57,8 @@ namespace Source.Game.Factories
         {
 			var bot = Instantiate<Player>();
 
-			bot.Initialize(new RandomDirectionInput(), BotFillColor, MinPlayerRadius, GetRandomPosition());
+			bot.Initialize(BotFillColor, MinPlayerRadius, GetRandomPosition());
+			bot.AddComponent<AiMovementComponent>();
 
 			return bot;
 		}

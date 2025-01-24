@@ -11,7 +11,7 @@ namespace Source.Game
 		private GameLoop GameLoop => GameLoop.Instance;
 		private RenderWindow _window;
 		private SFMLRenderer _renderer;
-		private Input _input;
+		private PlayerInput _input;
 
 		private UnitFactory _unitFactory;
 		private UIFactory _uiFactory;
@@ -28,7 +28,7 @@ namespace Source.Game
 
 		private int _alivedPlayersCount = 0;
 
-		public void Initialize(RenderWindow window, SFMLRenderer renderer, Input input)
+		public void Initialize(RenderWindow window, SFMLRenderer renderer, PlayerInput input)
 		{
 			_window = window;
 			_renderer = renderer;
@@ -206,6 +206,8 @@ namespace Source.Game
 			}
 
 			_alivedPlayersCount = _players.Count;
+
+			OnPlayerDead(_alivedPlayersCount);
 		}
 
 		private void OnPlayerDead(int playersCount)
@@ -233,11 +235,11 @@ namespace Source.Game
 
 			foreach (var player in _players)
 			{
-				if (player != _mainPlayer || player.IsActive)
+				if (player != _mainPlayer && player.IsActive)
 				{
 					bot = player;
 					break;
-				}		
+				}
 			}
 
 			if (bot == null)
@@ -245,7 +247,7 @@ namespace Source.Game
 				return;
 			}
 
-			_mainPlayer.SwapInputComponents(bot);
+			//_mainPlayer.SwapInputComponents(bot);
 
 			_mainPlayer = bot;
 		}
