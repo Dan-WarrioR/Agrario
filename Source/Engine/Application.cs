@@ -12,7 +12,7 @@ namespace Source.Engine
 			
 			var game = new AgarioGame();
 			var renderer = new SFMLRenderer(window);
-			var input = new Input(window);
+			var input = new PlayerInput(window);
 			var gameLoop = new GameLoop(input, renderer, game);
 
 			window.Closed += (_, _) => gameLoop.Stop();

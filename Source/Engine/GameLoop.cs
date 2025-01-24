@@ -14,14 +14,14 @@ namespace Source.Engine
 
 		private List<IInpputHandler> _inputhandlers = new();
 
-		private readonly Input _input;
+		private readonly PlayerInput _input;
 		private readonly BaseRenderer _renderer;
 		private readonly BaseGame _game;
 		private readonly Time _time;
 
 		private bool _isStopped = false;
 
-		public GameLoop(Input input, BaseRenderer renderer, BaseGame game)
+		public GameLoop(PlayerInput input, BaseRenderer renderer, BaseGame game)
 		{
 			Instance = this;
 
