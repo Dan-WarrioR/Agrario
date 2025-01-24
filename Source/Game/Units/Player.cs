@@ -1,9 +1,7 @@
 ﻿using SFML.Graphics;
 using SFML.System;
-using Source.Engine.GameObjects;
 using Source.Engine.Tools;
 using Source.Game.Configs;
-using Source.Game.Units.Components.Input;
 
 namespace Source.Game.Units
 {
@@ -12,20 +10,10 @@ namespace Source.Game.Units
 		public bool TryEat(IFood food);
 	}
 
-	public class Player : CircleObject, IEater, IFood, IInpputHandler
+	public class Player : CircleObject, IEater, IFood
 	{
 		private const float BaseZoom = 0.1f;
 		private const float ZoomFactorCoefficient = 0.01f;
-
-		private const float GrowthBase = 2f;
-		private const float GrowthDecayRate = 0.5f;
-		private const float MinGrowthFactor = 1f;
-
-		private const float BaseSpeed = 200f;
-		private const float MinSpeed = 100f;
-		private const float SpeedReductionCoefficient = 20f;
-
-		private const float MassMultiplier = 1f;
 
 		public event Action<float> OnAteFood;
 
@@ -43,21 +31,17 @@ namespace Source.Game.Units
 		{
 			get
 			{
-				float speedReduction = (Radius - SpeedReductionCoefficient) / 100f;
+				float speedReduction = (Radius - PlayerConfig.SpeedReductionCoefficient) / 100f;
 
-				return MathF.Max(MinSpeed, BaseSpeed * (1 - speedReduction));
+				return MathF.Max(PlayerConfig.MinSpeed, PlayerConfig.BaseSpeed * (1 - speedReduction));
 			}
 		}
 
-		private IInputComponent _inputComponent;
-
 		private float _initialRadius;
 
-		public void Initialize(IInputComponent inputComponent, Color color, float radius, Vector2f initialPosition)
+		public void Initialize(Color color, float radius, Vector2f initialPosition)
 		{
 			Initialize(radius, initialPosition);
-
-			_inputComponent = inputComponent;
 			_initialRadius = radius;
 
 			Circle.FillColor = color;
@@ -69,21 +53,9 @@ namespace Source.Game.Units
 			Circle.Radius = _initialRadius;
 		}
 
-		public void UpdateInput()
-		{
-			if (!IsActive)
-			{
-				return;
-			}
-
-			_inputComponent.UpdateInput();
-		}
-
 		public override void Update(float deltaTime)
 		{
-			_inputComponent.Update(deltaTime);
-
-			Circle.Position += CurrentSpeed * deltaTime * _inputComponent.Delta;
+			base.Update(deltaTime);
 
 			ClampPosition();
 		}
@@ -97,8 +69,8 @@ namespace Source.Game.Units
 				return false;
 			}
 
-			float growthFactor = GrowthBase / (1f + GrowthDecayRate * MathF.Log(Mass + 1));
-			growthFactor = MathF.Max(growthFactor, MinGrowthFactor);
+			float growthFactor = PlayerConfig.GrowthBase / (1f + PlayerConfig.GrowthDecayRate * MathF.Log(Mass + 1));
+			growthFactor = MathF.Max(growthFactor, PlayerConfig.MinGrowthFactor);
 
 			float newMass = Mass + food.Mass * growthFactor;
 
@@ -132,13 +104,5 @@ namespace Source.Game.Units
 
 			Circle.Position = new(x, y);
 		}		
-
-		public void SwapInputComponents(Player player2)
-		{
-			var input = _inputComponent;
-
-			_inputComponent = player2._inputComponent;
-			player2._inputComponent = input;
-		}
 	}
 }
