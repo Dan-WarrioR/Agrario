@@ -85,11 +85,8 @@ namespace Source.Engine
 
 		public void BindKey(Keyboard.Key key, Action onPressed = null, Action onHeld = null, Action onReleased = null)
 		{
-			if (!_keyBindings.TryGetValue(key, out var keyBind))
-			{
-				keyBind = new KeyBind(key);
-				_toBindBindings.Add(keyBind);
-			}
+			var keyBind = new KeyBind(key);
+			_toBindBindings.Add(keyBind);
 
 			if (onPressed != null)
 			{
@@ -126,7 +123,10 @@ namespace Source.Engine
 		{
 			foreach (var item in _toBindBindings)
 			{
-				_keyBindings.Add(item.Key, item);
+				if (!_keyBindings.ContainsKey(item.Key))
+				{
+					_keyBindings.Add(item.Key, item);
+				}		
 			}
 
 			_toBindBindings.Clear();

@@ -1,6 +1,6 @@
 ﻿namespace Source.Engine.Tools
 {
-	public class Random
+	public class CustomRandom
 	{
 		public static int Range(int min, int max)
 		{

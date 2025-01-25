@@ -21,7 +21,7 @@ namespace Source.Engine.GameObjects
 
 		public Vector2f InitialPosition { get; private set; }
 
-		private List<BaseComponent> _components = new();
+		private Dictionary<Type, BaseComponent> _components = new();
 
 		public void Initialize(Vector2f initialPosition)
 		{
@@ -38,7 +38,7 @@ namespace Source.Engine.GameObjects
 			T component = new();
 
 			component.SetOwner(this);
-			_components.Add(component);
+			_components.Add(component.GetType(), component);
 
 			return component;
 		}
@@ -46,22 +46,16 @@ namespace Source.Engine.GameObjects
 		public T AddComponent<T>(T component) where T : BaseComponent
 		{
 			component.SetOwner(this);
-			_components.Add(component);
+			_components.Add(component.GetType(), component);
 
 			return component;
 		}
 
 		public T? GetComponent<T>() where T : BaseComponent
 		{
-			foreach (var component in _components)
-			{
-				if (component is T)
-				{
-					return component as T;
-				}
-			}
+			_components.TryGetValue(typeof(T), out BaseComponent component);
 
-			return null;
+			return component as T;
 		}
 
 		public bool TryGetComponent<T>(out T component) where T : BaseComponent
@@ -73,12 +67,12 @@ namespace Source.Engine.GameObjects
 
 		public void RemoveComponent<T>() where T : BaseComponent
 		{
-			_components.RemoveAll(c => c is T);
+			_components.Remove(typeof(T));
 		}
 
 		public virtual void Start()
 		{
-			foreach (var component in _components)
+			foreach (var component in _components.Values)
 			{
 				component.Start();
 			}
@@ -86,12 +80,15 @@ namespace Source.Engine.GameObjects
 
 		public virtual void Update(float deltaTime)
 		{
-			foreach (var component in _components)
+			foreach (var component in _components.Values)
 			{
 				component.Update(deltaTime);
 			}
 		}
 
-		public abstract void Draw(RenderTarget target, RenderStates states);
+		public virtual void Draw(RenderTarget target, RenderStates states)
+		{
+
+		}
 	}
 }
