@@ -43,6 +43,14 @@ namespace Source.Engine.GameObjects
 			return component;
 		}
 
+		public T AddComponent<T>(T component) where T : BaseComponent
+		{
+			component.SetOwner(this);
+			_components.Add(component);
+
+			return component;
+		}
+
 		public T? GetComponent<T>() where T : BaseComponent
 		{
 			foreach (var component in _components)
@@ -54,6 +62,13 @@ namespace Source.Engine.GameObjects
 			}
 
 			return null;
+		}
+
+		public bool TryGetComponent<T>(out T component) where T : BaseComponent
+		{
+			component = GetComponent<T>();
+
+			return component != null;
 		}
 
 		public void RemoveComponent<T>() where T : BaseComponent

@@ -6,6 +6,9 @@ namespace Source.Game
 {
 	public class GameCamera
 	{
+		private static bool IsDebugFactor = true;
+		private static float DebugFactor = 2f;
+
 		private View _gameView;
 		private View _uiView;
 		private RenderWindow _window;
@@ -43,6 +46,8 @@ namespace Source.Game
 		public void Zoom(float factor)
 		{
 			//_gameView.Zoom(factor); //zoom change view on factor every method invoke. Need to set a value once
+
+			factor = !IsDebugFactor ? factor : DebugFactor;
 
 			_gameView.Size = new(_uiView.Size.X * factor, _uiView.Size.Y * factor);
 		}

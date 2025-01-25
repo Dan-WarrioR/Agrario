@@ -47,8 +47,11 @@ namespace Source.Game.Factories
         {
 			var player = Instantiate<Player>();
 
-			player.Initialize(PlayerFillColor, 50, GetRandomPosition());
-			player.AddComponent<PlayerControllerComponent>();
+			player.Initialize(PlayerFillColor, MinPlayerRadius, GetRandomPosition());
+			var playerComponent = new PlayerMovementComponent();
+			playerComponent.ChangePlayerMode(false);
+
+			player.AddComponent(playerComponent);
 
             return player;
 		}
@@ -58,7 +61,10 @@ namespace Source.Game.Factories
 			var bot = Instantiate<Player>();
 
 			bot.Initialize(BotFillColor, MinPlayerRadius, GetRandomPosition());
-			bot.AddComponent<AiMovementComponent>();
+
+			var botController = new PlayerMovementComponent();
+			botController.ChangePlayerMode(true);
+			bot.AddComponent(botController);
 
 			return bot;
 		}
