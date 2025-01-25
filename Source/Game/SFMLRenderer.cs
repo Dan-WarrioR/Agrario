@@ -1,5 +1,4 @@
 ﻿using SFML.Graphics;
-using SFML.System;
 using Source.Engine;
 using Source.Engine.GameObjects;
 using Source.Game.Configs;
@@ -10,28 +9,24 @@ namespace Source.Game
 	{
 		private RenderWindow _window;
 
-		private GameCamera _camera;
+		public GameCamera Camera { get; private set; }
 
 		public SFMLRenderer(RenderWindow window)
 		{
 			_window = window;
 
-			_camera = new(_window, WindowConfig.WindowSize, WindowConfig.WindowSize);
-		}
-
-		public void UpdateView(Vector2f playerPosition) //Clean with Dependency
-		{
-			_camera.Update(playerPosition);
+			Camera = new(_window, WindowConfig.WindowSize, WindowConfig.WindowSize);
 		}
 
 		public override void Render()
 		{
 			_window.Clear(WindowConfig.BackgroundColor);
+			Camera.Update();
 
-			_camera.BeginGameView();
+			Camera.BeginGameView();
 			DrawActiveElements(GameElements);
 
-			_camera.BeginUIView();
+			Camera.BeginUIView();
 			DrawActiveElements(UIElements);
 
 			_window.Display();
@@ -39,7 +34,7 @@ namespace Source.Game
 
 		public void Zoom(float factor)
 		{
-			_camera.Zoom(factor);
+			Camera.Zoom(factor);
 		}
 
 		private void DrawActiveElements<T>(IEnumerable<T> objects) where T : Drawable, IActivable

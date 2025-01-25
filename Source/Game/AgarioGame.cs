@@ -3,6 +3,8 @@ using SFML.Graphics;
 using Source.Engine;
 using Source.Game.Units;
 using Source.Game.Configs;
+using Source.Engine.Tools;
+using Source.Game.Units.Components;
 
 namespace Source.Game
 {
@@ -74,6 +76,7 @@ namespace Source.Game
 			_players.Add(_mainPlayer);
 
 			_input.BindKey(SFML.Window.Keyboard.Key.F, SwapPlayerWithBot);
+			_renderer.Camera.SetFollowTarget(_mainPlayer);
 		}
 
 		private void SpawnUserUI()
@@ -161,8 +164,6 @@ namespace Source.Game
 
 		private void UpdatePlayerCamera()
 		{
-			_renderer.UpdateView(_mainPlayer.Position);
-
 			_renderer.Zoom(_mainPlayer.ZoomFactor);
 		}
 
@@ -247,9 +248,15 @@ namespace Source.Game
 				return;
 			}
 
-			//_mainPlayer.SwapInputComponents(bot);
+			var mainPlayerMovement = _mainPlayer.GetComponent<PlayerMovementComponent>();
+			var botMovement = bot.GetComponent<PlayerMovementComponent>();
+
+			mainPlayerMovement.ChangePlayerMode(true);
+			botMovement.ChangePlayerMode(false);
 
 			_mainPlayer = bot;
+
+			_renderer.Camera.SetFollowTarget(_mainPlayer);
 		}
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using SFML.Window;
 using Source.Engine.Tools;
+using System.Collections.Generic;
 
 namespace Source.Engine
 {
@@ -49,6 +50,9 @@ namespace Source.Engine
 
 		private readonly Dictionary<Keyboard.Key, KeyBind> _keyBindings;
 
+		private readonly List<KeyBind> _toUnbindBindings = new();
+		private readonly List<KeyBind> _toBindBindings = new();
+
 		public PlayerInput(Window window)
 		{
 			_window = window;
@@ -64,6 +68,9 @@ namespace Source.Engine
 			{
 				keyBind.Update();
 			}
+
+			UnbindBindings();
+			BindNewBindings();
 		}
 
 		public void BindKey(KeyBind keyBind)
@@ -73,7 +80,7 @@ namespace Source.Engine
 				return;
 			}
 
-			_keyBindings.Add(keyBind.Key, keyBind);
+			_toBindBindings.Add(keyBind);
 		}
 
 		public void BindKey(Keyboard.Key key, Action onPressed = null, Action onHeld = null, Action onReleased = null)
@@ -81,7 +88,7 @@ namespace Source.Engine
 			if (!_keyBindings.TryGetValue(key, out var keyBind))
 			{
 				keyBind = new KeyBind(key);
-				_keyBindings[key] = keyBind;
+				_toBindBindings.Add(keyBind);
 			}
 
 			if (onPressed != null)
@@ -102,12 +109,37 @@ namespace Source.Engine
 
 		public void RemoveBind(Keyboard.Key key)
 		{
-			_keyBindings.Remove(key);
+			if (!_keyBindings.ContainsKey(key))
+			{
+				return;
+			}
+
+			_toUnbindBindings.Add(_keyBindings[key]);
 		}
 
 		public bool TryGetBind(Keyboard.Key key, KeyBind keyBind)
 		{
 			return _keyBindings.TryGetValue(key, out keyBind);
+		}
+
+		private void BindNewBindings()
+		{
+			foreach (var item in _toBindBindings)
+			{
+				_keyBindings.Add(item.Key, item);
+			}
+
+			_toBindBindings.Clear();
+		}
+
+		private void UnbindBindings()
+		{
+			foreach (var item in _toUnbindBindings)
+			{
+				_keyBindings.Remove(item.Key);
+			}
+
+			_toUnbindBindings.Clear();
 		}
 	}
 }
