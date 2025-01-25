@@ -3,8 +3,7 @@ using SFML.Graphics;
 using Source.Engine;
 using Source.Game.Units;
 using Source.Game.Configs;
-using Source.Engine.Tools;
-using Source.Game.Units.Components;
+using SFML.Window;
 
 namespace Source.Game
 {
@@ -26,7 +25,9 @@ namespace Source.Game
 		private List<Food> _foods = new(GameConfig.FoodCount);
 		private List<Player> _players = new(GameConfig.PlayersCount);
 
-		private event Action<int> OnPlayerDied; 
+		private event Action<int> OnPlayerDied;
+
+		private bool _isEndGame = false;
 
 		private int _alivedPlayersCount = 0;
 
@@ -48,6 +49,8 @@ namespace Source.Game
 			_alivedPlayersCount = _players.Count;
 
 			SpawnUserUI();
+
+			_input.BindKey(Keyboard.Key.Escape, () => _isEndGame = true);
 		}
 
 		private void SpawnBots()
@@ -75,7 +78,7 @@ namespace Source.Game
 
 			_players.Add(_mainPlayer);
 
-			_input.BindKey(SFML.Window.Keyboard.Key.F, SwapPlayerWithBot);
+			_input.BindKey(Keyboard.Key.F, SwapPlayerWithBot);
 			_renderer.Camera.SetFollowTarget(_mainPlayer);
 		}
 
@@ -105,6 +108,11 @@ namespace Source.Game
 			CheckPlayerColissions();
 			
 			CheckForGameRestart();
+		}
+
+		public override bool IsEndGame()
+		{
+			return _isEndGame;
 		}
 
 
@@ -232,31 +240,36 @@ namespace Source.Game
 
 		private void SwapPlayerWithBot()
 		{
-			Player bot = null;
+			//List<Player> bots = new(_players.Count);
 
-			foreach (var player in _players)
-			{
-				if (player != _mainPlayer && player.IsActive)
-				{
-					bot = player;
-					break;
-				}
-			}
+			//foreach (var player in _players)
+			//{
+			//	if (player != _mainPlayer && player.IsActive)
+			//	{
+			//		bots.Add(player);
+			//	}
+			//}
 
-			if (bot == null)
-			{
-				return;
-			}
+			//if (bots.Count <= 0)
+			//{
+			//	return;
+			//}
 
-			var mainPlayerMovement = _mainPlayer.GetComponent<PlayerMovementComponent>();
-			var botMovement = bot.GetComponent<PlayerMovementComponent>();
+			//int randomIndex = Random.Range(0, bots.Count);
+			//var bot = bots[randomIndex];
 
-			mainPlayerMovement.ChangePlayerMode(true);
-			botMovement.ChangePlayerMode(false);
+			//var mainPlayerMovement = _mainPlayer.GetComponent<PlayerMovementComponent>();
+			//var botMovement = bot.GetComponent<PlayerMovementComponent>();
 
-			_mainPlayer = bot;
+			//mainPlayerMovement.ChangePlayerMode(true);
+			//botMovement.ChangePlayerMode(false);
 
-			_renderer.Camera.SetFollowTarget(_mainPlayer);
+			//_mainPlayer = bot;
+
+			//bot.Update(0.5f);
+			//_input.UpdateInput();
+
+			//_renderer.Camera.SetFollowTarget(_mainPlayer);
 		}
 	}
 }
