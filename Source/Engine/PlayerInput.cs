@@ -6,6 +6,7 @@ namespace Source.Engine
 	public class KeyBind
 	{
 		public event Action OnKeyPressed;
+		public event Action OnKeyHeld;
 		public event Action OnKeyReleased;
 
 		public Keyboard.Key Key;
@@ -25,26 +26,20 @@ namespace Source.Engine
 
 			if (_isPressed)
 			{
-				OnKeyPressed?.Invoke();
+				if (!_wasPressed)
+				{
+					OnKeyPressed?.Invoke();
+				}
+
+				OnKeyHeld?.Invoke();
 			}
 			else
 			{
 				if (_wasPressed)
 				{
 					OnKeyReleased?.Invoke();
-					_wasPressed = false;
 				}
 			}		
-		}
-
-		public void Add(Action action)
-		{
-			OnKeyPressed += action;
-		}
-
-		public void Remove(Action action)
-		{
-			OnKeyPressed -= action;
 		}
 	}
 
@@ -81,22 +76,38 @@ namespace Source.Engine
 			_keyBindings.Add(keyBind.Key, keyBind);
 		}
 
-		public void BindKey(Keyboard.Key key, Action action)
+		public void BindKey(Keyboard.Key key, Action onPressed = null, Action onHeld = null, Action onReleased = null)
 		{
-			if (!_keyBindings.ContainsKey(key))
+			if (!_keyBindings.TryGetValue(key, out var keyBind))
 			{
-				_keyBindings[key] = new(key);
+				keyBind = new KeyBind(key);
+				_keyBindings[key] = keyBind;
 			}
 
-			_keyBindings[key].Add(action);
+			if (onPressed != null)
+			{
+				keyBind.OnKeyPressed += onPressed;
+			}
+
+			if (onHeld != null)
+			{
+				keyBind.OnKeyHeld += onHeld;
+			}
+
+			if (onReleased != null)
+			{
+				keyBind.OnKeyReleased += onReleased;
+			}
 		}
 
-		public void UnbindKey(Keyboard.Key key, Action action)
+		public void RemoveBind(Keyboard.Key key)
 		{
-			if (_keyBindings.TryGetValue(key, out var keyBind))
-			{
-				keyBind.Remove(action);
-			}
+			_keyBindings.Remove(key);
+		}
+
+		public bool TryGetBind(Keyboard.Key key, KeyBind keyBind)
+		{
+			return _keyBindings.TryGetValue(key, out keyBind);
 		}
 	}
 }

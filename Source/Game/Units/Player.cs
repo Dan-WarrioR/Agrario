@@ -53,13 +53,6 @@ namespace Source.Game.Units
 			Circle.Radius = _initialRadius;
 		}
 
-		public override void Update(float deltaTime)
-		{
-			base.Update(deltaTime);
-
-			ClampPosition();
-		}
-
 		#region Eat
 
 		public bool TryEat(IFood food)
@@ -93,16 +86,6 @@ namespace Source.Game.Units
 			return player.Radius > Radius && distanceSquared < radiusDifference * radiusDifference && IsActive;
 		}
 
-		#endregion
-
-		private void ClampPosition()
-		{
-			var bounds = WindowConfig.Bounds;
-
-			float x = Math.Clamp(Position.X, bounds.Left, bounds.Width);
-			float y = Math.Clamp(Position.Y, bounds.Top, bounds.Height);
-
-			Circle.Position = new(x, y);
-		}		
+		#endregion			
 	}
 }
