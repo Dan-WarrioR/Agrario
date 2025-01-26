@@ -3,10 +3,10 @@ using SFML.System;
 using Source.Engine;
 using Source.Engine.GameObjects;
 
-namespace Source.Game.Units
+namespace Agrario.Source.Engine.GameObjects
 {
     public class TextObject : GameObject, IUIElement
-	{
+    {
         private static readonly Color DefaultTextColor = Color.White;
         private static readonly Font DefaultFont = new(FontPath);
 
@@ -21,17 +21,17 @@ namespace Source.Game.Units
         {
             Initialize(initialPosition);
 
-			_text = new(text, DefaultFont, CharacterSize)
-			{
-				FillColor = DefaultTextColor,
-				Position = initialPosition,
-			};
-		}
+            _text = new(text, DefaultFont, CharacterSize)
+            {
+                FillColor = DefaultTextColor,
+                Position = initialPosition,
+            };
+        }
 
         public void ChangeText(string text)
         {
-			_text.DisplayedString = text;
-		}
+            _text.DisplayedString = text;
+        }
 
         public override void Draw(RenderTarget target, RenderStates states)
         {

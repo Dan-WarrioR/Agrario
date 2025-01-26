@@ -1,11 +1,11 @@
-﻿using SFML.System;
+﻿using Agrario.Source.Engine.GameObjects;
+using SFML.System;
 using Source.Engine;
 using Source.Game.Configs;
-using Source.Game.Units;
 
 namespace Source.Game.Factories
 {
-	public class UIFactory : ObjectFactory
+    public class UIFactory : ObjectFactory
 	{
 		private static readonly Vector2f ScoreTextPosition = new(WindowConfig.Bounds.Width - 200, WindowConfig.Bounds.Top + 20);
 		private static readonly Vector2f PlayerCountTextPosition = new(WindowConfig.Bounds.Left + 50, WindowConfig.Bounds.Top + 20);
