@@ -1,14 +1,10 @@
 ﻿using SFML.Graphics;
 using SFML.System;
+using Source.Engine.GameObjects.Components;
 
 namespace Source.Engine.GameObjects
 {
-	public interface IInpputHandler
-	{
-		public void UpdateInput();
-	}
-
-	public interface IActivable
+    public interface IActivable
 	{
 		public bool IsActive { get; }
 
@@ -32,6 +28,29 @@ namespace Source.Engine.GameObjects
 		{
 			IsActive = isActive;
 		}
+
+		public virtual void Start()
+		{
+			foreach (var component in _components.Values)
+			{
+				component.Start();
+			}
+		}
+
+		public virtual void Update(float deltaTime)
+		{
+			foreach (var component in _components.Values)
+			{
+				component.Update(deltaTime);
+			}
+		}
+
+		public virtual void Draw(RenderTarget target, RenderStates states)
+		{
+
+		}
+
+		#region Components Interfaces
 
 		public T AddComponent<T>() where T : BaseComponent, new()
 		{
@@ -70,25 +89,6 @@ namespace Source.Engine.GameObjects
 			_components.Remove(typeof(T));
 		}
 
-		public virtual void Start()
-		{
-			foreach (var component in _components.Values)
-			{
-				component.Start();
-			}
-		}
-
-		public virtual void Update(float deltaTime)
-		{
-			foreach (var component in _components.Values)
-			{
-				component.Update(deltaTime);
-			}
-		}
-
-		public virtual void Draw(RenderTarget target, RenderStates states)
-		{
-
-		}
+		#endregion
 	}
 }

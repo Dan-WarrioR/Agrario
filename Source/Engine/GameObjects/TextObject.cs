@@ -1,9 +1,7 @@
 ﻿using SFML.Graphics;
 using SFML.System;
-using Source.Engine;
-using Source.Engine.GameObjects;
 
-namespace Agrario.Source.Engine.GameObjects
+namespace Source.Engine.GameObjects
 {
     public class TextObject : GameObject, IUIElement
     {

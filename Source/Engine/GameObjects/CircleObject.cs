@@ -1,9 +1,8 @@
-﻿using Agrario.Source.Engine.GameObjects;
-using SFML.Graphics;
+﻿using SFML.Graphics;
 using SFML.System;
 using Source.Engine.Tools;
 
-namespace Source.Game.Units
+namespace Source.Engine.GameObjects
 {
     public class CircleObject : ShapeObject
     {
