@@ -4,7 +4,7 @@ using Source.Engine;
 using Source.Game.Units;
 using Source.Game.Configs;
 using SFML.Window;
-using Agrario.Source.Engine.GameObjects;
+using Source.Engine.GameObjects;
 
 namespace Source.Game
 {
@@ -52,6 +52,7 @@ namespace Source.Game
 			SpawnUserUI();
 
 			_input.BindKey(Keyboard.Key.Escape, () => _isEndGame = true);
+			_input.BindKey(Keyboard.Key.R, RestartGame);
 		}
 
 		private void SpawnBots()
@@ -95,10 +96,6 @@ namespace Source.Game
 		}
 
 
-		public override void UpdateInput()
-		{
-					
-		}
 
 		public override void Update(float deltaTime)
 		{

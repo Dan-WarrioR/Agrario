@@ -3,11 +3,9 @@ using Source.Engine.GameObjects;
 
 namespace Source.Engine
 {
-	public abstract class BaseGame : GameObject, IInpputHandler
+	public abstract class BaseGame : GameObject
 	{
 		public override void Draw(RenderTarget target, RenderStates states) { }
-
-		public abstract void UpdateInput();
 
 		public virtual bool IsEndGame()
 		{

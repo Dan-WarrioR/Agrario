@@ -12,8 +12,6 @@ namespace Source.Engine
 		private List<GameObject> _gameObjects = new();
 		private List<GameObject> _newGameObjects = new();
 
-		private List<IInpputHandler> _inputhandlers = new();
-
 		private readonly PlayerInput _input;
 		private readonly BaseRenderer _renderer;
 		private readonly BaseGame _game;
@@ -32,7 +30,6 @@ namespace Source.Engine
 			_time = new();
 
 			_gameObjects.Add(game);
-			_inputhandlers.Add(game);
 		}
 
 		public void Run()
@@ -54,11 +51,6 @@ namespace Source.Engine
 		private void UpdateInput()
 		{
 			_input.UpdateInput();
-
-			foreach (var inputHandler in _inputhandlers)
-			{
-				inputHandler.UpdateInput();
-			}
 		}
 
 		private void Update()
@@ -106,11 +98,6 @@ namespace Source.Engine
 			gameObject.Start();
 
 			_gameObjects.Add(gameObject);
-
-			if (gameObject is IInpputHandler inputGameObject && !_inputhandlers.Contains(inputGameObject))
-			{
-				_inputhandlers.Add(inputGameObject);
-			}
 		}
 
 
@@ -129,11 +116,6 @@ namespace Source.Engine
 		{
 			_gameObjects.Remove(gameObject);
 			_newGameObjects.Remove(gameObject);
-
-			if (gameObject is IInpputHandler inputGameObject)
-			{
-				_inputhandlers.Remove(inputGameObject);
-			}
 		}
 	}
 }
