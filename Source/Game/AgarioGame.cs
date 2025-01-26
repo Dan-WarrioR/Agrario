@@ -131,10 +131,7 @@ namespace Source.Game
 			{
 				foreach (var food in _foods)
 				{
-					if (player.TryEat(food))
-					{
-						food.Eat();
-					}
+					player.TryEat(food);
 				}		
 			}
 		}
@@ -166,13 +163,7 @@ namespace Source.Game
 				}
 			}
 		}
-
-
-		private void UpdatePlayerCamera()
-		{
-			_renderer.Zoom(_mainPlayer.ZoomFactor);
-		}
-
+	
 		private bool TryEatPlayer(Player player1, Player player2)
 		{
 			if (player1.TryEat(player2))
@@ -191,13 +182,18 @@ namespace Source.Game
 		
 		private void EatPlayer(Player player)
 		{
-			player.SetActive(false);
 			_alivedPlayersCount--;
 			OnPlayerDied?.Invoke(_alivedPlayersCount);
 		}
 
+		private void UpdatePlayerCamera()
+		{
+			_renderer.Zoom(_mainPlayer.ZoomFactor);
+		}
 
-		
+
+
+
 
 
 		private void RestartGame()

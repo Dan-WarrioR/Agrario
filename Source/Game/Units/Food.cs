@@ -4,9 +4,18 @@ using Source.Engine.Tools;
 
 namespace Source.Game.Units
 {
-    public interface IFood
+	public interface IEater
+	{
+		public bool TryEat(IFood food);
+	}
+
+	public interface IFood
 	{
 		public float Mass { get; }
+
+		public event Action OnBeingEaten;
+
+		public void EatMe();
 
 		public bool CanBeEatenBy(Player player);
 	}
@@ -21,9 +30,13 @@ namespace Source.Game.Units
 
 		public float Mass => Radius * Radius * MathF.PI * MassMultiplier;
 
-		public void Eat()
+		public event Action OnBeingEaten;
+
+		public void EatMe()
 		{
 			SetActive(false);
+
+			OnBeingEaten?.Invoke();
 		}
 
 		public bool CanBeEatenBy(Player player)

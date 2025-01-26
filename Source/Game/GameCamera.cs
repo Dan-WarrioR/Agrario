@@ -8,7 +8,7 @@ namespace Source.Game
 	public class GameCamera
 	{
 		private static bool IsDebugFactor = true;
-		private static float DebugFactor = 2f;
+		private static float DebugFactor = 1.5f;
 
 		private View _gameView;
 		private View _uiView;

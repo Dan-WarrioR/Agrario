@@ -10,9 +10,13 @@ namespace Source.Engine.GameObjects
 
         protected CircleShape Circle { get; private set; }
 
-        public void Initialize(float radius, Vector2f initialPosition)
+		protected float InitialRadius { get; private set; }
+
+		public void Initialize(float radius, Vector2f initialPosition)
         {
             Initialize(new CircleShape(radius), initialPosition);
+
+            InitialRadius = radius;
 
 			Circle = (CircleShape)Shape;
 

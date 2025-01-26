@@ -6,11 +6,6 @@ using Source.Game.Configs;
 
 namespace Source.Game.Units
 {
-	public interface IEater
-	{
-		public bool TryEat(IFood food);
-	}
-
 	public class Player : CircleObject, IEater, IFood
 	{
 		private const float BaseZoom = 0.1f;
@@ -38,6 +33,8 @@ namespace Source.Game.Units
 			}
 		}
 
+		public event Action OnBeingEaten;
+
 		private float _initialRadius;
 
 		public void Initialize(Color color, float radius, Vector2f initialPosition)
@@ -63,6 +60,8 @@ namespace Source.Game.Units
 				return false;
 			}
 
+			food.EatMe();
+
 			float growthFactor = PlayerConfig.GrowthBase / (1f + PlayerConfig.GrowthDecayRate * MathF.Log(Mass + 1));
 			growthFactor = MathF.Max(growthFactor, PlayerConfig.MinGrowthFactor);
 
@@ -77,6 +76,13 @@ namespace Source.Game.Units
 			OnAteFood?.Invoke(Mass);
 
 			return true;
+		}
+
+		public void EatMe()
+		{
+			SetActive(false);
+
+			OnBeingEaten?.Invoke();
 		}
 
 		public bool CanBeEatenBy(Player player)
