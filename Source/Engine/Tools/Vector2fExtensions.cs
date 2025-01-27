@@ -33,5 +33,23 @@ namespace Source.Engine.Tools
 		{
 			return MathF.Sqrt(vector.X * vector.X + vector.Y * vector.Y);
 		}
+
+		public static Vector2f Lerp(this Vector2f start, Vector2f end, float t)
+		{
+			t = Math.Clamp(t, 0, 1);
+
+			float x = start.X + (end.X - start.X) * t;
+			float y = start.Y + (end.Y - start.Y) * t;
+
+			return new (x, y);
+		}
+
+		public static Vector2f LerpUnclamped(this Vector2f start, Vector2f end, float t)
+		{
+			float x = start.X + (end.X - start.X) * t;
+			float y = start.Y + (end.Y - start.Y) * t;
+
+			return new(x, y);
+		}
 	}
 }

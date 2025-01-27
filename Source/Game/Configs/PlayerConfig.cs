@@ -1,7 +1,19 @@
-﻿namespace Source.Game.Configs
+﻿using SFML.System;
+
+namespace Source.Game.Configs
 {
 	public static class PlayerConfig
 	{
+		//Sprites
+
+		public const string SlimeSpritePath = "Characters\\Slime";
+		public const string EyeSpritePath = "Characters\\Eye";
+		public const string MonsterSpritePath = "Characters\\Monster";
+
+		//Scale
+		public static Vector2f NormalPlayerScale = new(1, 1);
+		public static Vector2f MirroredPlayerScale = new(-1, 1);
+
 		//Speed
 		public const float BaseSpeed = 200f;
 		public const float MinSpeed = 100f;
