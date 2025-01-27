@@ -8,7 +8,10 @@ namespace Source.Game.Units.Controllers
 {
     public class PlayerController : BaseController
     {
-        private static List<(Keyboard.Key Key, Vector2f Delta)> _keyMap = new()
+        private static Vector2f NormalPlayerScale = new(1, 1);
+		private static Vector2f MirroredPlayerScale = new(-1, 1);
+
+		private static List<(Keyboard.Key Key, Vector2f Delta)> _keyMap = new()
         {
             new(Keyboard.Key.W, new(0, -1)),
             new(Keyboard.Key.S, new(0, 1)),
@@ -37,7 +40,7 @@ namespace Source.Game.Units.Controllers
             foreach (var binding in _keyMap)
             {
                 PlayerInput.BindKey(binding.Key,
-                    onHeld: () => _delta += binding.Delta,
+                    onPressed: () => _delta += binding.Delta,
                     onReleased: () => _delta -= binding.Delta);
             }
         }
@@ -46,14 +49,20 @@ namespace Source.Game.Units.Controllers
         {
             base.Update(deltaTime);
 
-            Vector2f positionDelta = _target.CurrentSpeed * deltaTime * _delta;
+			Vector2f positionDelta = _target.CurrentSpeed * deltaTime * _delta;
 
             var position = GetClampedPosition(_target.Position + positionDelta);
 
-            _target.SetPosition(position);
+			if (_delta.X > 0)
+			{
+				_target.SetScale(MirroredPlayerScale);
+			}
+			else if (_delta.X < 0)
+			{
+				_target.SetScale(NormalPlayerScale);
+			}
 
-            _delta.X = 0;
-            _delta.Y = 0;
+			_target.SetPosition(position);
         }
     }
 }

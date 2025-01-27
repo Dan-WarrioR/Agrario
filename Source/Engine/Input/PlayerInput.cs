@@ -73,7 +73,7 @@ namespace Source.Engine.Input
             _toUnbindBindings.Add(_keyBindings[key]);
         }
 
-        public bool TryGetBind(Keyboard.Key key, KeyBind keyBind)
+        public bool TryGetBind(Keyboard.Key key, out KeyBind keyBind)
         {
             return _keyBindings.TryGetValue(key, out keyBind);
         }

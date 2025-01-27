@@ -18,17 +18,27 @@ namespace Source.Engine.GameObjects
             Initialize(initialPosition);
 
             Shape = shape;
-
+            
             shape.Position = initialPosition;
 
             var shapeBounds = shape.GetLocalBounds();
-            shape.Origin = new Vector2f(shapeBounds.Width / 2, shapeBounds.Height / 2);
+            shape.Origin = new(shapeBounds.Width / 2, shapeBounds.Height / 2);
             shape.FillColor = FillColor;
         }
 
         public void SetPosition(Vector2f position)
         {
             Shape.Position = position;
+		}
+
+		public void SetScale(Vector2f scale)
+		{
+			Shape.Scale = scale;
+		}
+
+		public void SetTexture(Texture texture)
+        {
+            Shape.Texture = texture;
         }
 
         public bool IsIntersects(FloatRect objectRect)
