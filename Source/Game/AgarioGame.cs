@@ -230,11 +230,6 @@ namespace Source.Game
 			_scoreText.ChangeText(text);
 		}
 
-
-
-
-		//Trash
-
 		private void SwapPlayers()
 		{
 			List<Player> bots = new(_players.Count);

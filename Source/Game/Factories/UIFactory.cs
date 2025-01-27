@@ -36,5 +36,14 @@ namespace Source.Game.Factories
 
 			return textObject;
 		}
+
+		public TextObject CreateText(Vector2f position, string text)
+		{
+			var textObject = Instantiate<TextObject>();
+
+			textObject.Initialize(text, position);
+
+			return textObject;
+		}
 	}
 }

@@ -4,7 +4,8 @@ using SFML.System;
 using Source.Game.Configs;
 using Source.Engine;
 using Source.Game.Units.Controllers;
-using System.Numerics;
+using Source.Engine.GameObjects.Components;
+using Source.Engine.Tools;
 
 namespace Source.Game.Factories
 {
@@ -12,9 +13,6 @@ namespace Source.Game.Factories
     {
 		private const float MinPlayerRadius = 20f;
 		private const float FoodRadius = 5f;
-
-		private static readonly Color BotFillColor = new(46, 204, 113);
-		private static readonly Color PlayerFillColor = new(52, 152, 219);
 
 		public UnitFactory(GameLoop gameLoop, BaseRenderer renderer) : base(gameLoop, renderer)
         {
@@ -47,11 +45,11 @@ namespace Source.Game.Factories
 		public Player SpawnPlayer()
         {
 			var player = Instantiate<Player>();
-
-			player.Initialize(PlayerFillColor, MinPlayerRadius, GetRandomPosition());
-
 			var playerConroller = Instantiate<PlayerController>();
-			playerConroller.SetTarget(player);
+
+			player.Initialize(playerConroller, GetRandomColor(), MinPlayerRadius, GetRandomPosition());
+			var animator = player.AddComponent<Animator>();
+			animator.Initialize(PlayerConfig.MonsterSpritePath, 0.1f);
 
             return player;
 		}
@@ -59,11 +57,11 @@ namespace Source.Game.Factories
 		public Player SpawnBot()
         {
 			var bot = Instantiate<Player>();
-
-			bot.Initialize(BotFillColor, MinPlayerRadius, GetRandomPosition());
-
 			var botConroller = Instantiate<BotController>();
-			botConroller.SetTarget(bot);
+
+			bot.Initialize(botConroller, GetRandomColor(), MinPlayerRadius, GetRandomPosition());
+			var animator = bot.AddComponent<Animator>();
+			animator.Initialize(PlayerConfig.SlimeSpritePath, 0.1f);
 
 			return bot;
 		}
@@ -86,5 +84,14 @@ namespace Source.Game.Factories
 
             return new(x, y);
         }
+
+		private Color GetRandomColor()
+		{
+			byte r = CustomRandom.RangeByte(0, 255);
+			byte g = CustomRandom.RangeByte(0, 255);
+			byte b = CustomRandom.RangeByte(0, 255);
+
+			return new Color(r, g, b);
+		}
     }
 }
