@@ -3,6 +3,7 @@ using SFML.System;
 using Source.Engine.GameObjects;
 using Source.Engine.Tools;
 using Source.Game.Configs;
+using Source.Game.Units.Controllers;
 
 namespace Source.Game.Units
 {
@@ -35,20 +36,62 @@ namespace Source.Game.Units
 
 		public event Action OnBeingEaten;
 
-		private float _initialRadius;
+		private Vector2f _delta;
 
-		public void Initialize(Color color, float radius, Vector2f initialPosition)
+		private BaseController _controller;
+
+		public void Initialize(BaseController controller, Color color, float radius, Vector2f initialPosition)
 		{
 			Initialize(radius, initialPosition);
-			_initialRadius = radius;
 
 			Circle.FillColor = color;
+
+			SetConrtoller(controller);
 		}	
 
 		public void Reset()
 		{
 			SetActive(true);
-			Circle.Radius = _initialRadius;
+			Circle.Radius = InitialRadius;
+		}
+
+		public override void Update(float deltaTime)
+		{
+			base.Update(deltaTime);
+
+			Vector2f positionDelta = CurrentSpeed * deltaTime * _delta;
+
+			var position = GetClampedPosition(Position + positionDelta);
+
+			if (_delta.X > 0)
+			{
+				SetScale(PlayerConfig.MirroredPlayerScale);
+			}
+			else if (_delta.X < 0)
+			{
+				SetScale(PlayerConfig.NormalPlayerScale);
+			}
+
+			SetPosition(position);
+		}
+
+		public void SetDelta(Vector2f delta)
+		{
+			_delta = delta;
+		}
+
+		public void SetConrtoller(BaseController conrtoller)
+		{
+			_controller = conrtoller;
+			conrtoller.SetTarget(this);
+		}
+
+		public void SwapControllers(Player otherPlayer)
+		{
+			var otherController = otherPlayer._controller;
+
+			otherPlayer.SetConrtoller(_controller);
+			SetConrtoller(otherController);
 		}
 
 		#region Eat
@@ -94,5 +137,15 @@ namespace Source.Game.Units
 		}
 
 		#endregion			
+
+		private Vector2f GetClampedPosition(Vector2f position)
+		{
+			var bounds = WindowConfig.Bounds;
+
+			float x = Math.Clamp(position.X, bounds.Left, bounds.Width);
+			float y = Math.Clamp(position.Y, bounds.Top, bounds.Height);
+
+			return new(x, y);
+		}
 	}
 }

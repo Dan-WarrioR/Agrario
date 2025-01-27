@@ -24,8 +24,6 @@ namespace Source.Game.Units.Controllers
 
         private Player _target;
 
-        private Vector2f _delta;
-
 		public override void SetTarget(GameObject target)
 		{
 			base.SetTarget(target);
@@ -40,8 +38,8 @@ namespace Source.Game.Units.Controllers
             foreach (var binding in _keyMap)
             {
                 PlayerInput.BindKey(binding.Key,
-                    onPressed: () => _delta += binding.Delta,
-                    onReleased: () => _delta -= binding.Delta);
+                    onPressed: () => Delta += binding.Delta,
+                    onReleased: () => Delta -= binding.Delta);
             }
         }
 
@@ -49,20 +47,7 @@ namespace Source.Game.Units.Controllers
         {
             base.Update(deltaTime);
 
-			Vector2f positionDelta = _target.CurrentSpeed * deltaTime * _delta;
-
-            var position = GetClampedPosition(_target.Position + positionDelta);
-
-			if (_delta.X > 0)
-			{
-				_target.SetScale(MirroredPlayerScale);
-			}
-			else if (_delta.X < 0)
-			{
-				_target.SetScale(NormalPlayerScale);
-			}
-
-			_target.SetPosition(position);
+			_target.SetDelta(Delta);
         }
     }
 }

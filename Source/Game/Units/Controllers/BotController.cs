@@ -1,20 +1,17 @@
-﻿using SFML.System;
-using Source.Engine.GameObjects;
+﻿using Source.Engine.GameObjects;
 using Source.Engine.Tools;
 
 namespace Source.Game.Units.Controllers
 {
 	public class BotController : BaseController
 	{
-		private const int MinMovementDelay = 2;
-		private const int MaxMovementDelay = 10;
+		private const int MinMovementDelay = 0;
+		private const int MaxMovementDelay = 5;
 
 		private Player _target;
 
 		private float _movementDelay = 0f;
 		private float _aiMovementTime = 0f;
-
-		private Vector2f _delta;
 
 		public override void SetTarget(GameObject target)
 		{
@@ -27,8 +24,8 @@ namespace Source.Game.Units.Controllers
 		{
 			base.Start();
 
-			SetRandomDelta();
 			_movementDelay = CustomRandom.Range(MinMovementDelay, MaxMovementDelay);
+			SetRandomDelta();
 		}
 
 		public override void Update(float deltaTime)
@@ -39,14 +36,11 @@ namespace Source.Game.Units.Controllers
 
 			if (_aiMovementTime > _movementDelay)
 			{
+				_movementDelay = CustomRandom.Range(MinMovementDelay, MaxMovementDelay);
 				SetRandomDelta();
 			}
 
-			var positionDelta = _target.CurrentSpeed * deltaTime * _delta;
-
-			var newPosition = GetClampedPosition(_target.Position + positionDelta);
-
-			_target.SetPosition(newPosition);		
+			_target.SetDelta(Delta);		
 		}
 
 		private void SetRandomDelta()
@@ -55,7 +49,7 @@ namespace Source.Game.Units.Controllers
 
 			float angle = CustomRandom.NextSingle() * MathF.PI * 2;
 
-			_delta = new(MathF.Cos(angle), MathF.Sin(angle));
+			Delta = new(MathF.Cos(angle), MathF.Sin(angle));
 		}
 	}
 }

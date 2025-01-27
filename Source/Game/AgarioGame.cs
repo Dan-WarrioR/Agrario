@@ -6,6 +6,7 @@ using Source.Game.Configs;
 using SFML.Window;
 using Source.Engine.GameObjects;
 using Source.Engine.Input;
+using Source.Engine.Tools;
 
 namespace Source.Game
 {
@@ -54,6 +55,7 @@ namespace Source.Game
 
 			_input.BindKey(Keyboard.Key.Escape, () => _isEndGame = true);
 			_input.BindKey(Keyboard.Key.R, RestartGame);
+			_input.BindKey(Keyboard.Key.F, SwapPlayers);
 		}
 
 		private void SpawnBots()
@@ -81,7 +83,7 @@ namespace Source.Game
 
 			_players.Add(_mainPlayer);
 
-			_input.BindKey(Keyboard.Key.F, SwapPlayerWithBot);
+			_input.BindKey(Keyboard.Key.F, SwapPlayers);
 			_renderer.Camera.SetFollowTarget(_mainPlayer);
 		}
 
@@ -233,38 +235,31 @@ namespace Source.Game
 
 		//Trash
 
-		private void SwapPlayerWithBot()
+		private void SwapPlayers()
 		{
-			//List<Player> bots = new(_players.Count);
+			List<Player> bots = new(_players.Count);
 
-			//foreach (var player in _players)
-			//{
-			//	if (player != _mainPlayer && player.IsActive)
-			//	{
-			//		bots.Add(player);
-			//	}
-			//}
+			foreach (var player in _players)
+			{
+				if (player != _mainPlayer && player.IsActive)
+				{
+					bots.Add(player);
+				}
+			}
 
-			//if (bots.Count <= 0)
-			//{
-			//	return;
-			//}
+			if (bots.Count <= 0)
+			{
+				return;
+			}
 
-			//int randomIndex = Random.Range(0, bots.Count);
-			//var bot = bots[randomIndex];
+			int randomIndex = CustomRandom.Range(0, bots.Count);
+			var bot = bots[randomIndex];
 
-			//var mainPlayerMovement = _mainPlayer.GetComponent<PlayerMovementComponent>();
-			//var botMovement = bot.GetComponent<PlayerMovementComponent>();
+			_mainPlayer.SwapControllers(bot);
 
-			//mainPlayerMovement.ChangePlayerMode(true);
-			//botMovement.ChangePlayerMode(false);
+			_mainPlayer = bot;
 
-			//_mainPlayer = bot;
-
-			//bot.Update(0.5f);
-			//_input.UpdateInput();
-
-			//_renderer.Camera.SetFollowTarget(_mainPlayer);
+			_renderer.Camera.SetFollowTarget(_mainPlayer);
 		}
 	}
 }
