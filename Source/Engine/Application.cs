@@ -1,4 +1,5 @@
 ﻿using SFML.Graphics;
+using Source.Engine.Input;
 using Source.Game;
 using Source.Game.Configs;
 

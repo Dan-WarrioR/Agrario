@@ -1,8 +1,9 @@
 ﻿using Source.Engine.GameObjects;
+using Source.Engine.Input;
 
 namespace Source.Engine
 {
-	public class GameLoop
+    public class GameLoop
 	{
 		private const int TargetFramerate = 120;
 		private const float TimeUntilUpdate = 1f / TargetFramerate;
@@ -29,7 +30,7 @@ namespace Source.Engine
 
 			_time = new();
 
-			_gameObjects.Add(game);
+			Register(game);
 		}
 
 		public void Run()

@@ -5,6 +5,7 @@ using Source.Game.Units;
 using Source.Game.Configs;
 using SFML.Window;
 using Source.Engine.GameObjects;
+using Source.Engine.Input;
 
 namespace Source.Game
 {
