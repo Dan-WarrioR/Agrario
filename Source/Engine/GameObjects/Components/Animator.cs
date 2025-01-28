@@ -1,5 +1,4 @@
 ﻿using SFML.Graphics;
-using Source.Engine.Tools;
 
 namespace Source.Engine.GameObjects.Components
 {
@@ -55,35 +54,12 @@ namespace Source.Engine.GameObjects.Components
 
 		private void SetupFrames()
 		{
-			var files = TryLoadFrames();
+			_frames = AnimationLoader.GetTextures(_spritePath);
 
-			if (files == null || files.Length <= 0)
+			if (_frames.Count > 0)
 			{
-				return;
+				_target.SetTexture(_frames[0]);
 			}
-
-			foreach (var file in files)
-			{
-				_frames.Add(new Texture(file));
-			}
-
-			_target.SetTexture(_frames[0]);
-		}
-
-		private string[]? TryLoadFrames()
-		{
-			var path = Path.Combine(PathHelper.ResourcesPath, _spritePath);
-			
-			try
-			{
-				return Directory.GetFiles(path);
-			}
-			catch (Exception e)
-			{
-				Console.WriteLine(e);
-			}
-
-			return null;
 		}
 	}
 }
