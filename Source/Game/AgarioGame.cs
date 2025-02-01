@@ -3,19 +3,17 @@ using SFML.Graphics;
 using Source.Engine;
 using Source.Game.Units;
 using Source.Game.Configs;
-using SFML.Window;
 using Source.Engine.GameObjects;
-using Source.Engine.Input;
 using Source.Engine.Tools;
 
 namespace Source.Game
 {
     public class AgarioGame : BaseGame
 	{
-		private GameLoop GameLoop => GameLoop.Instance;
+		private GameLoop GameLoop => _gameLoop ??= Dependency.Get<GameLoop>();
+		private GameLoop _gameLoop;
 		private RenderWindow _window;
 		private SFMLRenderer _renderer;
-		private PlayerInput _input;
 
 		private UnitFactory _unitFactory;
 		private UIFactory _uiFactory;
@@ -23,7 +21,8 @@ namespace Source.Game
 		private TextObject _scoreText;
 		private TextObject _countText;
 
-		private Player _mainPlayer;
+		public Player MainPlayer;
+		public IReadOnlyList<Player> Players => _players;
 
 		private List<Food> _foods = new(GameConfig.FoodCount);
 		private List<Player> _players = new(GameConfig.PlayersCount);
@@ -34,11 +33,12 @@ namespace Source.Game
 
 		private int _alivedPlayersCount = 0;
 
-		public void Initialize(RenderWindow window, SFMLRenderer renderer, PlayerInput input)
+		public void Initialize(RenderWindow window, SFMLRenderer renderer)
 		{
+			Dependency.Register(this);
+
 			_window = window;
 			_renderer = renderer;
-			_input = input;
 
 			_unitFactory = new(GameLoop, renderer);
 			_uiFactory = new(GameLoop, renderer);
@@ -52,10 +52,6 @@ namespace Source.Game
 			_alivedPlayersCount = _players.Count;
 
 			SpawnUserUI();
-
-			_input.BindKey(Keyboard.Key.Escape, () => _isEndGame = true);
-			_input.BindKey(Keyboard.Key.R, RestartGame);
-			_input.BindKey(Keyboard.Key.F, SwapPlayers);
 		}
 
 		private void SpawnBots()
@@ -79,21 +75,20 @@ namespace Source.Game
 
 		private void SpawnMainPlayer()
 		{
-			_mainPlayer = _unitFactory.SpawnPlayer();
+			MainPlayer = _unitFactory.SpawnPlayer();
 
-			_players.Add(_mainPlayer);
+			_players.Add(MainPlayer);
 
-			_input.BindKey(Keyboard.Key.F, SwapPlayers);
-			_renderer.Camera.SetFollowTarget(_mainPlayer);
+			_renderer.Camera.SetFollowTarget(MainPlayer);
 		}
 
 		private void SpawnUserUI()
 		{
-			_scoreText = _uiFactory.CreateScoreText(_mainPlayer.Mass.ToString());
+			_scoreText = _uiFactory.CreateScoreText(MainPlayer.Mass.ToString());
 
 			_countText = _uiFactory.CreateCountText($"Players: {_alivedPlayersCount}");
 
-			_mainPlayer.OnAteFood += UpdateScore;
+			MainPlayer.OnAteFood += UpdateScore;
 
 			OnPlayerDied += OnPlayerDead;
 		}
@@ -116,11 +111,33 @@ namespace Source.Game
 			return _isEndGame;
 		}
 
+		public void StopGame()
+		{
+			_isEndGame = true;
+		}
+
+		public void RestartGame()
+		{
+			foreach (var food in _foods)
+			{
+				_unitFactory.RespawnFood(food);
+			}
+
+			foreach (var player in _players)
+			{
+				_unitFactory.RespawnPlayer(player);
+			}
+
+			_alivedPlayersCount = _players.Count;
+
+			OnPlayerDead(_alivedPlayersCount);
+		}
+
 
 
 		private void CheckForGameRestart()
 		{
-			if (!_mainPlayer.IsActive || _alivedPlayersCount > 1)
+			if (!MainPlayer.IsActive || _alivedPlayersCount > 1)
 			{
 				return;
 			}
@@ -191,30 +208,13 @@ namespace Source.Game
 
 		private void UpdatePlayerCamera()
 		{
-			_renderer.Zoom(_mainPlayer.ZoomFactor);
+			_renderer.Zoom(MainPlayer.ZoomFactor);
 		}
 
 
 
 
 
-
-		private void RestartGame()
-		{
-			foreach (var food in _foods)
-			{
-				_unitFactory.RespawnFood(food);
-			}
-
-			foreach (var player in _players)
-			{
-				_unitFactory.RespawnPlayer(player);
-			}
-
-			_alivedPlayersCount = _players.Count;
-
-			OnPlayerDead(_alivedPlayersCount);
-		}
 
 		private void OnPlayerDead(int playersCount)
 		{
@@ -228,33 +228,6 @@ namespace Source.Game
 			string text = $"Mass: {MathF.Round(mass, 0)}";
 
 			_scoreText.ChangeText(text);
-		}
-
-		private void SwapPlayers()
-		{
-			List<Player> bots = new(_players.Count);
-
-			foreach (var player in _players)
-			{
-				if (player != _mainPlayer && player.IsActive)
-				{
-					bots.Add(player);
-				}
-			}
-
-			if (bots.Count <= 0)
-			{
-				return;
-			}
-
-			int randomIndex = CustomRandom.Range(0, bots.Count);
-			var bot = bots[randomIndex];
-
-			_mainPlayer.SwapControllers(bot);
-
-			_mainPlayer = bot;
-
-			_renderer.Camera.SetFollowTarget(_mainPlayer);
 		}
 	}
 }

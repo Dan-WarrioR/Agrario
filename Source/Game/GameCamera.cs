@@ -1,6 +1,7 @@
 ﻿using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
+using Source.Engine.Tools;
 using Source.Game.Units;
 
 namespace Source.Game
@@ -18,6 +19,8 @@ namespace Source.Game
 
 		public GameCamera(RenderWindow window, Vector2f initialCenter, Vector2f size)
 		{
+			Dependency.Register(this);
+
 			_window = window;
 
 			_window.Resized += OnWindowResize;

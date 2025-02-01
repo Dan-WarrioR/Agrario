@@ -37,7 +37,7 @@ namespace Source.Game.Units
 
 		public event Action OnBeingEaten;
 
-		private Vector2f _delta;
+		private Vector2f Delta => _controller.Delta;
 
 		private BaseController _controller;
 
@@ -60,25 +60,20 @@ namespace Source.Game.Units
 		{
 			base.Update(deltaTime);
 
-			Vector2f positionDelta = CurrentSpeed * deltaTime * _delta;
+			Vector2f positionDelta = CurrentSpeed * deltaTime * Delta;
 
 			var position = GetClampedPosition(Position + positionDelta);
 
-			if (_delta.X > 0)
+			if (Delta.X > 0)
 			{
 				SetScale(PlayerConfig.MirroredPlayerScale);
 			}
-			else if (_delta.X < 0)
+			else if (Delta.X < 0)
 			{
 				SetScale(PlayerConfig.NormalPlayerScale);
 			}
 
 			SetPosition(position);
-		}
-
-		public void SetDelta(Vector2f delta)
-		{
-			_delta = delta;
 		}
 
 		public void SetConrtoller(BaseController conrtoller)
