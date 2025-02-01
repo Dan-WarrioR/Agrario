@@ -1,7 +1,7 @@
 ﻿using Source.Engine.GameObjects;
 using SFML.System;
 using Source.Engine;
-using Source.Game.Configs;
+using Source.Engine.Configs;
 
 namespace Source.Game.Factories
 {

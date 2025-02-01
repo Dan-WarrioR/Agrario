@@ -1,11 +1,11 @@
-﻿using SFML.Graphics;
+﻿using Source.Engine.Configs;
+using SFML.Graphics;
 using Source.Engine;
 using Source.Engine.GameObjects;
-using Source.Game.Configs;
 
 namespace Source.Game
 {
-	public class SFMLRenderer : BaseRenderer
+    public class SFMLRenderer : BaseRenderer
 	{
 		private RenderWindow _window;
 

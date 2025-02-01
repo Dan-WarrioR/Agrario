@@ -1,11 +1,11 @@
-﻿using SFML.Graphics;
+﻿using Source.Engine.Configs;
+using SFML.Graphics;
 using Source.Engine.Input;
 using Source.Game;
-using Source.Game.Configs;
 
 namespace Source.Engine
 {
-	public class Application
+    public class Application
 	{
 		public void Run()
 		{

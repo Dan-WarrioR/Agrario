@@ -6,6 +6,7 @@ using Source.Engine;
 using Source.Game.Units.Controllers;
 using Source.Engine.GameObjects.Components;
 using Source.Engine.Tools;
+using Source.Engine.Configs;
 
 namespace Source.Game.Factories
 {

@@ -1,13 +1,14 @@
-﻿using SFML.Graphics;
+﻿using Source.Engine.Configs;
+using SFML.Graphics;
 using SFML.System;
+using Source.Engine;
 using Source.Engine.GameObjects;
 using Source.Engine.Tools;
 using Source.Game.Configs;
-using Source.Game.Units.Controllers;
 
 namespace Source.Game.Units
 {
-	public class Player : CircleObject, IEater, IFood
+    public class Player : CircleObject, IEater, IFood
 	{
 		private const float BaseZoom = 0.1f;
 		private const float ZoomFactorCoefficient = 0.01f;
