@@ -69,10 +69,9 @@ namespace Source.Engine.Configs
                     return (T)Enum.Parse(typeof(T), fieldValue);
                 }
 
-				var parseMethod = typeof(CustomConverter).GetMethod("Parse", [typeof(T), typeof(string)]);
-				if (parseMethod != null)
+				if (CustomConverter.TryParse(fieldValue, out T result))
 				{
-					return (T)parseMethod.Invoke(null, [defaultValue, fieldValue]); //wip
+                    return result;
 				}
 
                 return (T)Convert.ChangeType(fieldValue, typeof(T));
