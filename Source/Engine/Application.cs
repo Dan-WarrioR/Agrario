@@ -1,26 +1,24 @@
 ﻿using Source.Engine.Configs;
 using SFML.Graphics;
 using Source.Engine.Input;
-using Source.Game;
 
 namespace Source.Engine
 {
     public class Application
 	{
-		public void Run(IEnumerable<BaseConfig> configs)
+		public void Run(BaseGame game, BaseRenderer renderer, IEnumerable<BaseConfig> configs)
 		{
 			InitializeConfigs(configs);
 
 			RenderWindow window = CreateWindow();
-			
-			var game = new AgarioGame();
-			var renderer = new SFMLRenderer(window);
+
+			renderer.Initialize(window);
 			var input = new PlayerInput(window);
 			var gameLoop = new GameLoop(input, renderer, game);
 
 			window.Closed += (_, _) => gameLoop.Stop();
 			
-			game.Initialize(window, renderer);
+			game.Initialize();
 
 			gameLoop.Run();
 		}

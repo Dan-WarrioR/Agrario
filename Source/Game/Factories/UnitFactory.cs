@@ -12,10 +12,13 @@ namespace Source.Game.Factories
 {
     public class UnitFactory : ObjectFactory
     {
+		private static SFMLRenderer Renderer => _renderer ??= Dependency.Get<SFMLRenderer>();
+		private static SFMLRenderer _renderer;
+
 		private const float MinPlayerRadius = 20f;
 		private const float FoodRadius = 5f;
 
-		public UnitFactory(GameLoop gameLoop, BaseRenderer renderer) : base(gameLoop, renderer)
+		public UnitFactory() : base(Renderer)
         {
 
 		}

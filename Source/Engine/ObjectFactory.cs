@@ -1,15 +1,17 @@
 ﻿using Source.Engine.GameObjects;
+using Source.Engine.Tools;
 
 namespace Source.Engine
 {
 	public class ObjectFactory
 	{
+		private GameLoop GameLoop => _gameLoop ??= Dependency.Get<GameLoop>();
 		private GameLoop _gameLoop;
+
 		private BaseRenderer _renderer;
 
-		public ObjectFactory(GameLoop gameLoop, BaseRenderer renderer)
+		public ObjectFactory(BaseRenderer renderer)
 		{
-			_gameLoop = gameLoop;
 			_renderer = renderer;
 		}
 
@@ -24,14 +26,14 @@ namespace Source.Engine
 
 		private void RegisterObject(GameObject gameObject)
 		{
-			_gameLoop.Register(gameObject);
+			GameLoop.Register(gameObject);
 			_renderer.AddRenderElement(gameObject);
 		}
 
 		private void UnregisterObject(GameObject gameObject)
 		{
 			_renderer.RemoveGameElement(gameObject);
-			_gameLoop.UnRegister(gameObject);
+			GameLoop.UnRegister(gameObject);
 		}
 	}
 }

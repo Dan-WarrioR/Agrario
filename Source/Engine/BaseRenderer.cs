@@ -1,4 +1,5 @@
-﻿using Source.Engine.GameObjects;
+﻿using SFML.Graphics;
+using Source.Engine.GameObjects;
 
 namespace Source.Engine
 {
@@ -12,6 +13,13 @@ namespace Source.Engine
 		protected List<GameObject> GameElements = new();
 
 		protected List<GameObject> UIElements = new();
+
+		protected RenderWindow Window { get; private set; }
+
+		public virtual void Initialize(RenderWindow window)
+		{
+			Window = window;
+		}
 
 		public void AddRenderElement(GameObject gameObject)
 		{

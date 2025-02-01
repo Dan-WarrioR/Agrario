@@ -2,25 +2,26 @@
 using SFML.Graphics;
 using Source.Engine;
 using Source.Engine.GameObjects;
+using Source.Engine.Tools;
 
 namespace Source.Game
 {
     public class SFMLRenderer : BaseRenderer
 	{
-		private RenderWindow _window;
-
 		public GameCamera Camera { get; private set; }
 
-		public SFMLRenderer(RenderWindow window)
+		public override void Initialize(RenderWindow window)
 		{
-			_window = window;
+			base.Initialize(window);
 
-			Camera = new(_window, WindowConfig.WindowSize, WindowConfig.WindowSize);
+			Dependency.Register(this);
+
+			Camera = new(window, WindowConfig.WindowSize, WindowConfig.WindowSize);
 		}
 
 		public override void Render()
 		{
-			_window.Clear(WindowConfig.BackgroundColor);
+			Window.Clear(WindowConfig.BackgroundColor);
 			Camera.Update();
 
 			Camera.BeginGameView();
@@ -29,7 +30,7 @@ namespace Source.Game
 			Camera.BeginUIView();
 			DrawActiveElements(UIElements);
 
-			_window.Display();
+			Window.Display();
 		}
 
 		public void Zoom(float factor)
@@ -43,7 +44,7 @@ namespace Source.Game
 			{
 				if (obj.IsActive)
 				{
-					_window.Draw(obj);
+					Window.Draw(obj);
 				}
 			}
 		}

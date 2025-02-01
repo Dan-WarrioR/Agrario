@@ -1,5 +1,4 @@
 ﻿using Source.Game.Factories;
-using SFML.Graphics;
 using Source.Engine;
 using Source.Game.Units;
 using Source.Game.Configs;
@@ -12,7 +11,7 @@ namespace Source.Game
 	{
 		private GameLoop GameLoop => _gameLoop ??= Dependency.Get<GameLoop>();
 		private GameLoop _gameLoop;
-		private RenderWindow _window;
+		private SFMLRenderer Renderer => _renderer ??= Dependency.Get<SFMLRenderer>();
 		private SFMLRenderer _renderer;
 
 		private UnitFactory _unitFactory;
@@ -33,15 +32,12 @@ namespace Source.Game
 
 		private int _alivedPlayersCount = 0;
 
-		public void Initialize(RenderWindow window, SFMLRenderer renderer)
+		public override void Initialize()
 		{
 			Dependency.Register(this);
 
-			_window = window;
-			_renderer = renderer;
-
-			_unitFactory = new(GameLoop, renderer);
-			_uiFactory = new(GameLoop, renderer);
+			_unitFactory = new();
+			_uiFactory = new();
 
 			SpawnFood();
 
@@ -79,7 +75,7 @@ namespace Source.Game
 
 			_players.Add(MainPlayer);
 
-			_renderer.Camera.SetFollowTarget(MainPlayer);
+			Renderer.Camera.SetFollowTarget(MainPlayer);
 		}
 
 		private void SpawnUserUI()
@@ -208,7 +204,7 @@ namespace Source.Game
 
 		private void UpdatePlayerCamera()
 		{
-			_renderer.Zoom(MainPlayer.ZoomFactor);
+			Renderer.Zoom(MainPlayer.ZoomFactor);
 		}
 
 

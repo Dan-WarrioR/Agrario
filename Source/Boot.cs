@@ -1,5 +1,6 @@
 ﻿using Source.Engine;
 using Source.Engine.Configs;
+using Source.Game;
 
 namespace Source
 {
@@ -7,9 +8,11 @@ namespace Source
 	{
 		public static void Main()
 		{
-			Application application = new();
-
-			application.Run(new List<BaseConfig>()
+			var application = new Application();
+			var game = new AgarioGame();
+			var renderer = new SFMLRenderer();
+			
+			application.Run(game, renderer, new List<BaseConfig>()
 			{
 				new WindowConfig(),
 			});
