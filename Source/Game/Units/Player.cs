@@ -46,7 +46,8 @@ namespace Source.Game.Units
 			Initialize(radius, initialPosition);
 
 			Circle.FillColor = color;
-
+			Circle.OutlineThickness = 1f;
+			Circle.OutlineColor = Color.Cyan;
 			SetConrtoller(controller);
 		}	
 
