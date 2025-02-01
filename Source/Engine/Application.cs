@@ -7,8 +7,10 @@ namespace Source.Engine
 {
     public class Application
 	{
-		public void Run()
+		public void Run(IEnumerable<BaseConfig> configs)
 		{
+			InitializeConfigs(configs);
+
 			RenderWindow window = CreateWindow();
 			
 			var game = new AgarioGame();
@@ -18,9 +20,18 @@ namespace Source.Engine
 
 			window.Closed += (_, _) => gameLoop.Stop();
 			
-			game.Initialize(window, renderer, input);
+			game.Initialize(window, renderer);
 
 			gameLoop.Run();
+		}
+
+		private void InitializeConfigs(IEnumerable<BaseConfig> configs)
+		{
+			ConfigManager configManager = new();
+
+			configManager.RegisterConfigs(configs);
+
+			configManager.LoadConfigs();
 		}
 
 		private RenderWindow CreateWindow()

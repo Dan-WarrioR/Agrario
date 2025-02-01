@@ -4,18 +4,30 @@ using SFML.Window;
 
 namespace Source.Engine.Configs
 {
-    public static class WindowConfig
+    public class WindowConfig : BaseConfig
     {
-        public const string AppName = "Game";
+		public override string Category => nameof(WindowConfig);
 
-        public static readonly Vector2f WindowSize = new(1920, 1080);
+		public static string AppName { get; private set; } = "Game";
+        public static Vector2f WindowSize { get; private set; } = new(1920, 1080);
+        public static Styles Style { get; private set; } = Styles.Fullscreen;
+        public static VideoMode VideoMode { get; private set; } = VideoMode.DesktopMode;
+        public static FloatRect Bounds { get; private set; } = new(0, 0, WindowSize.X, WindowSize.Y);
+        public static Color BackgroundColor { get; private set; } = Color.Black;
 
-        public static readonly Styles Style = Styles.Fullscreen;
+		public override Dictionary<string, object> GetConfigValues()
+		{
+			return new Dictionary<string, object>
+			{
+				{ nameof(AppName), AppName },
+				{ nameof(WindowSize), $"{WindowSize.X},{WindowSize.Y}" },
+			};
+		}
 
-        public static readonly VideoMode VideoMode = VideoMode.DesktopMode;
-
-        public static readonly FloatRect Bounds = new(0, 0, WindowSize.X, WindowSize.Y);
-
-        public static readonly Color BackgroundColor = Color.Black;
-    }
+		public override void Initialize(ConfigManager manager)
+		{
+			AppName = manager.GetValue(Category, nameof(AppName), AppName);
+			WindowSize = manager.GetValue(Category, nameof(WindowSize), WindowSize);
+		}
+	}
 }

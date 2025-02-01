@@ -1,4 +1,5 @@
 ﻿using Source.Engine;
+using Source.Engine.Configs;
 
 namespace Source
 {
@@ -8,7 +9,10 @@ namespace Source
 		{
 			Application application = new();
 
-			application.Run();
+			application.Run(new List<BaseConfig>()
+			{
+				new WindowConfig(),
+			});
 		}
 	}
 }
