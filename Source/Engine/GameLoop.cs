@@ -1,5 +1,6 @@
 ﻿using Source.Engine.GameObjects;
 using Source.Engine.Input;
+using Source.Engine.Tools;
 
 namespace Source.Engine
 {
@@ -7,8 +8,6 @@ namespace Source.Engine
 	{
 		private const int TargetFramerate = 120;
 		private const float TimeUntilUpdate = 1f / TargetFramerate;
-
-		public static GameLoop Instance { get; private set; }
 
 		private List<GameObject> _gameObjects = new();
 		private List<GameObject> _newGameObjects = new();
@@ -22,7 +21,7 @@ namespace Source.Engine
 
 		public GameLoop(PlayerInput input, BaseRenderer renderer, BaseGame game)
 		{
-			Instance = this;
+			Dependency.Register(this);
 
 			_renderer = renderer;
 			_game = game;
@@ -51,12 +50,13 @@ namespace Source.Engine
 
 		private void UpdateInput()
 		{
-			_input.UpdateInput();
+			_input.UpdateInputStates();
 		}
 
 		private void Update()
 		{
 			_time.Update();
+			_input.InvokeBindings();
 
 			if (_time.BeforeUpdateTime < TimeUntilUpdate)
 			{

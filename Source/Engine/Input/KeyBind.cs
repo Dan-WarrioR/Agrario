@@ -18,11 +18,14 @@ namespace Source.Engine.Input
 			Key = key;
 		}
 
-		public void Update()
+		public void CheckBindStates()
 		{
 			_wasPressed = _isPressed;
 			_isPressed = Keyboard.IsKeyPressed(Key);
+		}
 
+		public void Update()
+		{
 			if (_isPressed)
 			{
 				if (!_wasPressed)

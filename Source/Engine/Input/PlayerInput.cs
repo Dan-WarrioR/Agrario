@@ -19,17 +19,25 @@ namespace Source.Engine.Input
             Dependency.Register(this);
         }
 
-        public void UpdateInput()
+        public void UpdateInputStates()
         {
             _window.DispatchEvents();
 
             foreach (var keyBind in _keyBindings.Values)
             {
-                keyBind.Update();
+                keyBind.CheckBindStates();
             }
 
             UnbindBindings();
             BindNewBindings();
+        }
+
+        public void InvokeBindings()
+        {
+            foreach (var keyBind in _keyBindings.Values)
+            {
+				keyBind.Update();
+			}
         }
 
         public void BindKey(KeyBind keyBind)

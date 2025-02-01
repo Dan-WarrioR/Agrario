@@ -1,9 +1,10 @@
-﻿using Source.Engine.GameObjects;
+﻿using Source.Engine;
+using Source.Engine.GameObjects;
 using Source.Engine.Tools;
 
 namespace Source.Game.Units.Controllers
 {
-	public class BotController : BaseController
+    public class BotController : BaseController
 	{
 		private const int MinMovementDelay = 0;
 		private const int MaxMovementDelay = 5;
@@ -38,9 +39,7 @@ namespace Source.Game.Units.Controllers
 			{
 				_movementDelay = CustomRandom.Range(MinMovementDelay, MaxMovementDelay);
 				SetRandomDelta();
-			}
-
-			_target.SetDelta(Delta);		
+			}		
 		}
 
 		private void SetRandomDelta()
