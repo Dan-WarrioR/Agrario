@@ -1,7 +1,6 @@
 ﻿using SFML.Graphics;
 using Source.Engine.Input;
 using SFML.Window;
-using Source.Engine.Configs;
 
 namespace Source.Engine
 {
@@ -16,8 +15,6 @@ namespace Source.Engine
 			var gameLoop = new GameLoop(input, renderer, game);
 
 			window.Closed += (_, _) => gameLoop.Stop();
-
-			ConfigLoader.LoadConfig(typeof(WindowConfig));
 
 			game.Initialize();
 

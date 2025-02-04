@@ -1,9 +1,15 @@
 ﻿using SFML.System;
+using Source.Engine.Configs;
 
 namespace Source.Game.Configs
 {
 	public static class PlayerConfig
 	{
+		static PlayerConfig()
+		{
+			ConfigLoader.LoadConfig(typeof(PlayerConfig));
+		}
+
 		//Sprites
 
 		public static string SlimeSpritePath = "Characters\\Slime";

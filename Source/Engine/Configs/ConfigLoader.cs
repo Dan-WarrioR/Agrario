@@ -81,6 +81,7 @@ namespace Source.Engine.Configs
 				_ when type == typeof(int) => int.Parse(value),
 				_ when type == typeof(float) => float.Parse(value, NumberStyles.Float),
 				_ when type == typeof(bool) => bool.Parse(value),
+				_ when type == typeof(string) => value,
 				_ => CustomConverter.TryParse(type, value, out object parsedValue) ? parsedValue : default
 			};
 		}
