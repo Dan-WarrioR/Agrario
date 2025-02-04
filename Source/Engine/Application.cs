@@ -1,15 +1,14 @@
-﻿using Source.Engine.Configs;
-using SFML.Graphics;
+﻿using SFML.Graphics;
 using Source.Engine.Input;
+using SFML.Window;
+using Source.Engine.Configs;
 
 namespace Source.Engine
 {
     public class Application
 	{
-		public void Run(BaseGame game, BaseRenderer renderer, IEnumerable<BaseConfig> configs)
+		public void Run(BaseGame game, BaseRenderer renderer)
 		{
-			InitializeConfigs(configs);
-
 			RenderWindow window = CreateWindow();
 
 			renderer.Initialize(window);
@@ -17,24 +16,17 @@ namespace Source.Engine
 			var gameLoop = new GameLoop(input, renderer, game);
 
 			window.Closed += (_, _) => gameLoop.Stop();
-			
+
+			ConfigLoader.LoadConfig(typeof(WindowConfig));
+
 			game.Initialize();
 
 			gameLoop.Run();
 		}
 
-		private void InitializeConfigs(IEnumerable<BaseConfig> configs)
-		{
-			ConfigManager configManager = new();
-
-			configManager.RegisterConfigs(configs);
-
-			configManager.LoadConfigs();
-		}
-
 		private RenderWindow CreateWindow()
 		{
-			var window = new RenderWindow(WindowConfig.VideoMode, WindowConfig.AppName, WindowConfig.Style);
+			var window = new RenderWindow(VideoMode.DesktopMode, "Game", Styles.Fullscreen);
 
 			window.SetFramerateLimit(60);
 			window.SetVerticalSyncEnabled(true);

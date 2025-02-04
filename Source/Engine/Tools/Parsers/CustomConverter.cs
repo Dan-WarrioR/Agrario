@@ -1,6 +1,6 @@
 ﻿using SFML.Graphics;
 using SFML.System;
-using SFML.Window;
+using System.Globalization;
 
 namespace Source.Engine.Tools.Parsers
 {
@@ -11,12 +11,11 @@ namespace Source.Engine.Tools.Parsers
 			{typeof(Vector2f), ConvertToVector2f},
 			{typeof(FloatRect), ConvertToFloatRect},
 			{typeof(Color), ConvertToColor},
-			{typeof(VideoMode), ConvertToVideoMode},
 		};
 
-		public static bool TryParse<T>(string data, out T result)
+		public static bool TryParse<T>(Type type, string data, out T result)
 		{
-			if (!_converters.TryGetValue(typeof(T), out var converter))
+			if (!_converters.TryGetValue(type, out var converter))
 			{
 				result = default;
 				return false;
@@ -38,26 +37,37 @@ namespace Source.Engine.Tools.Parsers
 
 		private static object ConvertToVector2f(string data)
 		{
-			var values = data.Split(',').Select(float.Parse).ToArray();
-			return new Vector2f(values[0], values[1]);
+			var parts = data.Split(new[] { "[Vector2f]", "X", "Y", "(", ")", " " }, StringSplitOptions.RemoveEmptyEntries);
+
+			if (parts.Length == 2 &&
+				float.TryParse(parts[0], NumberStyles.Float, CultureInfo.InvariantCulture, out var x) &&
+				float.TryParse(parts[1], NumberStyles.Float, CultureInfo.InvariantCulture, out var y))
+			{
+				return new Vector2f(x, y);
+			}
+			return default;
 		}
 
-		public static object ConvertToFloatRect(string data)
+		private static object ConvertToFloatRect(string data)
 		{
 			var values = data.Split(',').Select(float.Parse).ToArray();
 			return new FloatRect(values[0], values[1], values[2], values[3]);
 		}
 
-		public static object ConvertToColor(string data)
+		private static object ConvertToColor(string data)
 		{
-			var values = data.Split(',').Select(byte.Parse).ToArray();
-			return new Color(values[0], values[1], values[2], values.Length > 3 ? values[3] : (byte)255);
-		}
+			var parts = data.Split(new[] { "[Color]", "R", "G", "B", "A", "(", ")", " " }, StringSplitOptions.RemoveEmptyEntries);
 
-		public static object ConvertToVideoMode(string data)
-		{
-			var values = data.Split(',').Select(uint.Parse).ToArray();
-			return new VideoMode(values[0], values[1], values.Length > 2 ? values[2] : 32);
+			if (parts.Length == 4 &&
+				byte.TryParse(parts[0], out var r) &&
+				byte.TryParse(parts[1], out var g) &&
+				byte.TryParse(parts[2], out var b) &&
+				byte.TryParse(parts[3], out var a))
+			{
+				return new Color(r, g, b, a);
+			}
+
+			return default;
 		}
 	}
 }
