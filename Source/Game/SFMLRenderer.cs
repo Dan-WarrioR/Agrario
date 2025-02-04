@@ -10,18 +10,22 @@ namespace Source.Game
 	{
 		public GameCamera Camera { get; private set; }
 
+		private Color _backgroundColor;
+
 		public override void Initialize(RenderWindow window)
 		{
 			base.Initialize(window);
 
 			Dependency.Register(this);
 
+			_backgroundColor = WindowConfig.BackgroundColor;
+
 			Camera = new(window, WindowConfig.WindowSize, WindowConfig.WindowSize);
 		}
 
 		public override void Render()
 		{
-			Window.Clear(WindowConfig.BackgroundColor);
+			Window.Clear(_backgroundColor);
 			Camera.Update();
 
 			Camera.BeginGameView();

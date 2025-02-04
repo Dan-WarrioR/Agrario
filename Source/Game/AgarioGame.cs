@@ -4,6 +4,7 @@ using Source.Game.Units;
 using Source.Game.Configs;
 using Source.Engine.GameObjects;
 using Source.Engine.Tools;
+using Source.Engine.Configs;
 
 namespace Source.Game
 {
@@ -14,6 +15,9 @@ namespace Source.Game
 		private SFMLRenderer Renderer => _renderer ??= Dependency.Get<SFMLRenderer>();
 		private SFMLRenderer _renderer;
 
+		private int _playersCount;
+		private int _foodCount;
+
 		private UnitFactory _unitFactory;
 		private UIFactory _uiFactory;
 
@@ -23,8 +27,8 @@ namespace Source.Game
 		public Player MainPlayer;
 		public IReadOnlyList<Player> Players => _players;
 
-		private List<Food> _foods = new(GameConfig.FoodCount);
-		private List<Player> _players = new(GameConfig.PlayersCount);
+		private List<Food> _foods;
+		private List<Player> _players;
 
 		private event Action<int> OnPlayerDied;
 
@@ -36,36 +40,52 @@ namespace Source.Game
 		{
 			Dependency.Register(this);
 
+			SetupConfigs();
+
 			_unitFactory = new();
 			_uiFactory = new();
 
 			SpawnFood();
-
-			SpawnBots();
-
-			SpawnMainPlayer();
-
-			_alivedPlayersCount = _players.Count;
-
+			SpawnPlayers();	
 			SpawnUserUI();
 		}
 
-		private void SpawnBots()
+		private void SetupConfigs()
 		{
-			for (int i = 0; i < GameConfig.PlayersCount - 1; i++)
-			{
-				var bot = _unitFactory.SpawnBot();
+			ConfigLoader.LoadConfig(typeof(GameConfig));
 
-				_players.Add(bot);
-			}
+			_playersCount = GameConfig.PlayersCount;
+			_foodCount = GameConfig.FoodCount;
 		}
 
 		private void SpawnFood()
 		{
-			for (int i = 0; i < GameConfig.FoodCount; i++)
+			_foods = new(_foodCount);
+
+			for (int i = 0; i < _foodCount; i++)
 			{
 				var food = _unitFactory.SpawnFood();
 				_foods.Add(food);
+			}
+		}
+
+		private void SpawnPlayers()
+		{
+			_players = new(_playersCount);
+
+			SpawnBots();
+			SpawnMainPlayer();
+
+			_alivedPlayersCount = _players.Count;
+		}
+
+		private void SpawnBots()
+		{
+			for (int i = 0; i < _playersCount - 1; i++)
+			{
+				var bot = _unitFactory.SpawnBot();
+
+				_players.Add(bot);
 			}
 		}
 
