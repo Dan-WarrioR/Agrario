@@ -29,9 +29,9 @@ namespace Source.Game.Units
 		{
 			get
 			{
-				float speedReduction = (Radius - PlayerConfig.SpeedReductionCoefficient) / 100f;
-
-				return MathF.Max(PlayerConfig.MinSpeed, PlayerConfig.BaseSpeed * (1 - speedReduction));
+				float speedReduction = (Radius - _speedReductionCoefficient) / 100f;
+				
+				return MathF.Max(_minSpeed, _baseSpeed * (1 - speedReduction));
 			}
 		}
 
@@ -41,6 +41,16 @@ namespace Source.Game.Units
 
 		private BaseController _controller;
 
+		private static float _speedReductionCoefficient;
+		private static float _minSpeed;
+		private static float _baseSpeed;
+		private static Vector2f _mirroredPlayerScale;
+		private static Vector2f _normalPlayerScale;
+		private static FloatRect _bounds;
+		private static float _growthBase;
+		private static float _growthDecayRate;
+		private static float _minGrowthFactor;
+
 		public void Initialize(BaseController controller, Color color, float radius, Vector2f initialPosition)
 		{
 			Initialize(radius, initialPosition);
@@ -48,8 +58,24 @@ namespace Source.Game.Units
 			Circle.FillColor = color;
 			Circle.OutlineThickness = 1f;
 			Circle.OutlineColor = Color.Cyan;
+
+			SetupConfigValues();
+
 			SetConrtoller(controller);
 		}	
+
+		private void SetupConfigValues()
+		{
+			_speedReductionCoefficient = PlayerConfig.SpeedReductionCoefficient;
+			_minSpeed = PlayerConfig.MinSpeed;
+			_baseSpeed = PlayerConfig.BaseSpeed;
+			_mirroredPlayerScale = PlayerConfig.MirroredPlayerScale;
+			_normalPlayerScale = PlayerConfig.NormalPlayerScale;
+			_bounds = WindowConfig.Bounds;
+			_growthBase = PlayerConfig.GrowthBase;
+			_growthDecayRate = PlayerConfig.GrowthDecayRate;
+			_minGrowthFactor = PlayerConfig.MinGrowthFactor;
+		}
 
 		public void Reset()
 		{
@@ -67,11 +93,11 @@ namespace Source.Game.Units
 
 			if (Delta.X > 0)
 			{
-				SetScale(PlayerConfig.MirroredPlayerScale);
+				SetScale(_mirroredPlayerScale);
 			}
 			else if (Delta.X < 0)
 			{
-				SetScale(PlayerConfig.NormalPlayerScale);
+				SetScale(_normalPlayerScale);
 			}
 
 			SetPosition(position);
@@ -102,8 +128,8 @@ namespace Source.Game.Units
 
 			food.EatMe();
 
-			float growthFactor = PlayerConfig.GrowthBase / (1f + PlayerConfig.GrowthDecayRate * MathF.Log(Mass + 1));
-			growthFactor = MathF.Max(growthFactor, PlayerConfig.MinGrowthFactor);
+			float growthFactor = _growthBase / (1f + _growthDecayRate * MathF.Log(Mass + 1));
+			growthFactor = MathF.Max(growthFactor, _minGrowthFactor);
 
 			float newMass = Mass + food.Mass * growthFactor;
 
@@ -137,10 +163,8 @@ namespace Source.Game.Units
 
 		private Vector2f GetClampedPosition(Vector2f position)
 		{
-			var bounds = WindowConfig.Bounds;
-
-			float x = Math.Clamp(position.X, bounds.Left, bounds.Width);
-			float y = Math.Clamp(position.Y, bounds.Top, bounds.Height);
+			float x = Math.Clamp(position.X, _bounds.Left, _bounds.Width);
+			float y = Math.Clamp(position.Y, _bounds.Top, _bounds.Height);
 
 			return new(x, y);
 		}

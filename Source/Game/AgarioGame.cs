@@ -4,7 +4,6 @@ using Source.Game.Units;
 using Source.Game.Configs;
 using Source.Engine.GameObjects;
 using Source.Engine.Tools;
-using Source.Engine.Configs;
 
 namespace Source.Game
 {
@@ -14,9 +13,6 @@ namespace Source.Game
 		private GameLoop _gameLoop;
 		private SFMLRenderer Renderer => _renderer ??= Dependency.Get<SFMLRenderer>();
 		private SFMLRenderer _renderer;
-
-		private int _playersCount;
-		private int _foodCount;
 
 		private UnitFactory _unitFactory;
 		private UIFactory _uiFactory;
@@ -35,25 +31,25 @@ namespace Source.Game
 		private bool _isEndGame = false;
 
 		private int _alivedPlayersCount = 0;
+		private int _playersCount;
+		private int _foodCount;
 
 		public override void Initialize()
 		{
 			Dependency.Register(this);
 
-			SetupConfigs();
-
 			_unitFactory = new();
 			_uiFactory = new();
+
+			SetupConfigValues();
 
 			SpawnFood();
 			SpawnPlayers();	
 			SpawnUserUI();
 		}
 
-		private void SetupConfigs()
+		private void SetupConfigValues()
 		{
-			ConfigLoader.LoadConfig(typeof(GameConfig));
-
 			_playersCount = GameConfig.PlayersCount;
 			_foodCount = GameConfig.FoodCount;
 		}

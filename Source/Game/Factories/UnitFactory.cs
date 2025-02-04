@@ -18,9 +18,20 @@ namespace Source.Game.Factories
 		private const float MinPlayerRadius = 20f;
 		private const float FoodRadius = 5f;
 
+		private string _monsterSpritePath;
+		private string _slimeSpritePath;
+		private FloatRect _bounds;
+
 		public UnitFactory() : base(Renderer)
         {
+			SetupConfigsValues();
+		}
 
+		private void SetupConfigsValues()
+		{
+			_monsterSpritePath = PlayerConfig.MonsterSpritePath;
+			_slimeSpritePath = PlayerConfig.SlimeSpritePath;
+			_bounds = WindowConfig.Bounds;
 		}
 
 		#region Food
@@ -53,7 +64,7 @@ namespace Source.Game.Factories
 
 			player.Initialize(playerConroller, GetRandomColor(), MinPlayerRadius, GetRandomPosition());
 			var animator = player.AddComponent<Animator>();
-			animator.Initialize(PlayerConfig.MonsterSpritePath, 0.1f);
+			animator.Initialize(_monsterSpritePath, 0.1f);
 
             return player;
 		}
@@ -65,7 +76,7 @@ namespace Source.Game.Factories
 
 			bot.Initialize(botConroller, GetRandomColor(), MinPlayerRadius, GetRandomPosition());
 			var animator = bot.AddComponent<Animator>();
-			animator.Initialize(PlayerConfig.SlimeSpritePath, 0.1f);
+			animator.Initialize(_slimeSpritePath, 0.1f);
 
 			return bot;
 		}
@@ -81,10 +92,8 @@ namespace Source.Game.Factories
 
 		private Vector2f GetRandomPosition()
         {
-            var bounds = WindowConfig.Bounds;
-
-            float x = Random.Shared.Next((int)bounds.Left, (int)(bounds.Left + bounds.Width));
-            float y = Random.Shared.Next((int)bounds.Top, (int)(bounds.Top + bounds.Height));
+            float x = Random.Shared.Next((int)_bounds.Left, (int)(_bounds.Left + _bounds.Width));
+            float y = Random.Shared.Next((int)_bounds.Top, (int)(_bounds.Top + _bounds.Height));
 
             return new(x, y);
         }
