@@ -50,8 +50,17 @@ namespace Source.Engine.Tools.Parsers
 
 		private static object ConvertToFloatRect(string data)
 		{
-			var values = data.Split(',').Select(float.Parse).ToArray();
-			return new FloatRect(values[0], values[1], values[2], values[3]);
+			var parts = data.Split(new[] { "[FloatRect]", "Width", "Height", "Top", "Left", "X", "Y", "(", ")", " " }, StringSplitOptions.RemoveEmptyEntries);
+
+			if (parts.Length == 4 &&
+				float.TryParse(parts[0], NumberStyles.Float, CultureInfo.InvariantCulture, out var left) 
+				&& float.TryParse(parts[1], NumberStyles.Float, CultureInfo.InvariantCulture, out var top) 
+				&& float.TryParse(parts[2], NumberStyles.Float, CultureInfo.InvariantCulture, out var width) 
+				&& float.TryParse(parts[3], NumberStyles.Float, CultureInfo.InvariantCulture, out var height))
+			{
+				return new FloatRect(left, top, width, height);
+			}
+			return default;
 		}
 
 		private static object ConvertToColor(string data)

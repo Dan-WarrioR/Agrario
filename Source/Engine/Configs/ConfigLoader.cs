@@ -23,7 +23,7 @@ namespace Source.Engine.Configs
 		public static void LoadConfig(Type type)
 		{
 			var filePath = $"{type.Name}.ini";
-
+			
 			if (!File.Exists(filePath))
 			{
 				SaveConfig(type);
