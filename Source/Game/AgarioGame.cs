@@ -4,6 +4,7 @@ using Source.Game.Units;
 using Source.Game.Configs;
 using Source.Engine.GameObjects;
 using Source.Engine.Tools;
+using Source.Game.Features.AudioSystem;
 
 namespace Source.Game
 {
@@ -14,6 +15,7 @@ namespace Source.Game
 		private SFMLRenderer Renderer => _renderer ??= Dependency.Get<SFMLRenderer>();
 		private SFMLRenderer _renderer;
 
+		private AudioManager _audioManager;
 		private UnitFactory _unitFactory;
 		private UIFactory _uiFactory;
 
@@ -33,6 +35,8 @@ namespace Source.Game
 		private int _alivedPlayersCount = 0;
 		private int _playersCount;
 		private int _foodCount;
+		private string _musicSound;
+		private string _eatSound;
 
 		public override void Initialize()
 		{
@@ -43,6 +47,11 @@ namespace Source.Game
 
 			SetupConfigValues();
 
+			_audioManager = new();
+			_audioManager.LoadSounds();
+			_audioManager.SetVolume(_musicSound, 20f);
+			_audioManager.PlayLooped(_musicSound);
+
 			SpawnFood();
 			SpawnPlayers();	
 			SpawnUserUI();
@@ -52,6 +61,8 @@ namespace Source.Game
 		{
 			_playersCount = GameConfig.PlayersCount;
 			_foodCount = GameConfig.FoodCount;
+			_musicSound = AudioConfig.MusicSound;
+			_eatSound = AudioConfig.EatSound;
 		}
 
 		private void SpawnFood()
@@ -92,6 +103,8 @@ namespace Source.Game
 			_players.Add(MainPlayer);
 
 			Renderer.Camera.SetFollowTarget(MainPlayer);
+
+			MainPlayer.OnAteFood += (value) => _audioManager.PlayOnced(_eatSound);
 		}
 
 		private void SpawnUserUI()

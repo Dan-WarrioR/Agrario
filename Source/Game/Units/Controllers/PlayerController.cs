@@ -4,6 +4,8 @@ using Source.Engine;
 using Source.Engine.GameObjects;
 using Source.Engine.Input;
 using Source.Engine.Tools;
+using Source.Game.Configs;
+using Source.Game.Features.AudioSystem;
 
 namespace Source.Game.Units.Controllers
 {
@@ -22,13 +24,17 @@ namespace Source.Game.Units.Controllers
 
 		private AgarioGame Game => _game ??= Dependency.Get<AgarioGame>();
 		private GameCamera Camera => _camera ??= Dependency.Get<GameCamera>();
+        private PlayerInput PlayerInput => _playerInput ??= Dependency.Get<PlayerInput>();
+		private AudioManager AudioManager => _audioManager ??= Dependency.Get<AudioManager>();
 		private AgarioGame _game;
 		private GameCamera _camera;
-
-        private PlayerInput PlayerInput => _playerInput ??= Dependency.Get<PlayerInput>();
         private PlayerInput _playerInput;
+		private AudioManager _audioManager;
 
         private Player _target;
+
+		private string _restartSound;
+		private string _swapSound;
 
 		public override void SetTarget(GameObject target)
 		{
@@ -48,8 +54,11 @@ namespace Source.Game.Units.Controllers
                     onReleased: () => Delta -= binding.Delta);
             }
 
+			_restartSound = AudioConfig.RestargGameSound;
+			_swapSound = AudioConfig.SwapSound;
+
             PlayerInput.BindKey(Keyboard.Key.Escape, Game.StopGame);
-            PlayerInput.BindKey(Keyboard.Key.R, Game.RestartGame);
+            PlayerInput.BindKey(Keyboard.Key.R, RestartGame);
             PlayerInput.BindKey(Keyboard.Key.F, SwapPlayers);
         }
 
@@ -80,6 +89,14 @@ namespace Source.Game.Units.Controllers
 			mainPlayer = bot;
 
 			Camera.SetFollowTarget(mainPlayer);
+
+			AudioManager.PlayOnced(_swapSound);
+		}
+
+		private void RestartGame()
+		{
+			AudioManager.PlayOnced(_restartSound);
+			Game.RestartGame();
 		}
 	}
 }
