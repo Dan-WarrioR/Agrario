@@ -57,7 +57,7 @@ namespace Source.Game.Factories
 
 		#region Players
 
-		public Player SpawnPlayer()
+		public PlayerController SpawnPlayer()
         {
 			var player = Instantiate<Player>();
 			var playerConroller = Instantiate<PlayerController>();
@@ -66,7 +66,7 @@ namespace Source.Game.Factories
 			var animator = player.AddComponent<Animator>();
 			animator.Initialize(_monsterSpritePath, 0.1f);
 
-            return player;
+            return playerConroller;
 		}
 
 		public Player SpawnBot()

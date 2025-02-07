@@ -31,16 +31,29 @@ namespace Source.Game.Units.Controllers
         private PlayerInput _playerInput;
 		private AudioManager _audioManager;
 
-        private Player _target;
+        public Player Player { get; private set; }
 
 		private string _restartSound;
 		private string _swapSound;
+		private string _eatSound;
 
 		public override void SetTarget(GameObject target)
 		{
+			if (Player != null)
+			{
+				Player.OnAteFood -= OnAteFood;
+			}
+
 			base.SetTarget(target);
 
-			_target = (Player)Target;
+			var player = (Player)base.Target;
+
+			Player = player;
+
+			if (Player != null)
+			{
+				Player.OnAteFood += OnAteFood;
+			}
 		}
 
 		public override void Start()
@@ -56,8 +69,9 @@ namespace Source.Game.Units.Controllers
 
 			_restartSound = AudioConfig.RestargGameSound;
 			_swapSound = AudioConfig.SwapSound;
+			_eatSound = AudioConfig.EatSound;
 
-            PlayerInput.BindKey(Keyboard.Key.Escape, Game.StopGame);
+			PlayerInput.BindKey(Keyboard.Key.Escape, Game.StopGame);
             PlayerInput.BindKey(Keyboard.Key.R, RestartGame);
             PlayerInput.BindKey(Keyboard.Key.F, SwapPlayers);
         }
@@ -66,7 +80,7 @@ namespace Source.Game.Units.Controllers
 		{
 			List<Player> bots = new();
 
-			var mainPlayer = Game.MainPlayer;
+			var mainPlayer = Game.PlayerController.Player;
 
 			foreach (var player in Game.Players)
 			{
@@ -86,9 +100,9 @@ namespace Source.Game.Units.Controllers
 
 			mainPlayer.SwapControllers(bot);
 
-			mainPlayer = bot;
+			Game.PlayerController.SetTarget(bot);
 
-			Camera.SetFollowTarget(mainPlayer);
+			Camera.SetFollowTarget(bot);
 
 			AudioManager.PlayOnced(_swapSound);
 		}
@@ -97,6 +111,11 @@ namespace Source.Game.Units.Controllers
 		{
 			AudioManager.PlayOnced(_restartSound);
 			Game.RestartGame();
+		}
+
+		private void OnAteFood(float value)
+		{
+			AudioManager.PlayOnced(_eatSound);
 		}
 	}
 }

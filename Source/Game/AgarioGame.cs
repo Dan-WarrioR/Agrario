@@ -5,6 +5,7 @@ using Source.Game.Configs;
 using Source.Engine.GameObjects;
 using Source.Engine.Tools;
 using Source.Game.Features.AudioSystem;
+using Source.Game.Units.Controllers;
 
 namespace Source.Game
 {
@@ -22,7 +23,7 @@ namespace Source.Game
 		private TextObject _scoreText;
 		private TextObject _countText;
 
-		public Player MainPlayer;
+		public PlayerController PlayerController;
 		public IReadOnlyList<Player> Players => _players;
 
 		private List<Food> _foods;
@@ -36,7 +37,7 @@ namespace Source.Game
 		private int _playersCount;
 		private int _foodCount;
 		private string _musicSound;
-		private string _eatSound;
+		
 
 		public override void Initialize()
 		{
@@ -62,7 +63,6 @@ namespace Source.Game
 			_playersCount = GameConfig.PlayersCount;
 			_foodCount = GameConfig.FoodCount;
 			_musicSound = AudioConfig.MusicSound;
-			_eatSound = AudioConfig.EatSound;
 		}
 
 		private void SpawnFood()
@@ -98,22 +98,20 @@ namespace Source.Game
 
 		private void SpawnMainPlayer()
 		{
-			MainPlayer = _unitFactory.SpawnPlayer();
+			PlayerController = _unitFactory.SpawnPlayer();
 
-			_players.Add(MainPlayer);
+			_players.Add(PlayerController.Player);
 
-			Renderer.Camera.SetFollowTarget(MainPlayer);
-
-			MainPlayer.OnAteFood += (value) => _audioManager.PlayOnced(_eatSound);
+			Renderer.Camera.SetFollowTarget(PlayerController.Player);
 		}
 
 		private void SpawnUserUI()
 		{
-			_scoreText = _uiFactory.CreateScoreText(MainPlayer.Mass.ToString());
+			_scoreText = _uiFactory.CreateScoreText(PlayerController.Player.Mass.ToString());
 
 			_countText = _uiFactory.CreateCountText($"Players: {_alivedPlayersCount}");
 
-			MainPlayer.OnAteFood += UpdateScore;
+			PlayerController.Player.OnAteFood += UpdateScore;
 
 			OnPlayerDied += OnPlayerDead;
 		}
@@ -162,7 +160,7 @@ namespace Source.Game
 
 		private void CheckForGameRestart()
 		{
-			if (!MainPlayer.IsActive || _alivedPlayersCount > 1)
+			if (!PlayerController.IsActive || _alivedPlayersCount > 1)
 			{
 				return;
 			}
@@ -233,7 +231,7 @@ namespace Source.Game
 
 		private void UpdatePlayerCamera()
 		{
-			Renderer.Zoom(MainPlayer.ZoomFactor);
+			Renderer.Zoom(PlayerController.Player.ZoomFactor);
 		}
 
 
