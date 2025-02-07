@@ -67,7 +67,7 @@ namespace Source.Game.Units.Controllers
                     onReleased: () => Delta -= binding.Delta);
             }
 
-			_restartSound = AudioConfig.RestargGameSound;
+			_restartSound = AudioConfig.RestarGameSound;
 			_swapSound = AudioConfig.SwapSound;
 			_eatSound = AudioConfig.EatSound;
 
