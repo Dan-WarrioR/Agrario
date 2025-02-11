@@ -1,7 +1,7 @@
 ﻿using SFML.Audio;
 using Source.Engine.Tools;
 
-namespace Source.Game.Features.AudioSystem
+namespace Source.Engine.Systems
 {
     public class AudioManager
     {
@@ -80,10 +80,10 @@ namespace Source.Game.Features.AudioSystem
             sound.Stop();
         }
 
-		/// <summary>
-		/// The volume is a value between 0 (mute) and 100 (full volume)
-		/// </summary>
-		public void SetVolume(string soundName, float volume)
+        /// <summary>
+        /// The volume is a value between 0 (mute) and 100 (full volume)
+        /// </summary>
+        public void SetVolume(string soundName, float volume)
         {
             if (!_sounds.TryGetValue(soundName, out var sound))
             {

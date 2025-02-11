@@ -7,12 +7,10 @@
 		public static T Get<T>() where T : class
 		{
 			var type = typeof(T);
-			foreach (var pair in _instances)
+
+			if (_instances.TryGetValue(type, out var instance))
 			{
-				if (pair.Key == type)
-				{
-					return pair.Value as T;
-				}
+				return instance as T;
 			}
 
 			return null;
@@ -36,21 +34,6 @@
 			}
 		}
 
-		public static bool TryRegister<T>(T instance) where T : class
-		{
-			return TryRegister(typeof(T), instance);
-		}
-
-		public static bool TryRegister(Type type, object instance)
-		{
-			if (instance == null)
-			{
-				throw new NullReferenceException($"Dependency Instance cannot be null.");
-			}
-
-			return _instances.TryAdd(type, instance);
-		}
-
 		public static void Unregister<T>(T instance) where T : class
 		{
 			Unregister(typeof(T), instance);
@@ -69,27 +52,6 @@
 			}
 
 			_instances.Remove(type);
-		}
-
-		public static bool TryUnregister<T>(T instance) where T : class
-		{
-			return TryUnregister(typeof(T), instance);
-		}
-
-		public static bool TryUnregister(Type type, object instance)
-		{
-			if (instance == null)
-			{
-				throw new NullReferenceException($"Dependency Instance cannot be null.");
-			}
-
-			if (!_instances.ContainsKey(type))
-			{
-				return false;
-			}
-
-			_instances.Remove(type);
-			return true;
 		}
 	}
 }
