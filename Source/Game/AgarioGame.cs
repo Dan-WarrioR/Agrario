@@ -48,8 +48,8 @@ namespace Source.Game
 
 			SetupConfigValues();
 
-			_audioManager = new();
-			_audioManager.LoadSounds();
+			_audioManager = Dependency.Get<AudioManager>();
+			
 			_audioManager.SetVolume(_musicSound, 20f);
 			_audioManager.PlayLooped(_musicSound);
 
@@ -137,6 +137,7 @@ namespace Source.Game
 		public void StopGame()
 		{
 			_isEndGame = true;
+			_audioManager.StopAllSounds();
 		}
 
 		public void RestartGame()

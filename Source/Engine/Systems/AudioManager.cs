@@ -78,6 +78,14 @@ namespace Source.Engine.Systems
             sound.Stop();
         }
 
+        public void StopAllSounds()
+        {
+            foreach (var sound in _sounds.Values)
+            {
+                sound.Stop();
+            }
+        }
+
         /// <summary>
         /// The volume is a value between 0 (mute) and 100 (full volume)
         /// </summary>

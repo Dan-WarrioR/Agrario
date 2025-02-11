@@ -1,6 +1,7 @@
 ﻿using SFML.Graphics;
 using Source.Engine.Input;
 using SFML.Window;
+using Source.Engine.Systems;
 
 namespace Source.Engine
 {
@@ -12,6 +13,9 @@ namespace Source.Engine
 
 			renderer.Initialize(window);
 			var input = new PlayerInput(window);
+			var audioManager = new AudioManager();
+			audioManager.LoadSounds();
+			
 			var gameLoop = new GameLoop(input, renderer, game);
 
 			window.Closed += (_, _) => gameLoop.Stop();
