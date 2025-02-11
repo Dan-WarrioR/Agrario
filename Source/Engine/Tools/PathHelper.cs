@@ -2,7 +2,7 @@
 {
 	public static class PathHelper
 	{
-		public static string ProjectPath = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName;
+		public static string ProjectPath = AppDomain.CurrentDomain.BaseDirectory;
 
 		public static string ResourcesPath => Path.Combine(ProjectPath, "Resources");
 	}

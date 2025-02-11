@@ -5,7 +5,7 @@ namespace Source.Engine.Systems
 {
     public class AudioManager
     {
-        private Dictionary<string, Sound> _sounds;
+        private Dictionary<string, Sound> _sounds = new();
 
         public AudioManager()
         {
@@ -22,8 +22,6 @@ namespace Source.Engine.Systems
             }
 
             var files = Directory.GetFiles(folderPath, "*.wav");
-
-            _sounds = new(files.Length);
 
             foreach (string file in files)
             {

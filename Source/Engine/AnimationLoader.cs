@@ -41,7 +41,7 @@ namespace Source.Engine
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine($"Failed to load textures from path {path}: {e}");
+				Debug.LogError(e.Message);
 			}
 
 			return textures;
