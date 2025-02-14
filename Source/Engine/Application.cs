@@ -15,6 +15,7 @@ namespace Source.Engine
 			var input = new PlayerInput(window);
 			var audioManager = new AudioManager();
 			audioManager.LoadSounds();
+			new PauseManager();
 			
 			var gameLoop = new GameLoop(input, renderer, game);
 

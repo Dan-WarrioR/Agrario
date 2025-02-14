@@ -83,10 +83,8 @@ namespace Source.Game.Units
 			Circle.Radius = InitialRadius;
 		}
 
-		public override void Update(float deltaTime)
+		public override void OnUpdate(float deltaTime)
 		{
-			base.Update(deltaTime);
-
 			Vector2f positionDelta = CurrentSpeed * deltaTime * Delta;
 
 			var position = GetClampedPosition(Position + positionDelta);

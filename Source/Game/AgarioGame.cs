@@ -118,7 +118,7 @@ namespace Source.Game
 
 
 
-		public override void Update(float deltaTime)
+		public override void OnUpdate(float deltaTime)
 		{
 			UpdatePlayerCamera();		
 

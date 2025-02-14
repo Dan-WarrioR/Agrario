@@ -21,18 +21,14 @@ namespace Source.Game.Units.Controllers
 			_target = (Player)Target;
 		}
 
-		public override void Start()
+		public override void OnStart()
 		{
-			base.Start();
-
 			_movementDelay = CustomRandom.Range(MinMovementDelay, MaxMovementDelay);
 			SetRandomDelta();
 		}
 
-		public override void Update(float deltaTime)
+		public override void OnUpdate(float deltaTime)
 		{
-			base.Update(deltaTime);
-
 			_aiMovementTime += deltaTime;
 
 			if (_aiMovementTime > _movementDelay)

@@ -26,10 +26,12 @@ namespace Source.Game.Units.Controllers
 		private GameCamera Camera => _camera ??= Dependency.Get<GameCamera>();
         private PlayerInput PlayerInput => _playerInput ??= Dependency.Get<PlayerInput>();
 		private AudioManager AudioManager => _audioManager ??= Dependency.Get<AudioManager>();
+		private PauseManager PauseManager => _pauseManager ??= Dependency.Get<PauseManager>();
 		private AgarioGame _game;
 		private GameCamera _camera;
         private PlayerInput _playerInput;
 		private AudioManager _audioManager;
+		private PauseManager _pauseManager;
 
         public Player Player { get; private set; }
 
@@ -56,10 +58,8 @@ namespace Source.Game.Units.Controllers
 			}
 		}
 
-		public override void Start()
+		public override void OnStart()
         {
-            base.Start();
-
             foreach (var binding in _movementBindingsMap)
             {
                 PlayerInput.BindKey(binding.Key,
@@ -74,6 +74,7 @@ namespace Source.Game.Units.Controllers
 			PlayerInput.BindKey(Keyboard.Key.Escape, Game.StopGame);
             PlayerInput.BindKey(Keyboard.Key.R, RestartGame);
             PlayerInput.BindKey(Keyboard.Key.F, SwapPlayers);
+            PlayerInput.BindKey(Keyboard.Key.P, PauseGame);
         }
 
 		private void SwapPlayers()
@@ -116,6 +117,11 @@ namespace Source.Game.Units.Controllers
 		private void OnAteFood(float value)
 		{
 			AudioManager.PlayOnced(_eatSound);
+		}
+
+		private void PauseGame()
+		{
+			PauseManager.SetPaused(!PauseManager.IsPaused);
 		}
 	}
 }

@@ -29,21 +29,28 @@ namespace Source.Engine.GameObjects
 			IsActive = isActive;
 		}
 
-		public virtual void Start()
+		public void Start()
 		{
 			foreach (var component in _components.Values)
 			{
 				component.Start();
 			}
+
+			OnStart();
 		}
 
-		public virtual void Update(float deltaTime)
+		public void Update(float deltaTime)
 		{
 			foreach (var component in _components.Values)
 			{
 				component.Update(deltaTime);
 			}
+
+			OnUpdate(deltaTime);
 		}
+
+		public virtual void OnStart() { }
+		public virtual void OnUpdate(float deltaTime) { }
 
 		public virtual void Draw(RenderTarget target, RenderStates states)
 		{
