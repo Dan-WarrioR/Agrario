@@ -16,7 +16,7 @@ namespace Source.Engine.Systems
 			Dependency.Register(this);
 		}
 
-		public static bool IsPaused { get; private set; } = false;
+		public bool IsPaused { get; private set; } = false;
 
 		public void Register(IPauseHandler handler)
 		{
