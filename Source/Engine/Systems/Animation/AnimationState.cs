@@ -25,6 +25,11 @@ namespace Source.Engine.Systems.Animation
 		{
 			_elapsedTime += deltaTime;
 
+			if (_frames.Count <= 0)
+			{
+				return;
+			}
+
 			if (_elapsedTime >= _frameDuration)
 			{
 				_elapsedTime -= _frameDuration;
@@ -36,8 +41,13 @@ namespace Source.Engine.Systems.Animation
 			}
 		}
 
-		public Texture GetCurrentFrame()
+		public Texture? GetCurrentFrame()
 		{
+			if (_frames.Count <= 0)
+			{
+				return null;
+			}
+
 			return _frames[_currentFrameIndex];
 		}
 

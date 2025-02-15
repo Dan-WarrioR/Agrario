@@ -11,7 +11,7 @@ namespace Source.Game.Units.Controllers
 		private const int MinIdleDelay = 1;
 		private const int MaxIdleDelay = 3;
 
-		private const float IdleChance = 1f;
+		private const float IdleChance = 0.2f;
 
 		private float _movementDelay = 0f;
 		private float _aiMovementTime = 0f;

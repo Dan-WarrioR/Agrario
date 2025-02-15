@@ -5,6 +5,7 @@ using Source.Engine;
 using Source.Engine.GameObjects;
 using Source.Engine.Tools;
 using Source.Game.Configs;
+using Source.Engine.Systems;
 
 namespace Source.Game.Units
 {
@@ -12,6 +13,9 @@ namespace Source.Game.Units
 	{
 		private const float BaseZoom = 0.1f;
 		private const float ZoomFactorCoefficient = 0.01f;
+
+		private PauseManager PauseManager => _pauseManager ??= Dependency.Get<PauseManager>();
+		private PauseManager _pauseManager;
 
 		public static Vector2f IdleDelta { get; private set; }
 
@@ -88,6 +92,11 @@ namespace Source.Game.Units
 
 		public override void OnUpdate(float deltaTime)
 		{
+			if (PauseManager.IsPaused)
+			{
+				return;
+			}
+
 			Vector2f positionDelta = CurrentSpeed * deltaTime * Delta;
 
 			var position = GetClampedPosition(Position + positionDelta);

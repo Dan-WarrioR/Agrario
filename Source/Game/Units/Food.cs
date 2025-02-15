@@ -22,7 +22,7 @@ namespace Source.Game.Units
 
 	public class Food : CircleObject, IFood
 	{
-		private static readonly Color FoodColor = new(241, 196, 15);
+		private static readonly Color FoodColor = new(230, 57, 70);
 
 		private const float MassMultiplier = 1f;
 

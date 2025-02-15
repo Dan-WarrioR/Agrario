@@ -9,7 +9,7 @@ using Source.Game.Configs;
 
 namespace Source.Game.Units.Controllers
 {
-    public class PlayerController : BaseController
+    public class PlayerController : BaseController, IPauseHandler
     {
 		private static List<(Keyboard.Key Key, Vector2f Delta)> _movementBindingsMap = new()
         {
@@ -35,6 +35,27 @@ namespace Source.Game.Units.Controllers
 		private string _restartSound;
 		private string _swapSound;
 		private string _eatSound;
+	
+		public override void OnStart()
+        {
+			PauseManager.Register(this);
+
+            foreach (var binding in _movementBindingsMap)
+            {
+                PlayerInput.BindKey(binding.Key,
+                    onPressed: () => Delta += binding.Delta,
+                    onReleased: () => Delta -= binding.Delta);
+            }
+
+			_restartSound = AudioConfig.RestarGameSound;
+			_swapSound = AudioConfig.SwapSound;
+			_eatSound = AudioConfig.EatSound;
+
+			PlayerInput.BindKey(Keyboard.Key.Escape, Game.StopGame);
+            PlayerInput.BindKey(Keyboard.Key.R, RestartGame);
+            PlayerInput.BindKey(Keyboard.Key.F, SwapPlayers);
+            PlayerInput.BindKey(Keyboard.Key.P, PauseGame);
+        }
 
 		public override void SetTarget(GameObject target)
 		{
@@ -55,24 +76,6 @@ namespace Source.Game.Units.Controllers
 			}
 		}
 
-		public override void OnStart()
-        {
-            foreach (var binding in _movementBindingsMap)
-            {
-                PlayerInput.BindKey(binding.Key,
-                    onPressed: () => Delta += binding.Delta,
-                    onReleased: () => Delta -= binding.Delta);
-            }
-
-			_restartSound = AudioConfig.RestarGameSound;
-			_swapSound = AudioConfig.SwapSound;
-			_eatSound = AudioConfig.EatSound;
-
-			PlayerInput.BindKey(Keyboard.Key.Escape, Game.StopGame);
-            PlayerInput.BindKey(Keyboard.Key.R, RestartGame);
-            PlayerInput.BindKey(Keyboard.Key.F, SwapPlayers);
-            PlayerInput.BindKey(Keyboard.Key.P, PauseGame);
-        }
 
 		private void SwapPlayers()
 		{
@@ -120,5 +123,27 @@ namespace Source.Game.Units.Controllers
 		{
 			PauseManager.SetPaused(!PauseManager.IsPaused);
 		}
+
+		void IPauseHandler.SetPaused(bool isPaused)
+		{
+			if (isPaused)
+			{
+				foreach (var binding in _movementBindingsMap)
+				{
+					PlayerInput.RemoveBind(binding.Key);
+				}
+
+				Delta = new(0, 0);
+			}
+            else
+            {
+				foreach (var binding in _movementBindingsMap)
+				{
+					PlayerInput.BindKey(binding.Key,
+						onPressed: () => Delta += binding.Delta,
+						onReleased: () => Delta -= binding.Delta);
+				}
+			}
+        }
 	}
 }

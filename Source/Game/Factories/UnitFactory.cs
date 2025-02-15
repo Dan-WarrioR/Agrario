@@ -76,8 +76,8 @@ namespace Source.Game.Factories
 
 			var animator = player.AddComponent<Animator>();
 
-			var idle = new AnimationState("Idle", AnimationLoader.GetTextures(_skullIdleSpritePath), FrameDuration);
-			var run = new AnimationState("Run", AnimationLoader.GetTextures(_skullAggresiveSpritePath), FrameDuration);			
+			var idle = new AnimationState("Idle", TextureLoader.GetSpritesheetTextures(_skullIdleSpritePath), FrameDuration);
+			var run = new AnimationState("Run", TextureLoader.GetSpritesheetTextures(_skullAggresiveSpritePath), FrameDuration);			
 
 			animator.AddAnimation(idle);
 			animator.AddAnimation(run);
@@ -98,8 +98,8 @@ namespace Source.Game.Factories
 
 			var animator = bot.AddComponent<Animator>();
 
-			var idle = new AnimationState("Idle", AnimationLoader.GetTextures(_rockIdleSpritePath), FrameDuration);
-			var run = new AnimationState("Run", AnimationLoader.GetTextures(_rockRunSpritePath), FrameDuration);
+			var idle = new AnimationState("Idle", TextureLoader.GetSpritesheetTextures(_rockIdleSpritePath), FrameDuration);
+			var run = new AnimationState("Run", TextureLoader.GetSpritesheetTextures(_rockRunSpritePath), FrameDuration);
 
 			animator.AddAnimation(idle);
 			animator.AddAnimation(run);
