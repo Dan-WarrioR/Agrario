@@ -15,10 +15,14 @@ namespace Source.Game.Configs
 		public static string SlimeSpritePath = "Characters\\Slime";
 		public static string EyeSpritePath = "Characters\\Eye";
 		public static string MonsterSpritePath = "Characters\\Monster";
+		public static string SkullIdleSpritePath = "Characters\\Skull\\Idle";
+		public static string SkullAggresiveSpritePath = "Characters\\Skull\\Aggresive";
+		public static string RockIdleSpritePath = "Characters\\Rock\\Idle";
+		public static string RockRunSpritePath = "Characters\\Rock\\Run";
 
 		//Scale
-		public static Vector2f NormalPlayerScale = new(1, 1);
-		public static Vector2f MirroredPlayerScale = new(-1, 1);
+		public static Vector2f NormalPlayerScale = new(-1, 1);
+		public static Vector2f MirroredPlayerScale = new(1, 1);
 
 		//Speed
 		public static float BaseSpeed = 200f;

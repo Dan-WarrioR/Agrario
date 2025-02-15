@@ -11,9 +11,6 @@ namespace Source.Game.Units.Controllers
 {
     public class PlayerController : BaseController
     {
-        private static Vector2f NormalPlayerScale = new(1, 1);
-		private static Vector2f MirroredPlayerScale = new(-1, 1);
-
 		private static List<(Keyboard.Key Key, Vector2f Delta)> _movementBindingsMap = new()
         {
             new(Keyboard.Key.W, new(0, -1)),
@@ -48,7 +45,7 @@ namespace Source.Game.Units.Controllers
 
 			base.SetTarget(target);
 
-			var player = (Player)base.Target;
+			var player = (Player)Target;
 
 			Player = player;
 
