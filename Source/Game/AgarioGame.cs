@@ -53,6 +53,7 @@ namespace Source.Game
 			_audioManager.SetVolume(_musicSound, 20f);
 			_audioManager.PlayLooped(_musicSound);
 
+			SpawnTerrain();
 			SpawnFood();
 			SpawnPlayers();	
 			SpawnUserUI();
@@ -63,6 +64,11 @@ namespace Source.Game
 			_playersCount = GameConfig.PlayersCount;
 			_foodCount = GameConfig.FoodCount;
 			_musicSound = AudioConfig.MusicSound;
+		}
+
+		private void SpawnTerrain()
+		{
+			_uiFactory.CreateTerrain();
 		}
 
 		private void SpawnFood()
