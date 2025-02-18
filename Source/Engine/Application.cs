@@ -42,6 +42,7 @@ namespace Source.Engine
 
 		private void CreateSubSystems()
 		{
+			new EventBus();
 			new PauseManager();
 			new TextureLoader();
 		}

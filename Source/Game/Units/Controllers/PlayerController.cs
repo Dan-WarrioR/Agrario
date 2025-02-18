@@ -6,7 +6,6 @@ using Source.Engine.GameObjects;
 using Source.Engine.Input;
 using Source.Engine.Tools;
 using Source.Engine.Tools.ProjectUtilities;
-using Source.Game.Configs;
 
 namespace Source.Game.Units.Controllers
 {
@@ -19,23 +18,19 @@ namespace Source.Game.Units.Controllers
             new(Keyboard.Key.A, new(-1, 0)),
             new(Keyboard.Key.D, new(1, 0)),
         };
-
+		
+        private EventBus EventBus => _eventBus ??= Dependency.Get<EventBus>();
 		private AgarioGame Game => _game ??= Dependency.Get<AgarioGame>();
 		private GameCamera Camera => _camera ??= Dependency.Get<GameCamera>();
         private PlayerInput PlayerInput => _playerInput ??= Dependency.Get<PlayerInput>();
-		private AudioManager AudioManager => _audioManager ??= Dependency.Get<AudioManager>();
 		private PauseManager PauseManager => _pauseManager ??= Dependency.Get<PauseManager>();
 		private AgarioGame _game;
 		private GameCamera _camera;
         private PlayerInput _playerInput;
-		private AudioManager _audioManager;
 		private PauseManager _pauseManager;
+		private EventBus _eventBus;
 
         public Player Player { get; private set; }
-
-		private string _restartSound;
-		private string _swapSound;
-		private string _eatSound;
 	
 		public override void OnStart()
         {
@@ -47,10 +42,6 @@ namespace Source.Game.Units.Controllers
                     onPressed: () => Delta += binding.Delta,
                     onReleased: () => Delta -= binding.Delta);
             }
-
-			_restartSound = AudioConfig.RestarGameSound;
-			_swapSound = AudioConfig.SwapSound;
-			_eatSound = AudioConfig.EatSound;
 
 			PlayerInput.BindKey(Keyboard.Key.Escape, Game.StopGame);
             PlayerInput.BindKey(Keyboard.Key.R, RestartGame);
@@ -76,8 +67,7 @@ namespace Source.Game.Units.Controllers
 				Player.OnAteFood += OnAteFood;
 			}
 		}
-
-
+		
 		private void SwapPlayers()
 		{
 			List<Player> bots = new();
@@ -105,19 +95,20 @@ namespace Source.Game.Units.Controllers
 			Game.PlayerController.SetTarget(bot);
 
 			Camera.SetFollowTarget(bot);
-
-			AudioManager.PlayOnced(_swapSound);
+			
+			EventBus.Invoke("OnPlayerSwapped");
 		}
 
 		private void RestartGame()
 		{
-			AudioManager.PlayOnced(_restartSound);
 			Game.RestartGame();
+			EventBus.Invoke("OnGameRestart");
+			
 		}
 
 		private void OnAteFood(float value)
 		{
-			AudioManager.PlayOnced(_eatSound);
+			EventBus.Invoke("OnPlayerAteFood");
 		}
 
 		private void PauseGame()
