@@ -8,6 +8,8 @@ using Source.Engine.GameObjects.Components;
 using Source.Engine.Tools;
 using Source.Engine.Configs;
 using Source.Engine.Systems.Animation;
+using Source.Engine.Systems.Tools.Animations;
+using Source.Engine.Tools.ProjectUtilities;
 
 namespace Source.Game.Factories
 {
@@ -15,6 +17,9 @@ namespace Source.Game.Factories
     {
 		private static SFMLRenderer Renderer => _renderer ??= Dependency.Get<SFMLRenderer>();
 		private static SFMLRenderer _renderer;
+		
+		private static TextureLoader TextureLoader => _textureLoader ??= Dependency.Get<TextureLoader>();
+		private static TextureLoader _textureLoader;
 
 		private const float MinPlayerRadius = 20f;
 		private const float FoodRadius = 5f;

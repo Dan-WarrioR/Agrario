@@ -2,6 +2,7 @@
 using System.Reflection;
 using Source.Engine.Tools;
 using Source.Engine.Tools.Parsers;
+using Source.Engine.Tools.ProjectUtilities;
 
 namespace Source.Engine.Configs
 {

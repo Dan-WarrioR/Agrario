@@ -1,6 +1,6 @@
 ﻿using SFML.System;
 
-namespace Source.Engine.Tools
+namespace Source.Engine.Tools.Math
 {
 	public static class Vector2fExtensions
 	{
@@ -36,7 +36,7 @@ namespace Source.Engine.Tools
 
 		public static Vector2f Lerp(this Vector2f start, Vector2f end, float t)
 		{
-			t = Math.Clamp(t, 0, 1);
+			t = System.Math.Clamp(t, 0, 1);
 
 			float x = start.X + (end.X - start.X) * t;
 			float y = start.Y + (end.Y - start.Y) * t;

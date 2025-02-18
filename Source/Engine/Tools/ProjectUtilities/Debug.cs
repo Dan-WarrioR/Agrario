@@ -1,4 +1,4 @@
-﻿namespace Source.Engine.Tools
+﻿namespace Source.Engine.Tools.ProjectUtilities
 {
 	public static class Debug
 	{
