@@ -2,12 +2,12 @@
 {
 	public class AnimationTransition
 	{
-		public string FromState { get; }
-		public string ToState { get; }
+		public AnimationState FromState { get; }
+		public AnimationState ToState { get; }
 
 		private readonly Func<bool> _condition;
 
-		public AnimationTransition(string fromState, string toState, Func<bool> condition)
+		public AnimationTransition(AnimationState fromState, AnimationState toState, Func<bool> condition)
 		{
 			FromState = fromState;
 			ToState = toState;

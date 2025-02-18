@@ -5,40 +5,58 @@ namespace Source.Engine.Systems.Animation
 	public class AnimationStateMachine
 	{
 		private readonly Dictionary<string, AnimationState> _states = new();
-		private readonly List<AnimationTransition> _transitions = new();
+		private readonly Dictionary<AnimationState, List<AnimationTransition>> _transitionMap = new();
 
 		private AnimationState? _currentState;
 
 		public void AddState(AnimationState state)
 		{
+			_transitionMap.TryAdd(state, new());
 			_states.TryAdd(state.Name, state);
 		}
 
 		public void AddTransition(AnimationTransition transition)
 		{
-			_transitions.Add(transition);
+			if (!_transitionMap.TryGetValue(transition.FromState, out var transitions))
+			{
+				return;
+			}
+			
+			transitions.Add(transition);
 		}
 
-		public void SetState(string stateName)
+		public void ChangeState(string stateName)
 		{
 			if (!_states.TryGetValue(stateName, out var newState) || _currentState == newState)
 			{
 				return;			
 			}
 
-			_currentState?.Reset();
-			_currentState = newState;
+			SwitchState(newState);
+		}
+
+		public void ChangeState(AnimationState newState)
+		{
+			if (!_states.ContainsValue(newState) || _currentState == newState)
+			{
+				return;			
+			}
+
+			SwitchState(newState);
 		}
 
 		public void Update(float deltaTime)
 		{
-			foreach (var transition in _transitions)
+			if (_transitionMap.TryGetValue(_currentState, out var transitions))
 			{
-				if (transition.FromState == _currentState?.Name && transition.CanTransition())
+				foreach (var transition in transitions)
 				{
-					SetState(transition.ToState);
+					if (transition.CanTransition())
+					{
+						SwitchState(transition.ToState);
 
-					break;
+						break;
+					}
 				}
 			}
 
@@ -48,6 +66,13 @@ namespace Source.Engine.Systems.Animation
 		public Texture? GetCurrentFrame()
 		{
 			return _currentState?.GetCurrentFrame();
+		}
+
+		private void SwitchState(AnimationState state)
+		{
+			_currentState?.Exit();
+			_currentState = state;
+			_currentState?.Enter();
 		}
 	}
 }

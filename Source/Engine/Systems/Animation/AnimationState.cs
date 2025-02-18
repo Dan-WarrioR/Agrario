@@ -21,6 +21,17 @@ namespace Source.Engine.Systems.Animation
 			_frameDuration = frameDuration;
 		}
 
+		public void Enter()
+		{
+			
+		}
+		
+		public void Exit()
+		{
+			_currentFrameIndex = 0;
+			_elapsedTime = 0;
+		}
+
 		public void Update(float deltaTime)
 		{
 			_elapsedTime += deltaTime;
@@ -49,12 +60,6 @@ namespace Source.Engine.Systems.Animation
 			}
 
 			return _frames[_currentFrameIndex];
-		}
-
-		public void Reset()
-		{
-			_currentFrameIndex = 0;
-			_elapsedTime = 0;
 		}
 	}
 }
