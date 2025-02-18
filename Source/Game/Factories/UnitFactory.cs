@@ -10,6 +10,7 @@ using Source.Engine.Configs;
 using Source.Engine.Systems.Animation;
 using Source.Engine.Systems.Tools.Animations;
 using Source.Engine.Tools.ProjectUtilities;
+using Source.Game.Data.Animations;
 
 namespace Source.Game.Factories
 {
@@ -72,48 +73,32 @@ namespace Source.Game.Factories
 
 		#region Players
 
+		public (Player unit, TController controller) CreateUnit<TController>() where TController : BaseController, new()
+		{
+			var unit = Instantiate<Player>();
+			var controller = Instantiate<TController>();
+			
+			unit.Initialize(controller, GetRandomColor(), MinPlayerRadius, GetRandomPosition());
+			
+			return (unit, controller);
+		}
+		
 		public PlayerController SpawnPlayer()
-        {
-			var player = Instantiate<Player>();
-			var playerConroller = Instantiate<PlayerController>();
+		{
+			var player = CreateUnit<PlayerController>();
 
-			player.Initialize(playerConroller, GetRandomColor(), MinPlayerRadius, GetRandomPosition());
+			SetupAnimator(player.unit, new PlayerAnimationData(player.unit));
 
-			var animator = player.AddComponent<Animator>();
-
-			var idle = new AnimationState("Idle", TextureLoader.GetSpritesheetTextures(_skullIdleSpritePath), FrameDuration);
-			var run = new AnimationState("Run", TextureLoader.GetSpritesheetTextures(_skullAggresiveSpritePath), FrameDuration);			
-
-			animator.AddAnimation(idle);
-			animator.AddAnimation(run);
-			animator.AddTransition(new AnimationTransition("Idle", "Run", player.IsMoving));
-			animator.AddTransition(new AnimationTransition("Run", "Idle", () => !player.IsMoving()));
-
-			animator.Play("Run");
-
-			return playerConroller;
+			return player.controller;
 		}
 
 		public Player SpawnBot()
         {
-			var bot = Instantiate<Player>();
-			var botConroller = Instantiate<BotController>();
+			var bot = CreateUnit<BotController>();
+			
+			SetupAnimator(bot.unit, new EnemyAnimationData(bot.unit));
 
-			bot.Initialize(botConroller, GetRandomColor(), MinPlayerRadius, GetRandomPosition());
-
-			var animator = bot.AddComponent<Animator>();
-
-			var idle = new AnimationState("Idle", TextureLoader.GetSpritesheetTextures(_rockIdleSpritePath), FrameDuration);
-			var run = new AnimationState("Run", TextureLoader.GetSpritesheetTextures(_rockRunSpritePath), FrameDuration);
-
-			animator.AddAnimation(idle);
-			animator.AddAnimation(run);
-			animator.AddTransition(new AnimationTransition("Idle", "Run", () => !bot.IsMoving()));
-			animator.AddTransition(new AnimationTransition("Run", "Idle", () => !bot.IsMoving()));
-
-			animator.Play("Idle");
-
-			return bot;
+			return bot.unit;
 		}
 
         public void RespawnPlayer(Player player)
@@ -121,9 +106,17 @@ namespace Source.Game.Factories
 			player.Reset();
 			player.SetPosition(GetRandomPosition());
         }
+        
+        private void SetupAnimator<T>(Player unit, T data) where T : AnimationData
+        {
+	        var animator = unit.AddComponent<Animator>();
+
+	        animator.Setup(data);
+        }
 
 		#endregion
 
+		
 
 		private Vector2f GetRandomPosition()
         {

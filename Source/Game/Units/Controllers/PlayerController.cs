@@ -122,7 +122,7 @@ namespace Source.Game.Units.Controllers
 
 		private void PauseGame()
 		{
-			PauseManager.SetPaused(!PauseManager.IsPaused);
+			PauseManager.Switch();
 		}
 
 		void IPauseHandler.SetPaused(bool isPaused)

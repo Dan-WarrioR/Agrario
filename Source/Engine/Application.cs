@@ -16,7 +16,8 @@ namespace Source.Engine
 			var input = new PlayerInput(window);
 			var audioManager = new AudioManager();
 			audioManager.LoadSounds();
-			new PauseManager();
+
+			CreateSubSystems();
 			
 			var gameLoop = new GameLoop(input, renderer, game);
 
@@ -37,6 +38,12 @@ namespace Source.Engine
 			window.Closed += (_, _) => window.Close();
 
 			return window;
+		}
+
+		private void CreateSubSystems()
+		{
+			new PauseManager();
+			new TextureLoader();
 		}
 	}
 }

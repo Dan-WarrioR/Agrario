@@ -28,6 +28,11 @@ namespace Source.Engine.Systems
 			_handlers.Remove(handler);
 		}
 
+		public void Switch()
+		{
+			SetPaused(!IsPaused);
+		}
+
 		public void SetPaused(bool isPaused)
 		{
 			IsPaused = isPaused;
