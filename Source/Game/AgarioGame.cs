@@ -6,6 +6,7 @@ using Source.Engine.GameObjects;
 using Source.Engine.Tools;
 using Source.Game.Units.Controllers;
 using Source.Engine.Systems;
+using Source.Game.Features.Audio;
 
 namespace Source.Game
 {
@@ -45,6 +46,7 @@ namespace Source.Game
 
 			_unitFactory = new();
 			_uiFactory = new();
+			new GameSoundEventHandler();
 
 			SetupConfigValues();
 

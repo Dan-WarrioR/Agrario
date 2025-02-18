@@ -1,11 +1,12 @@
-﻿using Source.Engine;
-using Source.Engine.GameObjects;
+﻿using SFML.System;
+using Source.Engine;
+using Source.Engine.Systems;
 using Source.Engine.Tools;
 using Source.Engine.Tools.ProjectUtilities;
 
 namespace Source.Game.Units.Controllers
 {
-    public class BotController : BaseController
+    public class BotController : BaseController, IPauseHandler
 	{
 		private const int MinMovementDelay = 0;
 		private const int MaxMovementDelay = 5;
@@ -16,21 +17,28 @@ namespace Source.Game.Units.Controllers
 
 		private float _movementDelay = 0f;
 		private float _aiMovementTime = 0f;
-		private bool _isIdle = false;
 
-		public override void SetTarget(GameObject target)
-		{
-			base.SetTarget(target);
-		}
+		private Vector2f _cachedDelta;
+
+		private bool _isPaused;
 
 		public override void OnStart()
 		{
+			var pauseManager = Dependency.Get<PauseManager>();
+			pauseManager.Register(this);
+			_isPaused = pauseManager.IsPaused;
+			
 			_movementDelay = CustomRandom.Range(MinMovementDelay, MaxMovementDelay);
 			DecideNextAction();
 		}
 
 		public override void OnUpdate(float deltaTime)
 		{
+			if (_isPaused)
+			{
+				return;
+			}
+			
 			_aiMovementTime += deltaTime;
 
 			if (_aiMovementTime > _movementDelay)
@@ -46,13 +54,11 @@ namespace Source.Game.Units.Controllers
 
 			if (CustomRandom.NextSingle() < IdleChance)
 			{
-				_isIdle = true;
 				_movementDelay = CustomRandom.Range(MinIdleDelay, MaxIdleDelay);
 				Delta = new(0, 0);
 			}
 			else
 			{
-				_isIdle = false;
 				SetRandomDelta();
 			}
 		}
@@ -61,6 +67,20 @@ namespace Source.Game.Units.Controllers
 		{
 			float angle = CustomRandom.NextSingle() * MathF.PI * 2;
 			Delta = new(MathF.Cos(angle), MathF.Sin(angle));
+		}
+
+		void IPauseHandler.SetPaused(bool isPaused)
+		{
+			_isPaused = isPaused;
+			
+			if (_isPaused)
+			{
+				_cachedDelta = Delta;
+				Delta = new(0, 0);
+				return;
+			}
+			
+			Delta = _cachedDelta;
 		}
 	}
 }
