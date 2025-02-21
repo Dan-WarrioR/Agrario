@@ -1,10 +1,16 @@
-﻿using SFML.Window;
+﻿using SFML.System;
+using SFML.Window;
 using Source.Engine.Tools;
 
 namespace Source.Engine.Input
 {
     public class PlayerInput
     {
+        public Vector2i MousePosition => Mouse.GetPosition(_window);
+
+        public event Action<Mouse.Button, Vector2i> OnMousePressed;
+        public event Action<Mouse.Button, Vector2i> OnMouseReleased;
+
         private readonly Window _window;
 
         private readonly Dictionary<Keyboard.Key, KeyBind> _keyBindings;
@@ -17,18 +23,27 @@ namespace Source.Engine.Input
             _window = window;
             _keyBindings = new();
             Dependency.Register(this);
-        }
 
-        public void UpdateInputStates()
+            _window.MouseButtonPressed += OnMouseButtonPressed;
+            _window.MouseButtonReleased += OnMouseButtonReleased;
+		}
+
+        ~PlayerInput()
+        {
+			_window.MouseButtonPressed -= OnMouseButtonPressed;
+			_window.MouseButtonReleased -= OnMouseButtonReleased;
+		}
+
+		public void UpdateInputStates()
         {
             _window.DispatchEvents();
 
             foreach (var keyBind in _keyBindings.Values)
             {
                 keyBind.CheckBindStates();
-            }
+            }		
 
-            UnbindBindings();
+			UnbindBindings();
             BindNewBindings();
         }
 
@@ -108,5 +123,15 @@ namespace Source.Engine.Input
 
             _toUnbindBindings.Clear();
         }
-    }
+
+        private void OnMouseButtonReleased(object? sender, MouseButtonEventArgs e)
+        {
+            OnMousePressed?.Invoke(e.Button, new(e.X, e.Y));
+        }
+
+        private void OnMouseButtonPressed(object? sender, MouseButtonEventArgs e)
+        {
+			OnMouseReleased?.Invoke(e.Button, new(e.X, e.Y));
+		}
+	}
 }

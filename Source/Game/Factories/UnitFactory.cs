@@ -1,14 +1,12 @@
 ﻿using Source.Game.Units;
 using SFML.Graphics;
 using SFML.System;
-using Source.Game.Configs;
 using Source.Engine;
 using Source.Game.Units.Controllers;
 using Source.Engine.GameObjects.Components;
 using Source.Engine.Tools;
 using Source.Engine.Configs;
 using Source.Engine.Systems.Animation;
-using Source.Engine.Systems.Tools.Animations;
 using Source.Engine.Tools.ProjectUtilities;
 using Source.Game.Data.Animations;
 
@@ -18,9 +16,6 @@ namespace Source.Game.Factories
     {
 		private static SFMLRenderer Renderer => _renderer ??= Dependency.Get<SFMLRenderer>();
 		private static SFMLRenderer _renderer;
-		
-		private static TextureLoader TextureLoader => _textureLoader ??= Dependency.Get<TextureLoader>();
-		private static TextureLoader _textureLoader;
 
 		private const float MinPlayerRadius = 20f;
 		private const float FoodRadius = 5f;
@@ -29,7 +24,14 @@ namespace Source.Game.Factories
 
 		public UnitFactory() : base(Renderer)
         {
+	        Dependency.Register(this);
+	        
 			SetupConfigsValues();
+		}
+		
+		~UnitFactory()
+		{
+			Dependency.Unregister(this);
 		}
 
 		private void SetupConfigsValues()

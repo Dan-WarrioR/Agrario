@@ -22,7 +22,7 @@ namespace Source.Engine.Systems
                 return;
             }
 
-            var files = Directory.GetFiles(folderPath, "*.wav");
+            var files = Directory.GetFiles(folderPath);
 
             foreach (string file in files)
             {
@@ -37,7 +37,7 @@ namespace Source.Engine.Systems
         {
             if (!_sounds.TryGetValue(soundName, out var sound))
             {
-                Debug.LogWarning("No sound in collection!");
+                Debug.LogWarning($"No sound in collection with name {soundName}!");
 
                 return;
             }
@@ -51,7 +51,7 @@ namespace Source.Engine.Systems
         {
             if (!_sounds.TryGetValue(soundName, out var sound))
             {
-                Debug.LogWarning("No sound in collection!");
+                Debug.LogWarning($"No sound in collection with name {soundName}!");
 
                 return;
             }
@@ -71,7 +71,7 @@ namespace Source.Engine.Systems
         {
             if (!_sounds.TryGetValue(soundName, out var sound))
             {
-                Debug.LogWarning("No sound in collection!");
+                Debug.LogWarning($"No sound in collection with name {soundName}!");
 
                 return;
             }
@@ -94,7 +94,7 @@ namespace Source.Engine.Systems
         {
             if (!_sounds.TryGetValue(soundName, out var sound))
             {
-                Debug.LogWarning("No sound in collection!");
+                Debug.LogWarning($"No sound in collection with name {soundName}!");
 
                 return;
             }
