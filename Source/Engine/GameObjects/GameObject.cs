@@ -15,6 +15,8 @@ namespace Source.Engine.GameObjects
 	{
 		public bool IsActive { get; private set; } = true;
 
+		public bool IsDestroyed { get; private set; } = false;
+
 		public Vector2f InitialPosition { get; private set; }
 
 		private Dictionary<Type, BaseComponent> _components = new();
@@ -49,13 +51,18 @@ namespace Source.Engine.GameObjects
 			OnUpdate(deltaTime);
 		}
 
+		public void Destroy()
+		{
+			IsDestroyed = true;
+		}
+
+		#region To Use Virtual Methods
+
 		public virtual void OnStart() { }
 		public virtual void OnUpdate(float deltaTime) { }
+		public virtual void Draw(RenderTarget target, RenderStates states) { }
 
-		public virtual void Draw(RenderTarget target, RenderStates states)
-		{
-
-		}
+		#endregion
 
 		#region Components Interfaces
 

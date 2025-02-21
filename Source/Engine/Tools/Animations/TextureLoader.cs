@@ -80,7 +80,8 @@ namespace Source.Engine.Systems.Tools.Animations
 
 				if (!File.Exists(path))
 				{
-					Debug.LogWarning($"Texture not found: {path}");					
+					Debug.LogWarning($"Texture not found: {path}");
+					return null;
 				}
 
 				texture = new(path);

@@ -31,7 +31,7 @@ namespace Source.Game
 			_uiView.Size = _window.DefaultView.Size;
 			_uiView.Center = new(_uiView.Size.X / 2, _uiView.Size.Y / 2);
 
-			BeginGameView();
+			BeginUIView();
 		}
 
 		public void BeginGameView()
@@ -46,6 +46,11 @@ namespace Source.Game
 
 		public void Update()
 		{
+			if (_player == null)
+			{
+				return;
+			}
+
 			_gameView.Center = _player.Position;
 		}
 

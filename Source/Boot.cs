@@ -1,6 +1,5 @@
 ﻿using Source.Engine;
 using Source.Game;
-using Source.Game.GameStates;
 
 namespace Source
 {
@@ -9,7 +8,7 @@ namespace Source
 		public static void Main()
 		{
 			var application = new Application();
-			var game = new AgarioGameState();
+			var game = new AgarioGame();
 			var renderer = new SFMLRenderer();
 			
 			application.Run(game, renderer);

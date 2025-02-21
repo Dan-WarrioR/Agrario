@@ -11,6 +11,7 @@ namespace Source.Engine
 
 		private List<GameObject> _gameObjects = new();
 		private List<GameObject> _newGameObjects = new();
+		private List<GameObject> _destroyedGameObjects = new();
 
 		private readonly PlayerInput _input;
 		private readonly BaseRenderer _renderer;
@@ -70,8 +71,20 @@ namespace Source.Engine
 				if (updatable.IsActive)
 				{
 					updatable.Update(_time.DeltaTime);
-				}		
+				}
+
+				if (updatable.IsDestroyed)
+				{
+					_destroyedGameObjects.Add(updatable);
+				}
 			}
+
+			foreach (var destroyedObject in _destroyedGameObjects)
+			{
+				DestroyGameObject(destroyedObject);
+			}
+
+			_destroyedGameObjects.Clear();
 		}
 
 		private void Start()
@@ -101,7 +114,11 @@ namespace Source.Engine
 			_gameObjects.Add(gameObject);
 		}
 
-
+		private void DestroyGameObject(GameObject gameObject)
+		{
+			_gameObjects.Remove(gameObject);
+			_renderer.RemoveGameElement(gameObject);
+		}
 
 		public void Register<T>(T gameObject) where T : GameObject
 		{
