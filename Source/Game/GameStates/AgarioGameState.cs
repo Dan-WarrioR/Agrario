@@ -5,12 +5,11 @@ using Source.Game.Configs;
 using Source.Engine.GameObjects;
 using Source.Engine.Tools;
 using Source.Game.Units.Controllers;
-using Source.Engine.Systems;
 using Source.Game.Features.Audio;
 
 namespace Source.Game.GameStates
 {
-    public class AgarioGame : BaseGame
+    public class AgarioGameState : BaseGame
 	{
 		private GameLoop GameLoop => _gameLoop ??= Dependency.Get<GameLoop>();
 		private GameLoop _gameLoop;
@@ -260,5 +259,7 @@ namespace Source.Game.GameStates
 
 			_scoreText.ChangeText(text);
 		}
+
+		
 	}
 }

@@ -9,7 +9,7 @@ namespace Source
 		public static void Main()
 		{
 			var application = new Application();
-			var game = new AgarioGame();
+			var game = new AgarioGameState();
 			var renderer = new SFMLRenderer();
 			
 			application.Run(game, renderer);

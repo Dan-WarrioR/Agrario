@@ -21,11 +21,11 @@ namespace Source.Game.Units.Controllers
         };
 		
         private EventBus EventBus => _eventBus ??= Dependency.Get<EventBus>();
-		private AgarioGame Game => _game ??= Dependency.Get<AgarioGame>();
+		private AgarioGameState Game => _game ??= Dependency.Get<AgarioGameState>();
 		private GameCamera Camera => _camera ??= Dependency.Get<GameCamera>();
         private PlayerInput PlayerInput => _playerInput ??= Dependency.Get<PlayerInput>();
 		private PauseManager PauseManager => _pauseManager ??= Dependency.Get<PauseManager>();
-		private AgarioGame _game;
+		private AgarioGameState _game;
 		private GameCamera _camera;
         private PlayerInput _playerInput;
 		private PauseManager _pauseManager;
