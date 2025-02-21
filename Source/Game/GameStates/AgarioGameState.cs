@@ -6,18 +6,21 @@ using Source.Engine.GameObjects;
 using Source.Engine.Tools;
 using Source.Game.Units.Controllers;
 using Source.Game.Features.Audio;
+using Source.Engine.Systems.GameFSM;
 
 namespace Source.Game.GameStates
 {
-    public class AgarioGameState : BaseGame
+    public class AgarioGameState : BaseGameState
 	{
 		private GameLoop GameLoop => _gameLoop ??= Dependency.Get<GameLoop>();
 		private GameLoop _gameLoop;
 		private SFMLRenderer Renderer => _renderer ??= Dependency.Get<SFMLRenderer>();
 		private SFMLRenderer _renderer;
-		
-		private UnitFactory _unitFactory;
+
+		private UIFactory UIFactory => _uiFactory ??= Dependency.Get<UIFactory>();
 		private UIFactory _uiFactory;
+
+		private UnitFactory _unitFactory;
 
 		private TextObject _scoreText;
 		private TextObject _countText;
@@ -30,27 +33,20 @@ namespace Source.Game.GameStates
 
 		private event Action<int> OnPlayerDied;
 
-		private bool _isEndGame = false;
-
 		private int _alivedPlayersCount = 0;
 		private int _playersCount;
 		private int _foodCount;
 		
 		private GameSoundManager _gameSoundManager;
 
-		public override void Initialize()
+		public override void Enter()
 		{
 			Dependency.Register(this);
 
 			_unitFactory = new();
-			_uiFactory = new();
 			_gameSoundManager = new();
 			
 			_gameSoundManager.PlayMainMenuMusic();
-
-			var menu = new Menu();
-			
-			menu.Begin();
 
 			SetupConfigValues();
 			
@@ -58,6 +54,11 @@ namespace Source.Game.GameStates
 			SpawnFood();
 			SpawnPlayers();	
 			SpawnUserUI();
+		}
+
+		public override void Exit()
+		{
+			
 		}
 
 		private void SetupConfigValues()
@@ -68,7 +69,7 @@ namespace Source.Game.GameStates
 
 		private void SpawnTerrain()
 		{
-			_uiFactory.CreateTerrain();
+			UIFactory.CreateTerrain();
 		}
 
 		private void SpawnFood()
@@ -124,7 +125,7 @@ namespace Source.Game.GameStates
 
 
 
-		public override void OnUpdate(float deltaTime)
+		public override void Update(float deltaTime)
 		{
 			UpdatePlayerCamera();		
 
@@ -135,15 +136,12 @@ namespace Source.Game.GameStates
 			CheckForGameRestart();
 		}
 
-		public override bool IsEndGame()
-		{
-			return _isEndGame;
-		}
-
 		public void StopGame()
 		{
-			_isEndGame = true;
 			_gameSoundManager.StopAllSounds();
+
+			var game = Dependency.Get<AgarioGame>();
+			game.StopGame();
 		}
 
 		public void RestartGame()

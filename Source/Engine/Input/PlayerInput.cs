@@ -10,6 +10,7 @@ namespace Source.Engine.Input
 
         public event Action<Mouse.Button, Vector2i> OnMousePressed;
         public event Action<Mouse.Button, Vector2i> OnMouseReleased;
+        public event Action<Vector2i> OnMouseMoved;
 
         private readonly Window _window;
 
@@ -26,13 +27,17 @@ namespace Source.Engine.Input
 
             _window.MouseButtonPressed += OnMouseButtonPressed;
             _window.MouseButtonReleased += OnMouseButtonReleased;
+            _window.MouseMoved += OnMouseDeviceMoved;
 		}
 
-        ~PlayerInput()
+		~PlayerInput()
         {
 			_window.MouseButtonPressed -= OnMouseButtonPressed;
 			_window.MouseButtonReleased -= OnMouseButtonReleased;
+			_window.MouseMoved -= OnMouseDeviceMoved;
 		}
+
+		#region Bindings
 
 		public void UpdateInputStates()
         {
@@ -124,7 +129,13 @@ namespace Source.Engine.Input
             _toUnbindBindings.Clear();
         }
 
-        private void OnMouseButtonReleased(object? sender, MouseButtonEventArgs e)
+		#endregion
+
+
+
+		#region Mouse
+
+		private void OnMouseButtonReleased(object? sender, MouseButtonEventArgs e)
         {
             OnMousePressed?.Invoke(e.Button, new(e.X, e.Y));
         }
@@ -133,5 +144,12 @@ namespace Source.Engine.Input
         {
 			OnMouseReleased?.Invoke(e.Button, new(e.X, e.Y));
 		}
+
+        private void OnMouseDeviceMoved(object? sender, MouseMoveEventArgs e)
+        {
+            OnMouseMoved?.Invoke(new(e.X, e.Y));
+        }
+
+		#endregion
 	}
 }

@@ -13,14 +13,16 @@ namespace Source.Engine.GameObjects
 
 		private static readonly Color DefaultTextColor = Color.White;
 		private static readonly Color DefaultBackgroundColor = new(50, 50, 50);
+		private static readonly Color HoverBackgroundColor = new(80, 80, 80);
 		private static readonly Font DefaultFont = new(FontPath);
 
-		private const string FontPath = @"C:\Windows\Fonts\Arial.ttf";
+		private const string FontPath = @"C:\\Windows\\Fonts\\Arial.ttf";
 		private const uint CharacterSize = 24;
 
 		private RectangleShape _background;
 		private Text? _text;
 		private Sprite? _icon;
+		private bool _isHovered = false;
 
 		public Vector2f Position => _background.Position;
 		public Vector2f Size => _background.Size;
@@ -34,7 +36,7 @@ namespace Source.Engine.GameObjects
 			_background = new RectangleShape(size)
 			{
 				FillColor = DefaultBackgroundColor,
-				Position = initialPosition
+				Position = initialPosition,
 			};
 
 			if (icon != null)
@@ -54,14 +56,13 @@ namespace Source.Engine.GameObjects
 				_text = new Text(text, DefaultFont, CharacterSize)
 				{
 					FillColor = DefaultTextColor,
-					Position = new Vector2f(
-						_background.Position.X + (_background.Size.X - CharacterSize * text.Length) / 2,
-						_background.Position.Y + (_background.Size.Y - CharacterSize) / 2
-					)
 				};
+
+				CenterText();
 			}
 
 			PlayerInput.OnMousePressed += OnMousePressed;
+			PlayerInput.OnMouseMoved += OnMouseMoved;
 		}
 
 		public override void Draw(RenderTarget target, RenderStates states)
@@ -78,9 +79,21 @@ namespace Source.Engine.GameObjects
 			}
 		}
 
+		private void CenterText()
+		{
+			if (_text == null) return;
+
+			var textBounds = _text.GetLocalBounds();
+			_text.Origin = new Vector2f(textBounds.Left + textBounds.Width / 2, textBounds.Top + textBounds.Height / 2);
+			_text.Position = new Vector2f(
+				_background.Position.X + _background.Size.X / 2,
+				_background.Position.Y + _background.Size.Y / 2
+			);
+		}
+
 		private bool IsMouseOver(Vector2i mousePos)
 		{
-			return _background.GetGlobalBounds().Contains(mousePos);
+			return _background.GetGlobalBounds().Contains(mousePos.X, mousePos.Y);
 		}
 
 		private void OnMousePressed(Mouse.Button button, Vector2i mousePosition)
@@ -91,6 +104,21 @@ namespace Source.Engine.GameObjects
 			}
 
 			OnClicked?.Invoke();
+		}
+
+		private void OnMouseMoved(Vector2i mousePosition)
+		{
+			bool wasHovered = _isHovered;
+			_isHovered = IsMouseOver(mousePosition);
+
+			if (_isHovered && !wasHovered)
+			{
+				_background.FillColor = HoverBackgroundColor;
+			}
+			else if (!_isHovered && wasHovered)
+			{
+				_background.FillColor = DefaultBackgroundColor;
+			}
 		}
 	}
 }

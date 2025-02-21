@@ -4,10 +4,13 @@
     {
         private BaseGameState _currentState;
 
-        public void SetState(BaseGameState newState)
+        public void SetState<T>() where T : BaseGameState, new()
         {
-            _currentState?.Exit();
-            _currentState = newState;
+            var newState = new T();
+			newState.Initialize(this);
+
+			_currentState?.Exit();
+            _currentState = newState;      
             _currentState.Enter();
         }
 

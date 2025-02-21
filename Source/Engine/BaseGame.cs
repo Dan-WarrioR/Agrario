@@ -5,13 +5,20 @@ namespace Source.Engine
 {
 	public abstract class BaseGame : GameObject
 	{
+		private bool _isEndGame = false;
+
 		public abstract void Initialize();
 
 		public override void Draw(RenderTarget target, RenderStates states) { }
 
 		public virtual bool IsEndGame()
 		{
-			return false;
+			return _isEndGame;
+		}
+
+		public void StopGame()
+		{
+			_isEndGame = true;
 		}
 	}
 }
