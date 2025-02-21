@@ -4,6 +4,7 @@ using Source.Engine;
 using Source.Engine.Configs;
 using Source.Engine.Tools;
 using Source.Game.UI.Terrain;
+using SFML.Graphics;
 
 namespace Source.Game.Factories
 {
@@ -20,7 +21,12 @@ namespace Source.Game.Factories
 
 		public UIFactory() : base(Renderer)
 		{
-			
+			Dependency.Register(this);
+		}
+
+		~UIFactory()
+		{
+			Dependency.Unregister(this);
 		}
 
 		public TextObject CreateScoreText(string text)
@@ -48,6 +54,15 @@ namespace Source.Game.Factories
 			textObject.Initialize(text, position);
 
 			return textObject;
+		}
+
+		public ButtonObject CreateButton(Vector2f size, Vector2f initialPosition, Texture? icon = null, string? text = null)
+		{
+			var buttonObject = Instantiate<ButtonObject>();
+
+			buttonObject.Initialize(size, initialPosition, icon, text);
+
+			return buttonObject;
 		}
 
 		public Terrain CreateTerrain()
