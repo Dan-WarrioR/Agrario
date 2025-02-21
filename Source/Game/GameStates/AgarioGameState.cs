@@ -248,14 +248,14 @@ namespace Source.Game.GameStates
 		{
 			string text = $"Players: {playersCount}";
 
-			_countText.ChangeText(text);
+			_countText.SetText(text);
 		}
 
 		private void UpdateScore(float mass)
 		{
 			string text = $"Mass: {MathF.Round(mass, 0)}";
 
-			_scoreText.ChangeText(text);
+			_scoreText.SetText(text);
 		}
 
 		

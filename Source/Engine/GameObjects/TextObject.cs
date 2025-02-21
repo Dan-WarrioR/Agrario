@@ -15,9 +15,9 @@ namespace Source.Engine.GameObjects
 
         private Text _text;
 
-        public void Initialize(string text, Vector2f initialPosition)
+        public void Initialize(Vector2f initialPosition, string text = null)
         {
-            Initialize(initialPosition);
+            base.Initialize(initialPosition);
 
             _text = new(text, DefaultFont, CharacterSize)
             {
@@ -26,9 +26,9 @@ namespace Source.Engine.GameObjects
             };
         }
 
-        public void ChangeText(string text)
+        public void SetText(object text)
         {
-            _text.DisplayedString = text;
+            _text.DisplayedString = text.ToString();
         }
 
         public override void Draw(RenderTarget target, RenderStates states)

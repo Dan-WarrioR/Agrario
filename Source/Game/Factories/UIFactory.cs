@@ -33,7 +33,7 @@ namespace Source.Game.Factories
 		{
 			var textObject = Instantiate<TextObject>();
 
-			textObject.Initialize(text, ScoreTextPosition);
+			textObject.Initialize(ScoreTextPosition, text);
 
 			return textObject;
 		}
@@ -42,16 +42,16 @@ namespace Source.Game.Factories
 		{
 			var textObject = Instantiate<TextObject>();
 
-			textObject.Initialize(text, PlayerCountTextPosition);
+			textObject.Initialize(PlayerCountTextPosition, text);
 
 			return textObject;
 		}
 
-		public TextObject CreateText(Vector2f position, string text)
+		public TextObject CreateText(Vector2f position, string text = null)
 		{
 			var textObject = Instantiate<TextObject>();
 
-			textObject.Initialize(text, position);
+			textObject.Initialize(position, text);
 
 			return textObject;
 		}

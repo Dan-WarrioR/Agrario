@@ -79,9 +79,23 @@ namespace Source.Engine.GameObjects
 			}
 		}
 
+		public void SetText(object text)
+		{
+			if (_text == null)
+			{
+				return;
+			}
+
+			_text.DisplayedString = text.ToString();
+			CenterText();
+		}
+
 		private void CenterText()
 		{
-			if (_text == null) return;
+			if (_text == null)
+			{
+				return;
+			}
 
 			var textBounds = _text.GetLocalBounds();
 			_text.Origin = new Vector2f(textBounds.Left + textBounds.Width / 2, textBounds.Top + textBounds.Height / 2);
