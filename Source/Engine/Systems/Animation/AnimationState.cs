@@ -20,11 +20,6 @@ namespace Source.Engine.Systems.Animation
 			_frames = frames;
 			_frameDuration = frameDuration;
 		}
-
-		public void Enter()
-		{
-			
-		}
 		
 		public void Exit()
 		{

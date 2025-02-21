@@ -24,14 +24,7 @@ namespace Source.Game.Factories
 
 		private const float MinPlayerRadius = 20f;
 		private const float FoodRadius = 5f;
-		private const float FrameDuration = 0.1f;
 
-		private string _monsterSpritePath;
-		private string _slimeSpritePath;
-		private string _skullIdleSpritePath;
-		private string _skullAggresiveSpritePath;
-		private string _rockIdleSpritePath;
-		private string _rockRunSpritePath;
 		private FloatRect _bounds;
 
 		public UnitFactory() : base(Renderer)
@@ -41,12 +34,6 @@ namespace Source.Game.Factories
 
 		private void SetupConfigsValues()
 		{
-			_monsterSpritePath = PlayerConfig.MonsterSpritePath;
-			_slimeSpritePath = PlayerConfig.SlimeSpritePath;
-			_skullIdleSpritePath = PlayerConfig.SkullIdleSpritePath;
-			_skullAggresiveSpritePath = PlayerConfig.SkullAggresiveSpritePath;
-			_rockIdleSpritePath = PlayerConfig.RockIdleSpritePath;
-			_rockRunSpritePath = PlayerConfig.RockRunSpritePath;
 			_bounds = WindowConfig.Bounds;
 		}
 

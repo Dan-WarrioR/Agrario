@@ -72,7 +72,6 @@ namespace Source.Engine.Systems.Animation
 		{
 			_currentState?.Exit();
 			_currentState = state;
-			_currentState?.Enter();
 		}
 	}
 }
