@@ -8,7 +8,7 @@ using Source.Game.Units.Controllers;
 using Source.Engine.Systems;
 using Source.Game.Features.Audio;
 
-namespace Source.Game
+namespace Source.Game.GameStates
 {
     public class AgarioGame : BaseGame
 	{
