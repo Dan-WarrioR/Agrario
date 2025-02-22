@@ -103,7 +103,7 @@ namespace Source.Game.Factories
 		{
 			var (unit, controller) = CreateUnit<PlayerController>();
 
-			SetupAnimator(unit, _playerGraph);
+			SetupAnimator(unit, BuidlPlayerAnimationGraph());
 
 			return controller;
 		}
