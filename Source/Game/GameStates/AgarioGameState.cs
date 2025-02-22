@@ -20,6 +20,7 @@ namespace Source.Game.GameStates
 		private UIFactory UIFactory => _uiFactory ??= Dependency.Get<UIFactory>();
 		private UIFactory _uiFactory;
 
+		private UnitFactory UnitFactory => _unitFactory ??= Dependency.Get<UnitFactory>();
 		private UnitFactory _unitFactory;
 
 		private TextObject _scoreText;
@@ -43,7 +44,6 @@ namespace Source.Game.GameStates
 		{
 			Dependency.Register(this);
 
-			_unitFactory = new();
 			_gameSoundManager = new();
 			
 			_gameSoundManager.PlayMainMenuMusic();
@@ -78,7 +78,7 @@ namespace Source.Game.GameStates
 
 			for (int i = 0; i < _foodCount; i++)
 			{
-				var food = _unitFactory.SpawnFood();
+				var food = UnitFactory.SpawnFood();
 				_foods.Add(food);
 			}
 		}
@@ -97,7 +97,7 @@ namespace Source.Game.GameStates
 		{
 			for (int i = 0; i < _playersCount - 1; i++)
 			{
-				var bot = _unitFactory.SpawnBot();
+				var bot = UnitFactory.SpawnBot();
 
 				_players.Add(bot);
 			}
@@ -105,7 +105,7 @@ namespace Source.Game.GameStates
 
 		private void SpawnMainPlayer()
 		{
-			PlayerController = _unitFactory.SpawnPlayer();
+			PlayerController = UnitFactory.SpawnPlayer();
 
 			_players.Add(PlayerController.Player);
 
@@ -114,9 +114,9 @@ namespace Source.Game.GameStates
 
 		private void SpawnUserUI()
 		{
-			_scoreText = _uiFactory.CreateScoreText(PlayerController.Player.Mass.ToString());
+			_scoreText = UIFactory.CreateScoreText(PlayerController.Player.Mass.ToString());
 
-			_countText = _uiFactory.CreateCountText($"Players: {_alivedPlayersCount}");
+			_countText = UIFactory.CreateCountText($"Players: {_alivedPlayersCount}");
 
 			PlayerController.Player.OnAteFood += UpdateScore;
 
@@ -256,8 +256,6 @@ namespace Source.Game.GameStates
 			string text = $"Mass: {MathF.Round(mass, 0)}";
 
 			_scoreText.SetText(text);
-		}
-
-		
+		}	
 	}
 }

@@ -8,12 +8,21 @@ using Source.Engine.Tools;
 using Source.Engine.Configs;
 using Source.Engine.Systems.Animation;
 using Source.Engine.Tools.ProjectUtilities;
-using Source.Game.Data.Animations;
+using Source.Engine.Systems.Tools.Animations;
+using Source.Game.Configs;
+using Source.Engine.GameObjects;
+using Source.Game.Features.SaveSystem;
+using Source.Game.Data.Saves;
 
 namespace Source.Game.Factories
 {
     public class UnitFactory : ObjectFactory
     {
+		private SaveService SaveService => _saveService ??= Dependency.Get<SaveService>();
+		private SaveService _saveService;
+
+		private TextureLoader TextureLoader => _textureLoader ??= Dependency.Get<TextureLoader>();
+		private TextureLoader _textureLoader;
 		private static SFMLRenderer Renderer => _renderer ??= Dependency.Get<SFMLRenderer>();
 		private static SFMLRenderer _renderer;
 
@@ -22,11 +31,20 @@ namespace Source.Game.Factories
 
 		private FloatRect _bounds;
 
+		private AnimationGraph _enemyGraph;
+		private AnimationGraph _playerGraph;
+
+		private PlayerSaveData _saveData;
+
 		public UnitFactory() : base(Renderer)
         {
 	        Dependency.Register(this);
 	        
 			SetupConfigsValues();
+
+			//_playerGraph = BuidlPlayerAnimationGraph();
+			//_enemyGraph = BuidlBotAnimationGraph();
+			_saveData = SaveService.Load<PlayerSaveData>();
 		}
 		
 		~UnitFactory()
@@ -62,6 +80,15 @@ namespace Source.Game.Factories
 
 		#region Players
 
+		public T SpawnCircle<T>(float radius, Vector2f position) where T : CircleObject, new()
+		{
+			var gameObject = Instantiate<T>();
+
+			gameObject.Initialize(radius, position);
+
+			return gameObject;
+		}
+
 		public (Player unit, TController controller) CreateUnit<TController>() where TController : BaseController, new()
 		{
 			var unit = Instantiate<Player>();
@@ -74,20 +101,20 @@ namespace Source.Game.Factories
 		
 		public PlayerController SpawnPlayer()
 		{
-			var player = CreateUnit<PlayerController>();
+			var (unit, controller) = CreateUnit<PlayerController>();
 
-			SetupAnimator(player.unit, new PlayerAnimationData(player.unit));
+			SetupAnimator(unit, _playerGraph);
 
-			return player.controller;
+			return controller;
 		}
 
 		public Player SpawnBot()
         {
-			var bot = CreateUnit<BotController>();
+			var (unit, controller) = CreateUnit<BotController>();
 			
-			SetupAnimator(bot.unit, new EnemyAnimationData(bot.unit));
+			SetupAnimator(unit, BuidlBotAnimationGraph());
 
-			return bot.unit;
+			return unit;
 		}
 
         public void RespawnPlayer(Player player)
@@ -96,16 +123,53 @@ namespace Source.Game.Factories
 			player.SetPosition(GetRandomPosition());
         }
         
-        private void SetupAnimator<T>(Player unit, T data) where T : AnimationData
+        private void SetupAnimator<T>(GameObject unit, T data) where T : AnimationGraph
         {
 	        var animator = unit.AddComponent<Animator>();
 
 	        animator.Setup(data);
         }
 
+		private AnimationGraph BuidlPlayerAnimationGraph()
+		{
+			var skin = GetCurrentPlayerSkin();
+
+			return new AnimationGraphBuilder()
+				.AddState("Idle", skin.idleSprites, 0.1f)
+				.AddState("Run", skin.runSprites, 0.1f)
+				.SetInitialState("Idle")
+				.AddTransition("Idle", "Run")
+				.AddBoolConditionTo("Idle", "IsMoving", true)
+				.AddTransition("Run", "Idle")
+				.AddBoolConditionTo("Run", "IsMoving", false)
+				.Build();
+		}
+
+		private AnimationGraph BuidlBotAnimationGraph()
+		{
+			return new AnimationGraphBuilder()
+				.AddState("Idle", TextureLoader.GetSpritesheetTextures(PlayerConfig.RockIdleSpritePath), 0.1f)
+				.AddState("Run", TextureLoader.GetSpritesheetTextures(PlayerConfig.RockRunSpritePath), 0.1f)
+				.SetInitialState("Idle")
+				.AddTransition("Idle", "Run")
+				.AddBoolConditionTo("Idle", "IsMoving", true)
+				.AddTransition("Run", "Idle")
+				.AddBoolConditionTo("Run", "IsMoving", false)
+				.Build();
+		}
+
 		#endregion
 
-		
+		private (List<Texture> idleSprites, List<Texture> runSprites) GetCurrentPlayerSkin()
+		{
+			(string idle, string run) = _saveData.SkinIndex switch
+			{
+				0 => (PlayerConfig.SkullIdleSpritePath, PlayerConfig.SkullAggresiveSpritePath),
+				1 => (PlayerConfig.RockIdleSpritePath, PlayerConfig.RockIdleSpritePath),
+			};
+
+			return (TextureLoader.GetSpritesheetTextures(idle), TextureLoader.GetSpritesheetTextures(run));
+		}
 
 		private Vector2f GetRandomPosition()
         {

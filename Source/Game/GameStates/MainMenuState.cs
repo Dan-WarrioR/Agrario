@@ -9,20 +9,26 @@ using Source.Engine.Systems.GameFSM;
 using Source.Engine.Tools;
 using Source.Game.Data.Saves;
 using Source.Game.Factories;
+using Source.Engine.Systems.Tools.Animations;
+using Source.Game.Configs;
+using Source.Engine.GameObjects.Components;
+using Source.Engine.GameObjects.UI;
+using Source.Engine.Systems.Animation;
 
 namespace Source.Game.GameStates
 {
     public class MainMenuState : BaseGameState
 	{
+		private TextureLoader TextureLoader => _textureLoader ??= Dependency.Get<TextureLoader>();
+		private TextureLoader _textureLoader;
 		private SaveService SaveService => _saveService ??= Dependency.Get<SaveService>();
 		private SaveService _saveService;
-
 		private PlayerInput PlayerInput => _playerInput ??= Dependency.Get<PlayerInput>();
 		private PlayerInput _playerInput;
 
-		private UIFactory _uiFactory;
+		private List<GameObject> _toDestroyObjects = new();
 
-		private List<ButtonObject> _buttons = new();
+		private UIFactory _uiFactory;
 
 		private ButtonObject _startButton;
 		private ButtonObject _exitButton;
@@ -30,35 +36,37 @@ namespace Source.Game.GameStates
 		private ButtonObject _rightArrowButton;
 
 		private PlayerSaveData _saveData;
+		private Vector2f _windowSize;
 
-		private TextObject _skinText;
+		private UICircleObject _skinObject;
+		private Animator _skinObjectAnimator;
+
+		private Dictionary<int, string> _skinPaths = new()
+		{
+			{ 0, PlayerConfig.SkullIdleSpritePath },
+			{ 1, PlayerConfig.RockIdleSpritePath },
+		};
 
 		public override void Enter()
 		{
-			_uiFactory = new();
+			_uiFactory = new UIFactory();
+			
 			_saveService = new();
-
-			var WindowSize = WindowConfig.WindowSize;
-
-			_startButton = CreateButton(new(200, 50), new((WindowSize.X - 200) / 2, 250), text: "Почати гру");
-			_exitButton = CreateButton(new(200, 50), new((WindowSize.X - 200) / 2, 320), text: "Exit");
-			_leftArrowButton = CreateButton(new(50, 50), new((WindowSize.X - 300) / 2, 150), text: "<");
-			_rightArrowButton = CreateButton(new(50, 50), new((WindowSize.X + 200) / 2, 150), text: ">");
-			_skinText = _uiFactory.CreateText(new(WindowSize.X / 2, 160));
-
-			//ShapeObejct is not a UI element. Fix it later
-			//_skinPreview = new ShapeObject(new RectangleShape(new(100, 100)) { FillColor = Color.Blue });
-			//_skinPreview.SetPosition(new((screenWidth - 100) / 2, 150));
-
 			_saveData = SaveService.Load<PlayerSaveData>();
 
-			_skinText.SetText(_saveData.SkinIndex);
+			_windowSize = WindowConfig.WindowSize;
+
+			_startButton = CreateButton(new(200, 50), new((_windowSize.X - 200) / 2, 250), text: "Почати гру");
+			_exitButton = CreateButton(new(200, 50), new((_windowSize.X - 200) / 2, 320), text: "Exit");
+			_leftArrowButton = CreateButton(new(50, 50), new((_windowSize.X - 300) / 2, 125), text: "<");
+			_rightArrowButton = CreateButton(new(50, 50), new((_windowSize.X + 200) / 2, 125), text: ">");
+
+			SpawnPlayerSkinAvatar();
 
 			_startButton.OnClicked += OnStartGameButtonClicked;
 			_exitButton.OnClicked += OnExitButtonClicked;
 			_leftArrowButton.OnClicked += OnLeftArrowClicked;
 			_rightArrowButton.OnClicked += OnRightArrowClicked;
-
 			PlayerInput.BindKey(Keyboard.Key.Escape, StopGame);
 		}	
 
@@ -78,7 +86,7 @@ namespace Source.Game.GameStates
 
 			SaveService.Save(_saveData);
 
-			foreach (var button in _buttons)
+			foreach (var button in _toDestroyObjects)
 			{
 				button.Destroy();
 			}		
@@ -110,9 +118,8 @@ namespace Source.Game.GameStates
 
 		private void UpdateSkin()
 		{
-			_skinText.SetText(_saveData.SkinIndex);
+			_skinObjectAnimator.SetFrames("Idle", GetSkinTextures());
 		}
-		
 
 		private void StopGame()
 		{
@@ -124,9 +131,36 @@ namespace Source.Game.GameStates
 		{
 			var button = _uiFactory.CreateButton(size, initialPosition, icon, text);
 
-			_buttons.Add(button);
+			_toDestroyObjects.Add(button);
 
 			return button;
+		}
+
+		private void SpawnPlayerSkinAvatar()
+		{
+			var unitFactory = new UnitFactory();
+
+			_skinObject = unitFactory.SpawnCircle<UICircleObject>(75, new(_windowSize.X / 2, 150));
+			_skinObjectAnimator = _skinObject.AddComponent<Animator>();
+
+			_skinObjectAnimator.Setup(new AnimationGraphBuilder()
+				.AddState("Idle", GetSkinTextures(), 0.1f)
+				.SetInitialState("Idle")
+				.Build());
+
+			_toDestroyObjects.Add(_skinObject);
+			UpdateSkin();
+		}
+
+		private List<Texture> GetSkinTextures()
+		{
+			string path = _saveData.SkinIndex switch
+			{
+				0 => PlayerConfig.SkullIdleSpritePath,
+				1 => PlayerConfig.RockIdleSpritePath,
+			};
+
+			return TextureLoader.GetSpritesheetTextures(path);
 		}
 	}
 }
