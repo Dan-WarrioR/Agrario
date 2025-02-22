@@ -68,6 +68,16 @@ namespace Source.Engine.Systems.Animation
 			return _currentState?.GetCurrentFrame();
 		}
 
+		public void SetFrame(string stateName, List<Texture> frames)
+		{
+			if (!_states.TryGetValue(stateName, out var state))
+			{
+				return;
+			}
+
+			state.SetFrames(frames);
+		}
+
 		private void SwitchState(AnimationState state)
 		{
 			_currentState?.Exit();

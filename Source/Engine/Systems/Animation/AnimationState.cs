@@ -7,7 +7,7 @@ namespace Source.Engine.Systems.Animation
 		public string Name { get; }
 		public bool Loop { get; }
 
-		private readonly List<Texture> _frames;
+		private List<Texture> _frames;
 		private readonly float _frameDuration;
 
 		private int _currentFrameIndex;
@@ -55,6 +55,12 @@ namespace Source.Engine.Systems.Animation
 			}
 
 			return _frames[_currentFrameIndex];
+		}
+
+		public void SetFrames(List<Texture> frames)
+		{
+			_frames = frames;
+			_currentFrameIndex = Math.Clamp(_currentFrameIndex, 0, _frames.Count - 1);
 		}
 	}
 }

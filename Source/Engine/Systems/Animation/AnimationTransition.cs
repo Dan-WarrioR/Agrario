@@ -5,18 +5,29 @@
 		public AnimationState FromState { get; }
 		public AnimationState ToState { get; }
 
-		private readonly Func<bool> _condition;
+		private readonly List<Func<bool>> _conditions = new();
 
-		public AnimationTransition(AnimationState fromState, AnimationState toState, Func<bool> condition)
+		public AnimationTransition(AnimationState fromState, AnimationState toState)
 		{
 			FromState = fromState;
 			ToState = toState;
-			_condition = condition;
+		}
+
+		public void AddCondition(Func<bool> condition)
+		{
+			_conditions.Add(condition);
 		}
 
 		public bool CanTransition()
 		{
-			return _condition.Invoke();
+			foreach (var condition in _conditions)
+			{
+				if (!condition.Invoke())
+				{
+					return false;
+				}
+			}
+			return true;
 		}
 	}
 }
