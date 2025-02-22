@@ -38,10 +38,10 @@ namespace Source.Engine.GameObjects
 
 		public void SetTexture(Texture texture)
         {
-            Shape.Texture = texture;
-        }
+			Shape.Texture = texture;
+		}
 
-        public bool IsIntersects(FloatRect objectRect)
+		public bool IsIntersects(FloatRect objectRect)
         {
             return ObjectRect.Intersects(objectRect);
         }

@@ -7,6 +7,7 @@ using Source.Engine.Tools;
 using Source.Game.Configs;
 using Source.Engine.Systems;
 using Source.Engine.Tools.Math;
+using Source.Engine.GameObjects.Components;
 
 namespace Source.Game.Units
 {
@@ -56,7 +57,8 @@ namespace Source.Game.Units
 
 		public Vector2f Delta => _controller.Delta;
 
-		private BaseController _controller;	
+		private BaseController _controller;
+		private Animator? _animator;
 
 		public void Initialize(BaseController controller, Color color, float radius, Vector2f initialPosition)
 		{
@@ -91,6 +93,11 @@ namespace Source.Game.Units
 			Circle.Radius = InitialRadius;
 		}
 
+		public override void OnStart()
+		{
+			_animator = GetComponent<Animator>();
+		}
+
 		public override void OnUpdate(float deltaTime)
 		{
 			if (PauseManager.IsPaused)
@@ -99,6 +106,15 @@ namespace Source.Game.Units
 			}
 
 			Vector2f positionDelta = CurrentSpeed * deltaTime * Delta;
+
+			if (IdleDelta == Delta)
+			{
+				_animator?.SetBool("IsMoving", false);
+
+				return;
+			}
+
+			_animator?.SetBool("IsMoving", true);
 
 			var position = GetClampedPosition(Position + positionDelta);
 

@@ -2,7 +2,7 @@
 {
 	public class PlayerSaveData
 	{
-		private int _skinsCount = 3;
+		private int _skinsCount = 1;
 
 		public int SkinIndex
 		{
