@@ -41,12 +41,6 @@ namespace Source.Game.GameStates
 		private UICircleObject _skinObject;
 		private Animator _skinObjectAnimator;
 
-		private Dictionary<int, string> _skinPaths = new()
-		{
-			{ 0, PlayerConfig.SkullIdleSpritePath },
-			{ 1, PlayerConfig.RockIdleSpritePath },
-		};
-
 		public override void Enter()
 		{
 			_uiFactory = new UIFactory();
@@ -139,14 +133,13 @@ namespace Source.Game.GameStates
 		private void SpawnPlayerSkinAvatar()
 		{
 			var unitFactory = new UnitFactory();
-
+			
 			_skinObject = unitFactory.SpawnCircle<UICircleObject>(75, new(_windowSize.X / 2, 150));
 			_skinObjectAnimator = _skinObject.AddComponent<Animator>();
 
 			_skinObjectAnimator.Setup(new AnimationGraphBuilder()
 				.AddState("Idle", GetSkinTextures(), 0.1f)
-				.SetInitialState("Idle")
-				.Build());
+				.SetInitialState("Idle"));
 
 			_toDestroyObjects.Add(_skinObject);
 			UpdateSkin();

@@ -1,18 +1,18 @@
-﻿using Source.Game.Units;
-using SFML.Graphics;
+﻿using SFML.Graphics;
 using SFML.System;
 using Source.Engine;
-using Source.Game.Units.Controllers;
 using Source.Engine.GameObjects.Components;
 using Source.Engine.Tools;
 using Source.Engine.Configs;
 using Source.Engine.Systems.Animation;
 using Source.Engine.Tools.ProjectUtilities;
 using Source.Engine.Systems.Tools.Animations;
-using Source.Game.Configs;
 using Source.Engine.GameObjects;
+using Source.Game.Configs;
 using Source.Game.Features.SaveSystem;
 using Source.Game.Data.Saves;
+using Source.Game.Units.Controllers;
+using Source.Game.Units;
 
 namespace Source.Game.Factories
 {
@@ -123,14 +123,14 @@ namespace Source.Game.Factories
 			player.SetPosition(GetRandomPosition());
         }
         
-        private void SetupAnimator<T>(GameObject unit, T data) where T : AnimationGraph
+        private void SetupAnimator(GameObject unit, AnimationGraphBuilder data)
         {
 	        var animator = unit.AddComponent<Animator>();
 
 	        animator.Setup(data);
         }
 
-		private AnimationGraph BuidlPlayerAnimationGraph()
+		private AnimationGraphBuilder BuidlPlayerAnimationGraph()
 		{
 			var skin = GetCurrentPlayerSkin();
 
@@ -141,11 +141,10 @@ namespace Source.Game.Factories
 				.AddTransition("Idle", "Run")
 				.AddBoolConditionTo("Idle", "IsMoving", true)
 				.AddTransition("Run", "Idle")
-				.AddBoolConditionTo("Run", "IsMoving", false)
-				.Build();
+				.AddBoolConditionTo("Run", "IsMoving", false);
 		}
 
-		private AnimationGraph BuidlBotAnimationGraph()
+		private AnimationGraphBuilder BuidlBotAnimationGraph()
 		{
 			return new AnimationGraphBuilder()
 				.AddState("Idle", TextureLoader.GetSpritesheetTextures(PlayerConfig.RockIdleSpritePath), 0.1f)
@@ -154,8 +153,7 @@ namespace Source.Game.Factories
 				.AddTransition("Idle", "Run")
 				.AddBoolConditionTo("Idle", "IsMoving", true)
 				.AddTransition("Run", "Idle")
-				.AddBoolConditionTo("Run", "IsMoving", false)
-				.Build();
+				.AddBoolConditionTo("Run", "IsMoving", false);
 		}
 
 		#endregion

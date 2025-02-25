@@ -4,7 +4,7 @@ using Source.Engine.Tools;
 
 namespace Source.Engine
 {
-    public class GameLoop
+    internal class GameLoop
 	{
 		private const int TargetFramerate = 120;
 		private const float TimeUntilUpdate = 1f / TargetFramerate;

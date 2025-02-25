@@ -1,6 +1,5 @@
 ﻿using SFML.Graphics;
 using SFML.System;
-using Source.Engine.Tools;
 using Source.Engine.Tools.Math;
 
 namespace Source.Engine.GameObjects

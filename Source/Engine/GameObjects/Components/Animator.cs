@@ -15,8 +15,10 @@ namespace Source.Engine.GameObjects.Components
 			_target = (ShapeObject)Owner;
 		}
 
-		public void Setup(AnimationGraph data)
+		public void Setup(AnimationGraphBuilder builder)
 		{
+			var data = builder.Build();
+			
 			foreach (var states in data.States)
 			{
 				_stateMachine.AddState(states);

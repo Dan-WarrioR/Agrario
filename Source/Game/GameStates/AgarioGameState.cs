@@ -12,8 +12,6 @@ namespace Source.Game.GameStates
 {
     public class AgarioGameState : BaseGameState
 	{
-		private GameLoop GameLoop => _gameLoop ??= Dependency.Get<GameLoop>();
-		private GameLoop _gameLoop;
 		private SFMLRenderer Renderer => _renderer ??= Dependency.Get<SFMLRenderer>();
 		private SFMLRenderer _renderer;
 
