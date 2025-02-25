@@ -2,16 +2,12 @@
 using Source.Engine.Configs;
 using Source.Engine.GameObjects;
 using Source.Engine.Systems.Tools.Animations;
-using Source.Engine.Tools;
 using Source.Engine.Tools.ProjectUtilities;
 
 namespace Source.Game.UI.Terrain
 {
 	public class Terrain : ShapeObject
-	{
-		private static TextureLoader TextureLoader => _textureLoader ??= Dependency.Get<TextureLoader>();
-		private static TextureLoader _textureLoader;
-		
+	{	
 		private Sprite _sprite;
 
 		private FloatRect _windowSize;
@@ -42,7 +38,7 @@ namespace Source.Game.UI.Terrain
 
 			var textureRect = new IntRect(0, 0, width, height);
 
-			_sprite = new Sprite(texture, textureRect);
+			_sprite = new(texture, textureRect);
 		}
 
 		public override void Draw(RenderTarget target, RenderStates states)

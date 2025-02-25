@@ -23,8 +23,6 @@ namespace Source.Game.Scenes
 		private EventBus EventBus => _eventBus ??= Dependency.Get<EventBus>();
 		private EventBus _eventBus;
 
-		private TextureLoader TextureLoader => _textureLoader ??= Dependency.Get<TextureLoader>();
-		private TextureLoader _textureLoader;
 		private SaveService SaveService => _saveService ??= Dependency.Get<SaveService>();
 		private SaveService _saveService;
 		private PlayerInput PlayerInput => _playerInput ??= Dependency.Get<PlayerInput>();

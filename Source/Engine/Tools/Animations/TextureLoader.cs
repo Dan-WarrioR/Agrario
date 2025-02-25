@@ -1,20 +1,14 @@
 ﻿using SFML.Graphics;
-using Source.Engine.Tools;
 using Source.Engine.Tools.ProjectUtilities;
 
 namespace Source.Engine.Systems.Tools.Animations
 {
-    public class TextureLoader
+    public static class TextureLoader
     {
-		private readonly Dictionary<string, Texture> _loadedTextures = new();
-		private readonly Dictionary<string, List<Texture>> _loadedSpritesheets = new();
+		private static readonly Dictionary<string, Texture> _loadedTextures = new();
+		private static readonly Dictionary<string, List<Texture>> _loadedSpritesheets = new();
 
-		public TextureLoader()
-		{
-			Dependency.Register(this);
-		}
-
-		public Texture? GetTexture(string texturePath)
+		public static Texture? GetTexture(string texturePath)
 		{
 			if (_loadedTextures.TryGetValue(texturePath, out var texture))
 			{
@@ -30,7 +24,7 @@ namespace Source.Engine.Systems.Tools.Animations
 			return texture;
 		}
 
-		public List<Texture> GetSpritesheetTextures(string spritesheetPath)
+		public static List<Texture> GetSpritesheetTextures(string spritesheetPath)
 		{
 			if (_loadedSpritesheets.TryGetValue(spritesheetPath, out var textures))
 			{
@@ -48,7 +42,7 @@ namespace Source.Engine.Systems.Tools.Animations
 			return new();
 		}
 
-		private List<Texture> LoadSpritesheet(string spritesheetPath)
+		private static List<Texture> LoadSpritesheet(string spritesheetPath)
 		{
 			var path = Path.Combine(PathHelper.ResourcesPath, spritesheetPath);
 			var textures = new List<Texture>();
@@ -70,7 +64,7 @@ namespace Source.Engine.Systems.Tools.Animations
 			return textures;
 		}
 
-		private Texture? LoadTexture(string spritePath)
+		private static Texture? LoadTexture(string spritePath)
         {
 			Texture? texture = null;
 

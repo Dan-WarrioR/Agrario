@@ -23,8 +23,6 @@ namespace Source.Game.Factories
 		private SaveService SaveService => _saveService ??= Dependency.Get<SaveService>();
 		private SaveService _saveService;
 
-		private TextureLoader TextureLoader => _textureLoader ??= Dependency.Get<TextureLoader>();
-		private TextureLoader _textureLoader;
 		private static SFMLRenderer Renderer => _renderer ??= Dependency.Get<SFMLRenderer>();
 		private static SFMLRenderer _renderer;
 
