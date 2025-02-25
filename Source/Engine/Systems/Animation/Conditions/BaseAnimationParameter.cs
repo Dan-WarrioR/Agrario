@@ -1,6 +1,6 @@
 ﻿namespace Source.Engine.Systems.Animation.Conditions
 {
-	public abstract class BaseAnimationParameter
+	internal abstract class BaseAnimationParameter
 	{
 		public string Name { get; }
 

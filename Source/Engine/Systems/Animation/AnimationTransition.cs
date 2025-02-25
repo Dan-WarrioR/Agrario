@@ -1,6 +1,6 @@
 ﻿namespace Source.Engine.Systems.Animation
 {
-	public class AnimationTransition
+	internal class AnimationTransition
 	{
 		public AnimationState FromState { get; }
 		public AnimationState ToState { get; }

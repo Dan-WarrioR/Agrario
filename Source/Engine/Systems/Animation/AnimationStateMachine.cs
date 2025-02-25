@@ -2,7 +2,7 @@
 
 namespace Source.Engine.Systems.Animation
 {
-	public class AnimationStateMachine
+	internal class AnimationStateMachine
 	{
 		private readonly Dictionary<string, AnimationState> _states = new();
 		private readonly Dictionary<AnimationState, List<AnimationTransition>> _transitionMap = new();

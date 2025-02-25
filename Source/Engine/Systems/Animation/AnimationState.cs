@@ -2,7 +2,7 @@
 
 namespace Source.Engine.Systems.Animation
 {
-	public class AnimationState
+	internal class AnimationState
 	{
 		public string Name { get; }
 		public bool Loop { get; }

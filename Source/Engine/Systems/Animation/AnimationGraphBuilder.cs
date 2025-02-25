@@ -3,7 +3,7 @@ using Source.Engine.Systems.Animation.Conditions;
 
 namespace Source.Engine.Systems.Animation
 {
-	public class AnimationGraph
+	internal class AnimationGraph
 	{
 		public List<AnimationState> States { get; }
 		public List<AnimationTransition> Transitions { get; }
@@ -77,7 +77,7 @@ namespace Source.Engine.Systems.Animation
 			return this;
 		}
 
-		public AnimationGraph Build()
+		internal AnimationGraph Build()
 		{
 			return new AnimationGraph(_states.Values.ToList(), _transitions, _initialState, _parameters);
 		}

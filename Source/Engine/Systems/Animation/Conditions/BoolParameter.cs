@@ -1,6 +1,6 @@
 ﻿namespace Source.Engine.Systems.Animation.Conditions
 {
-	public class BoolParameter : BaseAnimationParameter
+	internal class BoolParameter : BaseAnimationParameter
 	{
 		private readonly bool _defaultValue;
 
