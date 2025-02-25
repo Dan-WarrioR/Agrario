@@ -18,6 +18,8 @@ namespace Source.Game.Factories
 {
     public class UnitFactory : ObjectFactory
     {
+		private PlayerSaveData PlayerSaveData => SaveService.Load<PlayerSaveData>();
+
 		private SaveService SaveService => _saveService ??= Dependency.Get<SaveService>();
 		private SaveService _saveService;
 
@@ -34,8 +36,6 @@ namespace Source.Game.Factories
 		private AnimationGraph _enemyGraph;
 		private AnimationGraph _playerGraph;
 
-		private PlayerSaveData _saveData;
-
 		public UnitFactory() : base(Renderer)
         {
 	        Dependency.Register(this);
@@ -44,7 +44,6 @@ namespace Source.Game.Factories
 
 			//_playerGraph = BuidlPlayerAnimationGraph();
 			//_enemyGraph = BuidlBotAnimationGraph();
-			_saveData = SaveService.Load<PlayerSaveData>();
 		}
 		
 		~UnitFactory()
@@ -160,10 +159,10 @@ namespace Source.Game.Factories
 
 		private (List<Texture> idleSprites, List<Texture> runSprites) GetCurrentPlayerSkin()
 		{
-			(string idle, string run) = _saveData.SkinIndex switch
+			(string idle, string run) = PlayerSaveData.SkinIndex switch
 			{
 				0 => (PlayerConfig.SkullIdleSpritePath, PlayerConfig.SkullAggresiveSpritePath),
-				1 => (PlayerConfig.RockIdleSpritePath, PlayerConfig.RockIdleSpritePath),
+				1 => (PlayerConfig.RockIdleSpritePath, PlayerConfig.RockRunSpritePath),
 			};
 
 			return (TextureLoader.GetSpritesheetTextures(idle), TextureLoader.GetSpritesheetTextures(run));
