@@ -30,8 +30,6 @@ namespace Source.Game
 			_uiView = new(_window.DefaultView);
 			_uiView.Size = _window.DefaultView.Size;
 			_uiView.Center = new(_uiView.Size.X / 2, _uiView.Size.Y / 2);
-
-			BeginUIView();
 		}
 
 		public void BeginGameView()

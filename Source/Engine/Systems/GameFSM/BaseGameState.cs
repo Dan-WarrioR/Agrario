@@ -9,10 +9,10 @@
 			StateMachine = gameStateMachine;
 		}
 
-		public abstract void Enter();
+		public virtual void Enter() { }
 
-		public abstract void Update(float deltaTime);
+		public virtual void Update(float deltaTime) { }
 
-		public abstract void Exit();
+		public virtual void Exit() { }
 	}
 }
