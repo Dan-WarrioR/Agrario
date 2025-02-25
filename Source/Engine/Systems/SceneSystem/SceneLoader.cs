@@ -52,5 +52,16 @@ namespace Source.Engine.Systems.SceneSystem
 			_currentActiveScene = null;
 			scene.Unload();
 		}
+
+		public static void Update(float deltaTime)
+		{
+			foreach (var scene in _scenes.Values)
+			{
+				if (scene.IsActive)
+				{
+					scene.Update(deltaTime);
+				}
+			}
+		}
 	}
 }

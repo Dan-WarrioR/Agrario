@@ -18,5 +18,6 @@
 
 		public abstract void Load();
 		public abstract void Unload();
+		public virtual void Update(float deltaTime) { }
 	}
 }

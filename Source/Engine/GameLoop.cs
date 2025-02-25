@@ -1,5 +1,6 @@
 ﻿using Source.Engine.GameObjects;
 using Source.Engine.Input;
+using Source.Engine.Systems.SceneSystem;
 using Source.Engine.Tools;
 
 namespace Source.Engine
@@ -65,6 +66,8 @@ namespace Source.Engine
 			}
 
 			_time.Reset();
+
+			SceneLoader.Update(_time.DeltaTime);
 
 			foreach (var updatable in _gameObjects)
 			{
