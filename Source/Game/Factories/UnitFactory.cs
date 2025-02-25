@@ -34,7 +34,7 @@ namespace Source.Game.Factories
 		private AnimationGraph _enemyGraph;
 		private AnimationGraph _playerGraph;
 
-		public UnitFactory() : base(Renderer)
+		public UnitFactory()
         {
 	        Dependency.Register(this);
 	        

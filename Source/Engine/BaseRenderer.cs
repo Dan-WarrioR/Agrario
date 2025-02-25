@@ -1,5 +1,6 @@
 ﻿using SFML.Graphics;
 using Source.Engine.GameObjects;
+using Source.Engine.Tools;
 
 namespace Source.Engine
 {
@@ -18,7 +19,14 @@ namespace Source.Engine
 
 		public virtual void Initialize(RenderWindow window)
 		{
+			Dependency.Register(this);
+
 			Window = window;
+		}
+
+		~BaseRenderer()
+		{
+			Dependency.Unregister(this);
 		}
 
 		public void AddRenderElement(GameObject gameObject)

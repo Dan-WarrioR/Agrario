@@ -8,12 +8,8 @@ namespace Source.Engine
 		private GameLoop GameLoop => _gameLoop ??= Dependency.Get<GameLoop>();
 		private GameLoop _gameLoop;
 
-		private BaseRenderer _renderer;
-
-		public ObjectFactory(BaseRenderer renderer)
-		{
-			_renderer = renderer;
-		}
+		private static BaseRenderer Renderer = _renderer ??= Dependency.Get<BaseRenderer>();
+		private static BaseRenderer _renderer;
 
 		public T Instantiate<T>() where T : GameObject, new()
 		{
@@ -27,12 +23,12 @@ namespace Source.Engine
 		private void RegisterObject(GameObject gameObject)
 		{
 			GameLoop.Register(gameObject);
-			_renderer.AddRenderElement(gameObject);
+			Renderer.AddRenderElement(gameObject);
 		}
 
 		private void UnregisterObject(GameObject gameObject)
 		{
-			_renderer.RemoveGameElement(gameObject);
+			Renderer.RemoveGameElement(gameObject);
 			GameLoop.UnRegister(gameObject);
 		}
 	}

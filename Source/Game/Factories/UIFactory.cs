@@ -19,7 +19,7 @@ namespace Source.Game.Factories
 		private static readonly Vector2f PlayerCountTextPosition = new(WindowConfig.Bounds.Left + 50, WindowConfig.Bounds.Top + 20);
 
 
-		public UIFactory() : base(Renderer)
+		public UIFactory()
 		{
 			Dependency.Register(this);
 		}
