@@ -75,8 +75,6 @@ namespace Source.Game.Scenes
 			}
 		}
 
-		public override void Update(float deltaTime) { }
-
 		private void CreateMenu()
 		{
 			_startButton = CreateButton(new(200, 50), new((_windowSize.X - 200) / 2, 250), text: "Почати гру");

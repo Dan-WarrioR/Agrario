@@ -44,7 +44,6 @@ namespace Source.Engine
 		{
 			new EventBus();
 			new PauseManager();
-			new TextureLoader();
 		}
 	}
 }

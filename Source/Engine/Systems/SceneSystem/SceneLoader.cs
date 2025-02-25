@@ -6,7 +6,7 @@ namespace Source.Engine.Systems.SceneSystem
 	{
 		private static Dictionary<string, Scene> _scenes = new();
 
-		private static Scene? _currentScene;
+		private static Scene? _currentActiveScene;
 
 		public static void AddScene<T>() where T : Scene, new()
 		{
@@ -20,39 +20,37 @@ namespace Source.Engine.Systems.SceneSystem
 			}
 		}
 
-		public static void LoadScene<T>() where T : Scene, new()
+		public static void LoadScene(string sceneName)
 		{
-			var sceneName = typeof(T).Name;
-			Debug.Log($"Loaded {sceneName}");
 			if (!_scenes.TryGetValue(sceneName, out var scene))
 			{
 				Debug.LogWarning($"No scene in collection with name {sceneName}!");
 
 				return;
 			}
-			_currentScene = scene;
-			scene.Load();
+			_currentActiveScene = scene;
+			scene.LoadInternal();
+		}
+
+		public static void LoadScene<T>() where T : Scene, new()
+		{
+			var sceneName = typeof(T).Name;
+
+			LoadScene(sceneName);
 		}
 
 		public static void UnloadScene<T>() where T : Scene, new()
 		{
 			var sceneName = typeof(T).Name;
-			Debug.Log($"Exit {sceneName}");
+
 			if (!_scenes.TryGetValue(sceneName, out var scene))
 			{
 				Debug.LogWarning($"No scene in collection with name {sceneName}!");
 
 				return;
 			}
-			_currentScene = null;
+			_currentActiveScene = null;
 			scene.Unload();
-
-			_scenes.Remove(sceneName);
-		}
-
-		public static void Update(float deltaTime)
-		{
-			_currentScene?.Update(deltaTime);
 		}
 	}
 }

@@ -2,10 +2,21 @@
 {
 	public abstract class Scene
 	{
+		public bool IsActive { get; private set; } = false;
+
+		internal virtual void LoadInternal()
+		{
+			IsActive = true;
+			Load();
+		}
+
+		internal virtual void UnloadInternal()
+		{
+			IsActive = false;
+			Unload();
+		}
+
 		public abstract void Load();
-
 		public abstract void Unload();
-
-		public abstract void Update(float deltaTime);
 	}
 }
