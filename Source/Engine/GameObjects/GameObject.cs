@@ -13,6 +13,8 @@ namespace Source.Engine.GameObjects
 
 	public abstract class GameObject : Drawable, IActivable
 	{
+		#region Data
+
 		public bool IsActive { get; private set; } = true;
 
 		public bool IsDestroyed { get; private set; } = false;
@@ -25,6 +27,12 @@ namespace Source.Engine.GameObjects
 		{
 			InitialPosition = initialPosition;
 		}
+
+		#endregion
+
+		//////////////////////////////////////////////////
+
+		#region Interface
 
 		public void SetActive(bool isActive)
 		{
@@ -54,15 +62,24 @@ namespace Source.Engine.GameObjects
 		public void Destroy()
 		{
 			IsDestroyed = true;
+			OnDestroy();
 		}
 
-		#region To Use Virtual Methods
+		#endregion
+
+		//////////////////////////////////////////////////
+
+		#region To Override Methods
 
 		public virtual void OnStart() { }
 		public virtual void OnUpdate(float deltaTime) { }
+		public virtual void OnDestroy() { }
+
 		public virtual void Draw(RenderTarget target, RenderStates states) { }
 
 		#endregion
+
+		//////////////////////////////////////////////////
 
 		#region Components Interfaces
 

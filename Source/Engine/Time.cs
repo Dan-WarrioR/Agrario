@@ -10,8 +10,6 @@ namespace Source.Engine
 
 		private Clock _clock;
 
-		private float _elapsedTime = 0f;
-
 		private float _previousTimeElapsed = 0f;
 
 		public Time()
