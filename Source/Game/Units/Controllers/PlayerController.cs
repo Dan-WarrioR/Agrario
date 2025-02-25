@@ -5,7 +5,6 @@ using Source.Engine;
 using Source.Engine.GameObjects;
 using Source.Engine.Input;
 using Source.Engine.Tools;
-using Source.Engine.Tools.ProjectUtilities;
 using Source.Game.GameStates;
 
 namespace Source.Game.Units.Controllers
@@ -44,7 +43,7 @@ namespace Source.Game.Units.Controllers
                     onReleased: () => Delta -= binding.Delta);
             }
 
-			PlayerInput.BindKey(Keyboard.Key.Escape, Game.StopGame);
+			PlayerInput.BindKey(Keyboard.Key.Escape, StopGame);
             PlayerInput.BindKey(Keyboard.Key.R, RestartGame);
             PlayerInput.BindKey(Keyboard.Key.F, SwapPlayers);
             PlayerInput.BindKey(Keyboard.Key.P, PauseGame);
@@ -71,40 +70,17 @@ namespace Source.Game.Units.Controllers
 		
 		private void SwapPlayers()
 		{
-			List<Player> bots = new();
-
-			var mainPlayer = Game.PlayerController.Player;
-
-			foreach (var player in Game.Players)
-			{
-				if (player != mainPlayer && player.IsActive)
-				{
-					bots.Add(player);
-				}
-			}
-
-			if (bots.Count <= 0)
-			{
-				return;
-			}
-
-			int randomIndex = CustomRandom.Range(0, bots.Count);
-			var bot = bots[randomIndex];
-
-			mainPlayer.SwapControllers(bot);
-
-			Game.PlayerController.SetTarget(bot);
-
-			Camera.SetFollowTarget(bot);
-			
-			EventBus.Invoke("OnPlayerSwapped");
+			EventBus.Invoke("OnSwapPlayers");
 		}
 
 		private void RestartGame()
 		{
-			Game.RestartGame();
-			EventBus.Invoke("OnGameRestart");
-			
+			EventBus.Invoke("OnGameRestart");			
+		}
+
+		private void StopGame()
+		{
+			EventBus.Invoke("OnStopGame");
 		}
 
 		private void OnAteFood(float value)
