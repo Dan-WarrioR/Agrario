@@ -23,9 +23,6 @@ namespace Source.Game.Factories
 		private SaveService SaveService => _saveService ??= Dependency.Get<SaveService>();
 		private SaveService _saveService;
 
-		private static SFMLRenderer Renderer => _renderer ??= Dependency.Get<SFMLRenderer>();
-		private static SFMLRenderer _renderer;
-
 		private const float MinPlayerRadius = 20f;
 		private const float FoodRadius = 5f;
 

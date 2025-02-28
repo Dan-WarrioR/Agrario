@@ -1,10 +1,9 @@
-﻿using Source.Engine.Configs;
-using SFML.Graphics;
+﻿using SFML.Graphics;
+using Source.Engine.Configs;
 using Source.Engine.GameObjects;
-using Source.Engine.Rendering;
 using Source.Engine.Tools;
 
-namespace Source.Game
+namespace Source.Engine.Rendering
 {
     public class SFMLRenderer : BaseRenderer
 	{

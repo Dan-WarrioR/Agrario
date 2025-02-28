@@ -2,7 +2,7 @@
 using Source.Engine.GameObjects;
 using Source.Engine.Tools;
 
-namespace Source.Engine
+namespace Source.Engine.Rendering
 {
 	public interface IUIElement
 	{

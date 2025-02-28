@@ -2,6 +2,7 @@
 using SFML.System;
 using SFML.Window;
 using Source.Engine.Input;
+using Source.Engine.Rendering;
 using Source.Engine.Tools;
 
 namespace Source.Engine.GameObjects

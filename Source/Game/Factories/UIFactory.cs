@@ -12,9 +12,6 @@ namespace Source.Game.Factories
 	{
 		private const string TerrainPath = "Terrain\\Grass.png";
 
-		private static SFMLRenderer Renderer => _renderer ??= Dependency.Get<SFMLRenderer>();
-		private static SFMLRenderer _renderer;
-
 		private static readonly Vector2f ScoreTextPosition = new(WindowConfig.Bounds.Width - 200, WindowConfig.Bounds.Top + 20);
 		private static readonly Vector2f PlayerCountTextPosition = new(WindowConfig.Bounds.Left + 50, WindowConfig.Bounds.Top + 20);
 
