@@ -16,22 +16,22 @@ namespace Source.Engine
 
 		private readonly PlayerInput _input;
 		private readonly BaseRenderer _renderer;
-		private readonly BaseGame _game;
+		private readonly BaseGameRules _gameRules;
 		private readonly Time _time;
 
 		private bool _isStopped = false;
 
-		public GameLoop(PlayerInput input, BaseRenderer renderer, BaseGame game)
+		public GameLoop(PlayerInput input, BaseRenderer renderer, BaseGameRules gameRules)
 		{
 			Dependency.Register(this);
 
 			_renderer = renderer;
-			_game = game;
+			_gameRules = gameRules;
 			_input = input;
 
 			_time = new();
 
-			Register(game);
+			Register(gameRules);
 		}
 
 		public void Run()
@@ -107,7 +107,7 @@ namespace Source.Engine
 
 		private bool IsEndGameLoop()
 		{
-			return !_isStopped && _game.IsEndGame();
+			return !_isStopped && _gameRules.IsEndGame();
 		}
 
 		private void StartNewGameObject(GameObject gameObject)

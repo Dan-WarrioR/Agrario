@@ -8,7 +8,7 @@ namespace Source.Engine
 {
     public class Application
 	{
-		public void Run(BaseGame game, BaseRenderer renderer)
+		public void Run(BaseGameRules gameRules, BaseRenderer renderer)
 		{
 			RenderWindow window = CreateWindow();
 
@@ -19,11 +19,11 @@ namespace Source.Engine
 
 			CreateSubSystems();
 			
-			var gameLoop = new GameLoop(input, renderer, game);
+			var gameLoop = new GameLoop(input, renderer, gameRules);
 
 			window.Closed += (_, _) => gameLoop.Stop();
 
-			game.Initialize();
+			gameRules.Initialize();
 
 			gameLoop.Run();
 		}
