@@ -4,7 +4,7 @@ using SFML.Window;
 using Source.Engine.GameObjects;
 using Source.Engine.Tools;
 
-namespace Source.Game
+namespace Source.Engine.Rendering
 {
 	public class GameCamera
 	{
