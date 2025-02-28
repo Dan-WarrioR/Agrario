@@ -1,7 +1,7 @@
 ﻿using Source.Engine.Configs;
 using SFML.Graphics;
-using Source.Engine;
 using Source.Engine.GameObjects;
+using Source.Engine.Rendering;
 using Source.Engine.Tools;
 
 namespace Source.Game
