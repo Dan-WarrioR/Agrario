@@ -4,6 +4,8 @@ namespace Source.Engine.Systems.SceneSystem
 {
 	public static class SceneLoader
 	{
+		private const bool LogSceneChaging = true;
+		
 		private static Dictionary<string, BaseScene> _scenes = new();
 
 		private static BaseScene? _currentActiveScene;
@@ -30,6 +32,7 @@ namespace Source.Engine.Systems.SceneSystem
 			}
 			_currentActiveScene = scene;
 			scene.LoadInternal();
+			LogMessage($"Loading scene {sceneName}");
 		}
 
 		public static void LoadScene<T>() where T : BaseScene, new()
@@ -51,6 +54,7 @@ namespace Source.Engine.Systems.SceneSystem
 			}
 			_currentActiveScene = null;
 			scene.Unload();
+			LogMessage($"Unloading scene {sceneName}");
 		}
 
 		public static void Update(float deltaTime)
@@ -62,6 +66,16 @@ namespace Source.Engine.Systems.SceneSystem
 					scene.Update(deltaTime);
 				}
 			}
+		}
+
+		private static void LogMessage(object message)
+		{
+			if (!LogSceneChaging)
+			{
+				return;
+			}
+			
+			Debug.Log(message);
 		}
 	}
 }
