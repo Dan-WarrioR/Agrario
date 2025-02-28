@@ -3,7 +3,7 @@ using Source.Engine.GameObjects;
 
 namespace Source.Engine
 {
-	public abstract class BaseGame : GameObject
+	public abstract class BaseGameRules : GameObject
 	{
 		private bool _isEndGame = false;
 

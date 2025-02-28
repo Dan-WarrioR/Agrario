@@ -8,7 +8,7 @@ using Source.Game.Scenes;
 
 namespace Source.Game
 {
-	public class AgarioGame : BaseGame
+	public class AgarioGameRules : BaseGameRules
 	{
 		private EventBus EventBus => _eventBus ??= Dependency.Get<EventBus>();
 		private EventBus _eventBus;
