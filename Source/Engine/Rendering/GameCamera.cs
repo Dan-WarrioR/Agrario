@@ -1,8 +1,8 @@
 ﻿using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
+using Source.Engine.GameObjects;
 using Source.Engine.Tools;
-using Source.Game.Units;
 
 namespace Source.Game
 {
@@ -15,7 +15,7 @@ namespace Source.Game
 		private View _uiView;
 		private RenderWindow _window;
 
-		private Player _player;
+		private GameObject _target;
 
 		public GameCamera(RenderWindow window, Vector2f initialCenter, Vector2f size)
 		{
@@ -44,12 +44,12 @@ namespace Source.Game
 
 		public void Update()
 		{
-			if (_player == null)
+			if (_target == null)
 			{
 				return;
 			}
 
-			_gameView.Center = _player.Position;
+			_gameView.Center = _target.Position;
 		}
 
 		public void Zoom(float factor)
@@ -66,9 +66,9 @@ namespace Source.Game
 			_gameView.Size = size;
 		}
 
-		public void SetFollowTarget(Player player)
+		public void SetFollowTarget(GameObject target)
 		{
-			_player = player;
+			_target = target;
 		}
 
 		private void OnWindowResize(object? sender, SizeEventArgs e)
