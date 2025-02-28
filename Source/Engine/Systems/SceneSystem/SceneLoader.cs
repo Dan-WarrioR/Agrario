@@ -4,11 +4,11 @@ namespace Source.Engine.Systems.SceneSystem
 {
 	public static class SceneLoader
 	{
-		private static Dictionary<string, Scene> _scenes = new();
+		private static Dictionary<string, BaseScene> _scenes = new();
 
-		private static Scene? _currentActiveScene;
+		private static BaseScene? _currentActiveScene;
 
-		public static void AddScene<T>() where T : Scene, new()
+		public static void AddScene<T>() where T : BaseScene, new()
 		{
 			var sceneName = typeof(T).Name;
 
@@ -32,14 +32,14 @@ namespace Source.Engine.Systems.SceneSystem
 			scene.LoadInternal();
 		}
 
-		public static void LoadScene<T>() where T : Scene, new()
+		public static void LoadScene<T>() where T : BaseScene, new()
 		{
 			var sceneName = typeof(T).Name;
 
 			LoadScene(sceneName);
 		}
 
-		public static void UnloadScene<T>() where T : Scene, new()
+		public static void UnloadScene<T>() where T : BaseScene, new()
 		{
 			var sceneName = typeof(T).Name;
 

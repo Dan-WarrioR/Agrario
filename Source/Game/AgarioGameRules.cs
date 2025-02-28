@@ -19,8 +19,8 @@ namespace Source.Game
 		{
 			Dependency.Register(this);
 
-			SceneLoader.AddScene<MainMenuScene>();
-			SceneLoader.AddScene<GameScene>();
+			SceneLoader.AddScene<MainMenuBaseScene>();
+			SceneLoader.AddScene<GameBaseScene>();
 
 			_gameStateMachine = new();
 			_gameStateMachine.SetState<MainMenuState>();

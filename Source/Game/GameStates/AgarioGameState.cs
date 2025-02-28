@@ -8,12 +8,12 @@ namespace Source.Game.GameStates
 	{
 		public override void Enter()
 		{
-			SceneLoader.LoadScene<GameScene>();
+			SceneLoader.LoadScene<GameBaseScene>();
 		}
 
 		public override void Exit()
 		{
-			SceneLoader.UnloadScene<GameScene>();
+			SceneLoader.UnloadScene<GameBaseScene>();
 		}
 	}
 }

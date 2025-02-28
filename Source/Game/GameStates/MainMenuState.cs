@@ -13,7 +13,7 @@ namespace Source.Game.GameStates
 
 		public override void Enter()
 		{
-			SceneLoader.LoadScene<MainMenuScene>();
+			SceneLoader.LoadScene<MainMenuBaseScene>();
 			EventBus.Register("OnGameStart", OnStartGame);
 		}	
 
@@ -21,7 +21,7 @@ namespace Source.Game.GameStates
 		{
 			EventBus.Unregister("OnGameStart", OnStartGame);
 
-			SceneLoader.UnloadScene<MainMenuScene>();
+			SceneLoader.UnloadScene<MainMenuBaseScene>();
 		}
 
 		private void OnStartGame()

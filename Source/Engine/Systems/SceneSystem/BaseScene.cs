@@ -1,6 +1,6 @@
 ﻿namespace Source.Engine.Systems.SceneSystem
 {
-	public abstract class Scene
+	public abstract class BaseScene
 	{
 		public bool IsActive { get; private set; } = false;
 

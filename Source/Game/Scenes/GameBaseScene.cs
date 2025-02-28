@@ -11,7 +11,7 @@ using Source.Game.Configs;
 
 namespace Source.Game.Scenes
 {
-	public class GameScene : Scene
+	public class GameBaseScene : BaseScene
 	{
 		private EventBus EventBus => _eventBus ??= Dependency.Get<EventBus>();
 		private EventBus _eventBus;
