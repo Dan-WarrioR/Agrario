@@ -8,9 +8,6 @@ namespace Source.Engine.GameObjects
         protected virtual Color FillColor => Color.White;
 
         public FloatRect ObjectRect => Shape.GetGlobalBounds();
-
-        public Vector2f Position => Shape.Position;
-
         protected Shape Shape { get; private set; }
 
         public void Initialize(Shape shape, Vector2f initialPosition)
@@ -26,8 +23,10 @@ namespace Source.Engine.GameObjects
             shape.FillColor = FillColor;
         }
 
-        public void SetPosition(Vector2f position)
+        public override void SetPosition(Vector2f position)
         {
+            base.SetPosition(position);
+            
             Shape.Position = position;
 		}
 

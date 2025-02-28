@@ -20,12 +20,15 @@ namespace Source.Engine.GameObjects
 		public bool IsDestroyed { get; private set; } = false;
 
 		public Vector2f InitialPosition { get; private set; }
+		
+		public Vector2f Position { get; protected set; }
 
 		private Dictionary<Type, BaseComponent> _components = new();
 
 		public void Initialize(Vector2f initialPosition)
 		{
 			InitialPosition = initialPosition;
+			Position = initialPosition;
 		}
 
 		#endregion
@@ -39,6 +42,11 @@ namespace Source.Engine.GameObjects
 			IsActive = isActive;
 		}
 
+		public virtual void SetPosition(Vector2f position)
+		{
+			Position = position;
+		}
+		
 		public void Start()
 		{
 			foreach (var component in _components.Values)

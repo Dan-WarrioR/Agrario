@@ -11,9 +11,7 @@ namespace Source.Engine.GameObjects
 
         private const string FontPath = @"C:\Windows\Fonts\Arial.ttf";
         private const uint CharacterSize = 24;
-
-        public Vector2f Position => _text.Position;
-
+        
         private Text _text;
 
         public void Initialize(Vector2f initialPosition, string text = null)

@@ -24,8 +24,7 @@ namespace Source.Engine.GameObjects
 		private Text? _text;
 		private Sprite? _icon;
 		private bool _isHovered = false;
-
-		public Vector2f Position => _background.Position;
+		
 		public Vector2f Size => _background.Size;
 
 		public event Action? OnClicked;
