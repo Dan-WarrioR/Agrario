@@ -17,8 +17,8 @@ namespace Source.Game.Scenes
 		private EventBus EventBus => _eventBus ??= Dependency.Get<EventBus>();
 		private EventBus _eventBus;
 
-		private SFMLRenderer Renderer => _renderer ??= Dependency.Get<SFMLRenderer>();
-		private SFMLRenderer _renderer;
+		private BaseRenderer Renderer => _renderer ??= Dependency.Get<BaseRenderer>();
+		private BaseRenderer _renderer;
 
 		private GameCamera Camera => _camera ??= Dependency.Get<GameCamera>();
 		private GameCamera _camera;

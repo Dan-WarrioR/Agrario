@@ -1,5 +1,5 @@
 ﻿using Source.Engine;
-using Source.Game;
+using Source.SeaBattle;
 
 namespace Source
 {
@@ -8,8 +8,8 @@ namespace Source
 		public static void Main()
 		{
 			var application = new Application();
-			var game = new AgarioGame();
-			var renderer = new SFMLRenderer();
+			var game = new SeaBattleGameRules();
+			var renderer = new SeaBattleRenderer();
 			
 			application.Run(game, renderer);
 		}
