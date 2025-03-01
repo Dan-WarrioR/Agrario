@@ -17,10 +17,6 @@ namespace Source.SeaBattle.Users.Controllers
 		private PlayerInput PlayerInput => _playerInput ??= Dependency.Get<PlayerInput>();
 		private PlayerInput _playerInput;
 
-		
-
-		
-
 		public override void OnStart()
 		{
 			PlayerInput.BindKey(Keyboard.Key.Escape, StopGame);
@@ -46,14 +42,14 @@ namespace Source.SeaBattle.Users.Controllers
 			EventBus.Invoke("OnStopGame");
 		}
 
-		private void OnMousePressed(Mouse.Button button, Vector2i i)
+		private void OnMousePressed(Mouse.Button button, Vector2i position)
 		{
 			if (button != Mouse.Button.Left)
 			{
 				return;
 			}
 
-			ShootPosition = i;
+			ShootPosition = position;
 		}
 	}
 }
