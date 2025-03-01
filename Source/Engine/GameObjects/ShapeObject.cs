@@ -20,7 +20,7 @@ namespace Source.Engine.GameObjects
 
             var shapeBounds = shape.GetLocalBounds();
             shape.Origin = new(shapeBounds.Width / 2, shapeBounds.Height / 2);
-            shape.FillColor = FillColor;
+            //shape.FillColor = FillColor;
         }
 
         public override void SetPosition(Vector2f position)
@@ -35,7 +35,7 @@ namespace Source.Engine.GameObjects
 			Shape.Scale = scale;
 		}
 
-		public void SetTexture(Texture texture)
+		public void SetTexture(Texture? texture)
         {
 			Shape.Texture = texture;
 		}
@@ -45,7 +45,12 @@ namespace Source.Engine.GameObjects
             return ObjectRect.Intersects(objectRect);
         }
 
-        public override void Draw(RenderTarget target, RenderStates states)
+		public bool IsMouseOver(Vector2i mousePos)
+		{
+			return ObjectRect.Contains(mousePos.X, mousePos.Y);
+		}
+
+		public override void Draw(RenderTarget target, RenderStates states)
         {
             Shape.Draw(target, states);
         }

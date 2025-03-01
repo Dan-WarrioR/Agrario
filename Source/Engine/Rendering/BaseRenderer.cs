@@ -26,7 +26,7 @@ namespace Source.Engine.Rendering
 		
 		private Color _backgroundColor;
 
-		public virtual void Initialize(RenderWindow window)
+		internal void Initialize(RenderWindow window)
 		{
 			Dependency.Register(this);
 

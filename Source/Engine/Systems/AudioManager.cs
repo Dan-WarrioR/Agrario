@@ -47,7 +47,7 @@ namespace Source.Engine.Systems
             sound.Play();
         }
 
-        public void PlayOnced(string soundName)
+        public void PlayOnced(string soundName, bool playInstantly = false)
         {
             if (!_sounds.TryGetValue(soundName, out var sound))
             {
@@ -56,7 +56,7 @@ namespace Source.Engine.Systems
                 return;
             }
 
-            if (sound.Status == SoundStatus.Playing)
+            if (!playInstantly && sound.Status == SoundStatus.Playing)
             {
                 return;
             }
@@ -64,7 +64,6 @@ namespace Source.Engine.Systems
             sound.Loop = false;
 
             sound.Play();
-
         }
 
         public void StopSound(string soundName)
