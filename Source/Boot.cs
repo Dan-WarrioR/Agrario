@@ -1,4 +1,5 @@
 ﻿using Source.Engine;
+using Source.Engine.Rendering;
 using Source.SeaBattle;
 
 namespace Source
@@ -9,7 +10,7 @@ namespace Source
 		{
 			var application = new Application();
 			var game = new SeaBattleGameRules();
-			var renderer = new SeaBattleRenderer();
+			var renderer = new BaseRenderer();
 			
 			application.Run(game, renderer);
 		}
