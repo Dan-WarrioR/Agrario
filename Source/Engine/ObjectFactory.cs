@@ -1,4 +1,5 @@
-﻿using Source.Engine.GameObjects;
+﻿using SFML.System;
+using Source.Engine.GameObjects;
 using Source.Engine.Rendering;
 using Source.Engine.Tools;
 
@@ -14,7 +15,14 @@ namespace Source.Engine
 
 		public static T Instantiate<T>() where T : GameObject, new()
 		{
+			return Instantiate<T>(new(0, 0));
+		}
+
+		public static T Instantiate<T>(Vector2f position) where T : GameObject, new()
+		{
 			T instance = new();
+
+			instance.Initialize(position);
 
 			RegisterObject(instance);
 

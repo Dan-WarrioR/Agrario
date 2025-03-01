@@ -29,6 +29,8 @@ namespace Source.Engine.GameObjects
 		{
 			InitialPosition = initialPosition;
 			Position = initialPosition;
+
+			OnAwake();
 		}
 
 		#endregion
@@ -79,6 +81,7 @@ namespace Source.Engine.GameObjects
 
 		#region To Override Methods
 
+		public virtual void OnAwake() { }
 		public virtual void OnStart() { }
 		public virtual void OnUpdate(float deltaTime) { }
 		public virtual void OnDestroy() { }
