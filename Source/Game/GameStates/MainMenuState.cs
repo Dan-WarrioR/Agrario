@@ -21,7 +21,7 @@ namespace Source.Game.GameStates
 		{
 			EventBus.Unregister("OnGameStart", OnStartGame);
 
-			SceneLoader.UnloadScene<MainMenuBaseScene>();
+			SceneLoader.UnloadCurrentScene();
 		}
 
 		private void OnStartGame()

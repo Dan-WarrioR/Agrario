@@ -13,7 +13,7 @@ namespace Source.Game.GameStates
 
 		public override void Exit()
 		{
-			SceneLoader.UnloadScene<GameBaseScene>();
+			SceneLoader.UnloadCurrentScene();
 		}
 	}
 }

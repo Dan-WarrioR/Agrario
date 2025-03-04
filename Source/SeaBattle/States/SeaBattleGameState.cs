@@ -13,7 +13,7 @@ namespace Source.SeaBattle.States
 
         public override void Exit()
         {
-            SceneLoader.UnloadScene<SeaBattleGameScene>();
+            SceneLoader.UnloadCurrentScene();
         }
     }
 }

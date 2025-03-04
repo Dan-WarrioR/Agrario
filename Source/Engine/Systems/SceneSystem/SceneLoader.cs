@@ -22,19 +22,6 @@ namespace Source.Engine.Systems.SceneSystem
 			}
 		}
 
-		public static void LoadScene(string sceneName)
-		{
-			if (!_scenes.TryGetValue(sceneName, out var scene))
-			{
-				Debug.LogWarning($"No scene in collection with name {sceneName}!");
-
-				return;
-			}
-			_currentActiveScene = scene;
-			scene.LoadInternal();
-			LogMessage($"Loading scene {sceneName}");
-		}
-
 		public static void LoadScene<T>() where T : BaseScene, new()
 		{
 			var sceneName = typeof(T).Name;
@@ -42,30 +29,40 @@ namespace Source.Engine.Systems.SceneSystem
 			LoadScene(sceneName);
 		}
 
-		public static void UnloadScene<T>() where T : BaseScene, new()
+		public static void LoadScene(string sceneName)
 		{
-			var sceneName = typeof(T).Name;
-
-			if (!_scenes.TryGetValue(sceneName, out var scene))
+			if (_currentActiveScene != null)
 			{
-				Debug.LogWarning($"No scene in collection with name {sceneName}!");
+				UnloadCurrentScene();
+			}
 
+			if (!_scenes.TryGetValue(sceneName, out var sceneToLoad))
+			{
+				Debug.LogWarning($"No scene found with name {sceneName}!");
 				return;
 			}
-			_currentActiveScene = null;
-			scene.Unload();
-			LogMessage($"Unloading scene {sceneName}");
+
+			_currentActiveScene = sceneToLoad;
+			sceneToLoad.LoadInternal();
+			LogMessage($"Loaded scene {sceneName}");
 		}
 
-		public static void Update(float deltaTime)
+		public static void UnloadCurrentScene()
 		{
-			foreach (var scene in _scenes.Values)
+			if (_currentActiveScene == null)
 			{
-				if (scene.IsActive)
-				{
-					scene.Update(deltaTime);
-				}
+				return;
 			}
+
+			var sceneToUnload = _currentActiveScene;
+			_currentActiveScene = null;
+			sceneToUnload.UnloadInternal();
+			LogMessage($"Unloaded scene {sceneToUnload.GetType().Name}");
+		}
+
+		public static void Update(float deltaTime) //Deprecated
+		{
+			_currentActiveScene?.Update(deltaTime);
 		}
 
 		private static void LogMessage(object message)
