@@ -28,8 +28,6 @@ namespace Source.Game.Scenes
 		private PlayerInput PlayerInput => _playerInput ??= Dependency.Get<PlayerInput>();
 		private PlayerInput _playerInput;
 
-		private List<GameObject> _toDestroyObjects = new();
-
 		private UIFactory _uiFactory;
 
 		private ButtonObject _startButton;
@@ -68,11 +66,6 @@ namespace Source.Game.Scenes
 			PlayerInput.RemoveBind(Keyboard.Key.Escape);
 
 			SaveService.Save(_saveData);
-
-			foreach (var button in _toDestroyObjects)
-			{
-				button.Destroy();
-			}
 		}
 
 		private void CreateMenu()
@@ -121,8 +114,6 @@ namespace Source.Game.Scenes
 		{
 			var button = _uiFactory.CreateButton(size, initialPosition, icon, text);
 
-			_toDestroyObjects.Add(button);
-
 			return button;
 		}
 
@@ -137,7 +128,6 @@ namespace Source.Game.Scenes
 				.AddState("Idle", GetSkinTextures(), 0.1f)
 				.SetInitialState("Idle"));
 
-			_toDestroyObjects.Add(_skinObject);
 			UpdateSkin();
 		}
 

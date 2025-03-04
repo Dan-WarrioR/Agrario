@@ -13,6 +13,8 @@ namespace Source.Engine
 		private static BaseRenderer Renderer = _renderer ??= Dependency.Get<BaseRenderer>();
 		private static BaseRenderer _renderer;
 
+		internal static event Action<GameObject> OnObjectCreated;
+
 		public static T Instantiate<T>() where T : GameObject, new()
 		{
 			return Instantiate<T>(new(0, 0));
@@ -25,6 +27,8 @@ namespace Source.Engine
 			instance.Initialize(position);
 
 			RegisterObject(instance);
+
+			OnObjectCreated?.Invoke(instance);
 
 			return instance;
 		}
