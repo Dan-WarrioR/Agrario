@@ -32,6 +32,11 @@ namespace Source.Game.Units
 
 		public event Action OnBeingEaten;
 
+		public override void OnStart()
+		{
+			Shape.FillColor = FoodColor;
+		}
+
 		public void EatMe()
 		{
 			SetActive(false);
