@@ -11,9 +11,9 @@ namespace Source.Engine
 		private const int TargetFramerate = 120;
 		private const float TimeUntilUpdate = 1f / TargetFramerate;
 
-		private List<GameObject> _gameObjects = new();
-		private List<GameObject> _newGameObjects = new();
-		private List<GameObject> _destroyedGameObjects = new();
+		private HashSet<GameObject> _gameObjects = new();
+		private HashSet<GameObject> _newGameObjects = new();
+		private HashSet<GameObject> _destroyedGameObjects = new();
 
 		private readonly PlayerInput _input;
 		private readonly BaseRenderer _renderer;
